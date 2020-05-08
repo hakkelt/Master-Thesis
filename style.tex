@@ -1,0 +1,165 @@
+%% In this file, the package imports are listed, style and formatting rules are declared, and in the last couple rows the contents.tex is included, thus this file is the entry point for rendering.
+
+% General rules
+% --------------------------------------------------
+
+% twoside: printing margins are set two sided printing --> you can change it to "oneside" (but, please, protect environment and don't do that especially because the "Code of Studies and Exams" of the Faculty also recommends printing two sided)
+% 11pt: font size
+\documentclass[a4paper,11pt,twoside]{report}
+
+% Uncomment this line if you want to change the default font family to palatino:
+\renewcommand{\familydefault}{ppl}
+% Here you can browse more fonts supported by Overleaf (just make sure to use a serif font typeface): https://www.sharelatex.com/learn/Font_typefaces
+
+% Package needed to format table of contents (ToC):
+\usepackage{tocloft}
+% Indentations of sections in ToC:
+\setlength{\cftsecindent}{.9cm}
+% Indentations of subsections in ToC:
+\setlength{\cftsubsecindent}{1.4cm}
+
+% Uncomment the following line if you want the renderer insert space between paragraphs separated by an empty line
+%\usepackage{parskip}
+% ---------------------------------------------------
+
+% Formatting chapter titles
+% ---------------------------------------------------
+\usepackage{titlesec}
+
+% Declare the depth of numbering of chapters/sections/subsections:
+% 0: only chapters are numbered
+% 1: chapters and sections are numbered
+% 2: even subsections are numbered
+\setcounter{secnumdepth}{2} 
+
+% Format text of chapter titles
+% Uncommenting the line within the braces will change the chapter titles from "
+%   Chapter {number}
+%   {title}
+% " to "
+%   {number}. {title}
+% "
+\newcommand{\titleformatting}{
+    %\titleformat{\chapter}{\normalfont\huge}{\thechapter.}{1em}{\huge\textbf}
+}
+
+% Uncommenting the following line will remove the number of the chapter before the number of the subsections (e.g. changes "2.1 {section title}" to "1. {section title}" where "2" is the number of the chapter, and "1" is the number of the section
+%\renewcommand\thesection{\arabic{section}}
+
+% Format text of section titles
+%\titleformat{<which element you want to format>}[block/wrap]{<format rules for numbers of sections>}{<commands that render the numbers>}{<how much space you want between the number and the title>}{<format rules for title>}
+% size rules: \large, \Large, \huge, \Huge
+% more format rules: \bfseries (bold), \it (italic), \underline
+% \thesection: Command to render the number of the section
+\titleformat{\section}[block] {\normalfont\Large\bfseries}{\thesection.}{1em}{\Large}
+% ---------------------------------------------------
+
+
+% Mandatory formatting rules required by "Code of Studies and Exams" [don't change this two lines!]
+% ---------------------------------------------------
+
+% margins
+\usepackage[margin=2.5cm, bindingoffset=1.25cm]{geometry}
+
+% line spacing
+\linespread{1.5}
+% ---------------------------------------------------
+
+
+% Useful packages
+% ---------------------------------------------------
+
+% Handle UTF8 characters
+\usepackage[utf8]{inputenc}
+
+% If you don't use \usepackage[T1]{fontenc},
+%  - Words containing accented characters cannot be automatically hyphenated,
+%  - You cannot properly copy-and-paste such words from the output (DVI/PS/PDF),
+%  - Characters like the pipe sign, less than and greater sign give unexpected results in text.
+\usepackage[T1]{fontenc}
+
+% language specification
+\usepackage[english]{babel}
+
+% useful for equations
+\usepackage{mathtools}                        
+
+% Format references by IEEE guidlines
+\usepackage[style=ieee, backend=biber]{biblatex}
+
+% Needed for positioning the logo of the Faculty on the first page
+\usepackage[export]{adjustbox}
+
+% Importing the hyperref package all cross-referenced elements become hyperlinked. For example, the lines in the table of contents become links to the corresponding pages in the document.
+\usepackage[hidelinks, unicode, pdfusetitle]{hyperref}
+
+% PDF bookmarks (smart pdf viewers can show this bookmarks helping the reader to navigate inside the document)
+\usepackage{bookmark}
+
+% Support for set background colors for table cells
+\usepackage[table,xcdraw]{xcolor}
+
+% Transform URL-s in the text clickable automatically
+\usepackage{url}
+
+% Support for long quotes
+\usepackage{csquotes}
+
+% Support for embedded source codes
+\usepackage{listings}
+\usepackage{sourcecodepro} % a nice font family for code fragments
+\lstset{captionpos=b, numberbychapter=false, basicstyle=\ttfamily, showstringspaces=false, columns=fullflexible}
+
+% Tell the renderer where to look for images
+\graphicspath{ {images/} }
+
+% File holding references
+\addbibresource{references.bib}
+
+% Generate Dummy Text (feel free to remove it)
+\usepackage{lipsum}
+
+% ---------------------------------------------------
+
+
+% First page + empty page after it
+% You should bind the the original copy of the Diploma Thesis Proposal Form (collected from the Registrar’s Office) right after this blank page!
+% ---------------------------------------------------
+\author{\name\\\program}
+\title{\Huge{\thesisType}\\[1cm]
+    \huge{\title}}
+\date{\the\year}
+
+\newcommand{\titlePage}{
+    \includegraphics[valign=m, width=50pt]{ITK_logo} \parbox[c]{0.8\textwidth}{
+    Pázmány Péter Catholic University\\
+    Faculty of Information Technology and Bionics}
+    \vspace*{\fill}
+    
+    {\let\newpage\relax\maketitle}
+    \vspace*{\fill}
+    \begin{center}
+    \bigskip
+    
+    \supervisors
+    \end{center}
+}
+
+\newcommand{\blankPage}{
+    \begingroup
+        \pagestyle{empty}
+        \cleardoublepage
+    \endgroup
+    \clearpage
+}
+% ---------------------------------------------------
+
+
+% ------------- Dokumentum legenerálása -------------
+\begin{document}
+
+\titleformatting
+
+\input{contents.tex}
+
+\end{document}

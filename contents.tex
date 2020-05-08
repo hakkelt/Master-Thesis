@@ -1,0 +1,56 @@
+% This file is responsible to collect all content and assemble the document.
+
+% Edit these lines...
+\def\thesisType{Master Thesis}
+\def\name{HAKKEL Tamás}
+\def\program{Computer Science Engineering MSc}
+\def\title{Iteratively Reweighted Algorithms for Dynamic MRI}
+\def\supervisors{Supervisor: Claudio M. VERDUN \\ Faculty mentor: Dr. OLÁH András}
+
+% ---------------------------------------------
+
+% Render title page
+\titlePage
+
+% Set page numbering to roman numbers for all pages before the first chapter. Change it to "\pagenumbering{Roman}" if you want upper case roman numbers
+\pagenumbering{roman}
+
+% Mandatory parts
+% If you don't want these mandatory parts to be included in the table of contents, simply delete or comment out the lines starting with "\addcontentsline".
+\addcontentsline{toc}{chapter}{Diploma Thesis Proposal}
+
+% If you print your thesis two sided, the you need this blank page after the Title page
+\blankPage
+
+% The "Diploma Thesis Proposal" form takes the first two page numbers, so the "Thesis Authenticity Statement" gets the page number 3.
+\setcounter{page}{3}
+
+\addcontentsline{toc}{chapter}{Thesis Authenticity Statement}
+\input{contents/1-authenticity}
+\addcontentsline{toc}{chapter}{Abstract}
+\input{contents/2-abstract}
+% Uncomment the following line if you want to include an "Acknowledgements" page after the abstract.
+%\addcontentsline{toc}{chapter}{Acknowledgements}
+%\input{contents/3-acknowledgements}
+
+% Render table of contents
+\tableofcontents
+\clearpage
+
+% From here page numbers are arabic numbers starting again from 1
+\pagenumbering{arabic}
+
+% Include files holding the content of your thesis -- feel free to change as you like it
+\input{contents/4-introduction}
+\input{contents/5-related_works}
+\input{contents/6-methods}
+\input{contents/7-results}
+\input{contents/8-summary}
+
+% Bibliography
+\printbibliography
+\addcontentsline{toc}{chapter}{Bibliography}
+
+% Appendices -- if you don't have any, just delete the following two lines
+%\appendix
+%\input{contents/appendices}

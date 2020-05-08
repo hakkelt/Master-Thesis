@@ -1,0 +1,63 @@
+\chapter{Related Works}
+% The Code of Studies and Exams recommends the following content for this chapter: "Literature review, short description of similar/related applications/solutions, conclusions of literature review. Independent, critical analysis of the literature."
+% However, you are free to structure the content of your thesis as you want
+
+\section{Compressed Sensing in MRI}
+"Compressed Sensing MRI" (2008) by Michael Lustig, David L. Donoho, Juan M. Santos, and John M. Pauly --> "A look at how CS can improve on current imaging techniques"
+
+"Sparse MRI: The Application of Compressed Sensing for Rapid MR Imaging" (2007) by Michael Lustig, David Donoho, and John M. Pauly
+
+\section{Parallel Imaging}
+"Self-Calibrating Nonlinear Reconstruction Algorithms for Variable Density Sampling and Parallel Reception MRI" by Loubna El Gueddari, C. Lazarus, H Carrié, A. Vignaud, Ph Ciuciu
+
+SENSE and ESPIRiT for sensitivity map estimation
+
+\section{First Order Gradient Methods}
+
+My slideshow about first order methods: \url{https://docs.google.com/presentation/d/1tIZSSfzzHUgo9tlKlmhSUCCWD3ynzyZwnWtpBUe--6g/edit}
+
+\subsection{Origins}
+From Cauchy to recent explosion of optimization algorithm.
+
+Why would second order methods speed up convergence and why aren't we able to apply them to our problem.
+
+\subsection{Gradient Descent vs Conjugate Gradient}
+How do they work, and when can conjugate gradient outperform gradient descent
+
+\subsection{Proximal Methods and ISTA}
+Proximal operator, Iterative Shrinkage/Soft Thresholding Algorithm, Forward-Backward Splitting with linear line search, Wolfe conditions
+
+\subsection{FISTA by Nesterov}
+Momentum rule and its role in speeding up convergence
+
+\subsection{POGM by Kim and Fessler}
+Why is it faster than FISTA, and why is it optimal
+
+D. Kim and J. A. Fessler, “Optimized first-order methods for smooth convex minimization,” Math. Program., vol. 159, no. 1, pp. 81–107, Sep. 2016, doi: 10.1007/s10107-015-0949-3.
+
+\subsection{ADMM}
+what is it and why is it good
+
+\section{Decompositions}
+
+\subsection{Low rank and Sparse}
+C. Y. Lin and J. A. Fessler, “Efficient Dynamic Parallel MRI Reconstruction for the Low-Rank Plus Sparse Model,” IEEE Transactions on Computational Imaging, vol. 5, no. 1, pp. 17–26, Mar. 2019, doi: 10.1109/TCI.2018.2882089.
+
+J. A. Fessler, “Optimization methods for MR image reconstruction (long version),” arXiv:1903.03510 [eess, math], Jun. 2019.
+
+\subsection{Multiscale}
+
+Ong's dissertation: “Low Dimensional Methods for High Dimensional Magnetic Resonance Imaging,” 2018.
+
+F. Ong et al., “Extreme MRI: Large-Scale Volumetric Dynamic Imaging from Continuous Non-Gated Acquisitions,” arXiv:1909.13482 [physics], Dec. 2019.
+
+Differences between Ong's dissertation and his "extreme MRI" preprint paper
+
+\section{IRSL}
+Iteratively reweighted Least Squares method
+
+C. Kümmerle and C. M. Verdun, “Denoising and Completion of Structured Low-Rank Matrices via Iteratively Reweighted Least Squares,” arXiv:1811.07472 [cs, math], Nov. 2018.
+
+Henry Adams, Lara Kassab, and Deanna Needell "An Iterative Method for Structured Matrix Completion"
+
+\clearpage % You need \clearpage at the end of every chapter to force images included in this chapter to be rendered in somewhere else
