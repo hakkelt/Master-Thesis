@@ -1,0 +1,217 @@
+\chapter{Theoretical Background of MRI}
+
+\section{Physics of MRI}
+
+This section attempts to dive into the physics of MRI giving a quick overview of the theory of nuclear magnetic resonance following~\cite{nishimura_principles_1996, kurzhunov_novel_2017, pooley_fundamental_2005}.
+
+\subsection{Components of MRI machines}
+The theory of measurements based on nuclear magnetic resonance has its root in quantum physics: The nuclear magnetic moment and the angular momentum of protons in the atomic nuclei maintained by the spin of these particles are to be indirectly measured, and these observables depend (besides many other factors) on the tissue where the proton is located. More specifically, the MRI
+machines are tuned to focus on the nucleus of protons that consist of only one proton. The core components of MRI machines are the following:
+\begin{enumerate}
+    \item Superconductive coils immersed in liquid helium are the largest and most expensive part of the machine. They are responsible for producing a almost perfectly homogeneous and static magnetic field. The role of the liquid helium is to keep the wires at superconducting temperature, so that massive amounts of electricity can be run through the coils creating super-strong fields up to \SI{21.1}{\tesla}~\cite{schepkin_vivo_2012}. Although stronger magnetic field allows better resolution, the construction costs of such machines and the effect of the strong magnetic field on human tissues limit the strength of available MRI scanners for routine clinical from \SI{0.2}{\tesla} to \SI{3.0}{\tesla}, and up to \SI{11.7}{\tesla} in research machines for human imaging~\cite{ladd_pros_2018}.
+    \item Inside of this super-strong electromagnet, the so called gradient coils are located that alter the field along all three dimensions creating spatially varying magnetic field (hence the name: gradient coils) in order of \SI{}{\milli\tesla}, so that signals coming from different location within the coils are possible to be separated. They are also used to provide contrast for diffusion and flow imaging.
+    \item Within the Radio Frequency (RF) coils are located that emit and measure time varying electromagnetic signals on order of tens of \SI{}{\micro\tesla}.
+\end{enumerate}
+The reason behind this elaborate design (depicted on fig.~\ref{fig:mri_schematic}) is the need of creating a measurement setup suitable to give a very fine control over the the direction of the magnetic moment of protons of hydrogen atoms within the measured object (which, in our case, is the human body that contains a large amount of hydrogen mostly in the form of water, but also bounded within other molecules).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\linewidth]{images/mri-scanner.jpg}
+    \caption{\textbf{Schematic illustration} of construction of a cylindrical MRI scanner. Source: Adapted from~\cite{coyne_mri_2020}.}
+    \label{fig:mri_schematic}
+\end{figure}
+
+\subsection{Macroscopic Magnetization}
+The purpose of the superconductive coils is to align the magnetic moment of protons with the direction of the magnetic field. This direction (also corresponding to the head-to-foot direction) is usually referred to as longitudinal direction or z direction, and the plane perpendicular to this direction is called the transverse plane or the x-y plane. This alignment of the magnetic moment of the protons leads to two configurations: protons with their magnetic moment pointing to the same direction as the static magnetic field, and other protons having their magnetic moment with opposite direction. Without the static field, the randomly oriented spins cancel out each other, as they also do in the aligned case, when the number of protons oriented to the two directions are equal. But in real systems, a slight excess of the protons aligned with the static magnetic field always produces a net magnetization with the same direction as the external magnetic field (see fig.\ref{fig:net_magnetization}).
+
+The ratio of the number of protons in these two groups are described by the Fermi-Dirac statistics. In strong and static magnetic field at room temperature, the Fermi-Dirac distribution reduces to Boltzmann distribution resulting the following formula:
+\[N_+ = N \cdot \frac{e^{E_+ / (k_B T)}}{e^{E_+ / (k_B T)} + e^{E_- / (k_B T)}} \text{ and } N_- = N \cdot \frac{e^{E_- / (k_B T)}}{e^{E_+ / (k_B T)} + e^{E_- / (k_B T)}},\]
+where $N$ is the total number of protons, $N_+$ and $N_-$ are the numbers of protons pointing to the same and opposite direction as the static magnetic field, $E_+$ and $E_-$ are their respective energy levels, $k_B$ is the Boltzmann-constant, and $T$ is the temperature. In this case neighboring energy levels are equidistant with the difference in the secondary spin quantum number of $\Delta m = \pm 1$ and the energy difference of $\nabla E = \gamma \hbar B_0$, where $\gamma$ is an empirical constant called gyromagnetic ratio (equals to $42.575 \cdot 2\pi$\SI{}{\mega\hertz/\tesla} in case of protons), $\hbar$ is the reduced Planck constant, and $B_0$ is the static external magnetic field. The ratio of Boltzmann distributions for two states a spin \textonehalf nucleus is known as the Boltzmann factor:
+\[f(E) = e^{-\frac{\gamma \hbar B_0}{k_B T}}.\]
+Using this factor, the ratio of unpaired protons (these protons give the net magnetization) divided by the number of all protons is given by
+\[\frac{N_+ - N_-}{N_+ + N_-} = \frac{\gamma \hbar B_0}{2 k_B T}.\]
+This ratio at room temperature in a static field with a couple teslas is a tiny number (in the order of \num{1e-6} multiplied by $B_0$), so that explains why do MRI machines need such a strong electromagnets. (Note that this ratio also can be increased by increasing the temperature, but it is not feasible for human imaging.)
+
+\begin{figure}[thb]
+    \centering
+    \begin{minipage}{.52\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{images/net_magnetization.pdf}
+        \caption{\textbf{Effect of strong external magnetic field ($B_0$):} Spins of protons get aligned with the field in either parallel or anti-paralellel direction producing a net magnetization ($M$) parallel with the external field.}
+        \label{fig:net_magnetization}
+    \end{minipage}%
+    \hspace{0.03\textwidth}
+    \begin{minipage}{0.44\textwidth}
+        \centering
+        \includegraphics[width=0.4\linewidth]{images/precession.pdf}
+        \caption{\textbf{Formation of precession.} As a result of RF excitation pulse, the magnetic momentum of protons deviates from the longitudinal direction and starts to precess due to its angular moment.}
+        \label{fig:precession}
+    \end{minipage}
+\end{figure}
+
+\subsection{Precession}
+In equilibrium when all protons are aligned with the external magnetic field, the longitudinal component of net magnetization is maximal and the component in the transverse plane is zero. However, with the aid of an electromagnetic excitation in the transverse plane emitted by the RF coils, it is possible to rotate the vector of net magnetization into the transverse plane. The key factor in this process is to tune the frequency of the excitation to match the so called precessional frequency of the protons given by the Larmor equation:
+\[\omega = \gamma B_0.\]
+The name \textit{precessional frequency} comes from the phenomenon that the magnetic moment of protons start to precess around the longitudinal axis (which, again, is the direction of static external magnetic field) due to its intrinsic angular momentum. When the frequency of the excitation matches the precessional frequency of the proton (which happens to be in the radio frequency range, hence the name of RF coils), then resonance occurs and the angle of net magnetization gets tilted (illustrated by fig.~\ref{fig:precession}), otherwise the electromagnetic field has little to no effect of the net magnetization. An RF excitation of a duration $\tau$ causes rotation of the magnetization by an angle $\theta$, which is called the flip angle, defined by
+\[\theta = \gamma \int_0^\tau B_1(t) dt = \gamma \tau B_1,\]
+where $B_1$ is the magnetization of RF excitation, and it is assumed to be constant over time window of excitation with length $\tau$.
+
+As a result of the precession, the net magnetic flux changes in the RF coils (these coils used for both emitting and receiving RF signals) inducing an electromotive force $U_{ind}$ that can be calculated by Faraday's law of induction:
+\[U_{ind} = -\frac{d\Phi}{dt}.\]
+Projecting the precessing movement (with the Larmor frequency $\omega$) of the net magnetization to transversal plan, we get a sinusoidal change in flux that results in the following formula:
+\[U_{ind} \sim sin(\theta)\, \omega\, cos(\omega t) = sin(\theta)\, \gamma\, B_0\, cos(\gamma\, B_0\ t).\]
+While this formula is not an exact model that fits the current measured in the RF coils, but it captures three important aspects of the resulted electric signal:
+\begin{itemize}
+    \item It is a sinusoidal signal with a frequency depending only on a constant specific to protons and the external magnetic field.
+    \item The amplitude of that signal depends on the flip angle induced by an RF excitation.
+    \item And it is also dependent on the external magnetic field (yet another reason why MRI machines need very strong electromagnets).
+\end{itemize}
+
+\subsection{Relaxation}
+For a more accurate model, one should consider that as the protons emit RF signal due to their precessing magnetic moment, they lose the energy of the excitation and they slowly return to the low energy state; i.e., to the state where the magnetic moment of protons are aligned along the longitudinal axis, and where the net magnetization points to the same direction as the external field. Assuming that the excitation resulted in a perpendicular flip angle, the longitudinal component of magnetization is characterized by the exponential formula
+\[M_z = M_0 (1 - e^{-t/T_1}),\]
+where $M_0$ is the amplitude of magnetization in the equilibrium and is often called Boltzmann magnetization, and $T_1$ time constant is a property of the protons dependent on the tissue where they are located. The name of this process is $T_1$ relaxation.
+
+\begin{figure}[thb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/T1_relaxation.png}
+    \caption{\textbf{$T_1$ relaxation after a \SI{90}{\degree} RF excitation.} By the end of the pulse, the magnetization rotated from the z-direction to the x-y plane; therefore, the longitudinal component is reduced to zero, and gradually it returns to the equilibrium. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+    \label{fig:T1_relaxation}
+\end{figure}
+
+Furthermore, the net magnetization is also affected by another relaxation process called $T_2$ relaxation. The phenomenon causing this relaxation is called \textit{dephasing}, and the name comes from the fact that when excitation is applied to protons in the equilibrium, they will precess in the same phase, but soon they lose this synchronization. This desynchronization is due to the slight inhomogeneity of the static external field caused by four factors: spin-spin interactions (quantum mechanical interactions with the nearby protons), magnetic field inhomogeneities (hardware limitations), magnetic susceptibility (slight magnetization of molecules within the measured part of the body), and chemical shift effects (shielding effect of the electron cloud of molecules incorporating the hydrogen atoms). The slightly different $B_0$ value makes the Larmor frequency different, and that results in the desynchronization of phase. The outcome of this process is that the transversal component of the net magnetization decays exponentially to zero. The speed of decay is characterized by the $T_2^*$ time constant:
+\[M_{xy} = M_1\,e^{-t/T_2^*},\]
+where $M_1$ is the initial amplitude of net magnetization in the beginning of the $T_2$ relaxation process. For illustration of this process, see fig.~\ref{fig:T1_relaxation}. The resultant decaying signal is known as the Free Induction Decay (FID). Using, however, the later described \textit{spin-echo} acquisition protocol, the last three inhomogeneity-causing factors can be cancelled out leading to a slightly different time constant denoted by $T_2$.
+
+\begin{figure}[thb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/T2_relaxation.png}
+    \caption{\textbf{$T_2$ relaxation process.} Right after the RF pulse, thre precession of all protons are in the same phase, but they quickly desynchronize due to magnetic field inhomogeneities. The plot in the second row depicts the strength of current induced in the RF coils that corresponds to the projection of the x-y component ($M_{xy}$) of the net magnetization along the direction perpendicular to the surface of the coil. And as a result of the $T_2$ relaxation, the amplitude of this sinusoidal curve exponentially decays. The resultant decaying signal is known as the Free Induction Decay (FID). Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+    \label{fig:T2_relaxation}
+\end{figure}
+
+\section{Concepts of MR Imaging}
+
+In that section, the most important concepts of MR imaging are summarized, clarifying the vocabulary used in the later chapters, based on~\cite{nishimura_principles_1996, pooley_fundamental_2005}.
+
+\subsection{MRI Sequences}
+Since the advent of MRI, numerous methods were developed and are used in today's medicine. And while they are all measure somehow the $T_1$ and $T_2$ constants at different location, the produced image is quite different, making them fit different use cases. These methods are called MRI sequences and they mostly differ in the a particular setting of RF pulses and the gradients in the static magnetic field, resulting in a particular image appearance. The most commonly used group of MRI sequences is the \textit{spin echo}~\cite{hahn_spin_1950}. In accordance with the two types of relaxation, sequences in that group have two main parameters: $TR$ (Time of Repetition) and $TE$ (Time of Echo). These parameters have a crucial role timing the recording of current in the RF coils when the difference between the amplitude of the RF signal emitted by the excited protons is maximal because this difference makes it possible later to distinguish different tissues.
+
+The $TR$ parameter is connected to the $T_1$ value, as it determines the time between two excitation pulses. Having a larger $TR$ value allows protons to get better aligned with the external magnetic field before the next excitation, which results in a higher initial value for $M_{xy}$, leading to a stronger current in the detector coils, but it also makes the entire measurement longer. On the other hand, $TE$ determines the delay between the peak of the RF pulse and the peak of the echo. That echo is a temporary rephasing of spins caused by a second, \SI{180}{\degree} RF pulse emitted at $t = TE/2$. That pulse inverts spins, and therefore it makes spins with slower Larmor frequency, which lagged behind the faster ones previously, be ahead of the others in phase. At the time when faster precessing protons catch up, the transversal magnetization exhibits an echo peak (see~\ref{fig:spin_echo}). As stated earlier, an important advantage of spin echo technique is that three factors of magnetic inhomogeneity is cancelled out by the inversion as these factors are constant over time, while spin-spin interactions are random interactions between protons that cause random local changes in the magnetic fields experienced by the protons.
+
+\begin{figure}[thb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/spin_echo.png}
+    \caption{\textbf{Process of spin echo sequence.} The echo is a temporary rephasing of spins caused by a second, \SI{180}{\degree} RF pulse emitted at $t = TE/2$. That pulse inverts spins, and therefore it makes spins with slower Larmor frequency, which lagged behind the faster ones previously, be ahead of the others in phase. At the time when faster precessing protons catch up, the transversal magnetization exhibits an echo peak. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+    \label{fig:spin_echo}
+\end{figure}
+
+Before moving forward, an important thing to note that the $T_1$ relaxation is much slower than the $T_2$ relaxation ($T_1$ relaxation takes hundreds of milliseconds up to a few seconds while $T_2$ rarely exceeds \SI{200}{\milli\second}. As a result, the acquisition time is mostly dominated by waiting for the $T_1$ relaxation, and therefore short $TR$ values are favorable when fast imaging is needed. Also, the different time-scale of $T_1$ and $T_2$ relaxation opens a range of possibilities to make acquisition process faster or more effective.
+
+Based on the choice of $TR$ and $TE$ values, we can talk about three types of spin echo sequences: $T_1$ weighted sequence has intermediate $TR$ value in the magnitude of $T_1$ producing maximal T1 weighting (at this point, the difference caused by different $T_1$ value between the amplitude of signals coming from different tissues are maximal) and short $TE$ value magnitudes smaller than $T_2$ producing minimal T2 weighting (there is not enough time to have significant difference between decay curves with different $T_2$). To the contrary, T2-weighted images have a long $TE$ (maximizing the difference in $T_2$ relaxation) and long $TR$ (reducing the weight of $T_1$ relaxation). And the third type, called proton density (PD) weighting, uses short $TE$ and long $TE$, so that the pixel intensities on the resulted image will reflect only the density of protons (that also differs between tissues), and the $T_1$ and $T_2$ values have little effect on it.
+
+\begin{figure}[thb]
+    \centering
+    \begin{minipage}[t]{.28\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{images/T1_weighted.png}
+        \caption{\textbf{$T_1$ weighted sequence.} Choosing the $TR$ value to be relatively short, and $TE$ to be relatively short, the difference due to the variation of $T_1$ value over tissues would dominate over differences caused by different $T_2$ value. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \label{fig:T1_weighted}
+    \end{minipage}%
+    \hspace{0.02\textwidth}
+    \begin{minipage}[t]{.28\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/T2_weighted.png}
+        \caption{\textbf{$T_2$ weighted sequence.} Choosing both $TR$ and $TE$ values to be relatively long, the difference due to the variation of $T_2$ would dominate over differences caused by different $T_1$ value. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \label{fig:T2_weighted}
+    \end{minipage}%
+    \hspace{0.02\textwidth}
+    \begin{minipage}[t]{0.34\textwidth}
+        \centering
+        \includegraphics[width=.85\linewidth]{images/PD_weighted.png}
+        \caption{\textbf{Proton density (PD) weighted sequence.} Choosing the $TR$ value to be relatively long, and $TE$ to be relatively short, the difference due to the variation of both $T_1$ and $T_2$ values are minimized, and hence mostly the density of protons would determine signal strength. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \label{fig:PD_weighted}
+    \end{minipage}
+\end{figure}
+
+Two common variant of spin echo are multiecho spin-echo, and turbo spin-echo. The multiecho spin-echo pulse sequence utilizes multiple \SI{180}{\degree} RF pulses to induce multiple echo peaks each with a different $TE$, forming multiple images of the same object with different weighting ranging from PD-weighting to $T_2$-weighting. This method exploits the fact that $T_1$ is much larger than $T_1$, thus multiple echos can be performed without drastically changing the acquisition time. Similarly, turbo spin-echo sequences consist of multiple echo-generating \SI{180}{\degree} pulses, but in this case only one image is formed speeding up the imaging by gathering information about multiple positions in each cycle.
+
+The other large group of sequences is the gradient echo sequence~\cite{winkler_characteristics_1988}. That type of sequences differs from echo-spin that the flip angle of initial RF pulse is less than \SI{90}{\degree} (e.g., \SI{20}{\degree} or \SI{30}{\degree}) and there is no \SI{180}{\degree} secondary pulse, instead it induces an echo by the spacial gradients explained later. Hence this method is able to perform the measurement much faster as $T_1$ relaxation reaches near-equilibrium state much earlier.
+
+Beyond these sequence types, several other commonly used variants exist, which will not be discussed here, such as the inversion recovery sequences~\cite{dwyer_short-ti_1988, fleckenstein_fast_1991, ashgriz_flair_1991, bedell_implementation_1998}, diffusion-weighted sequences~\cite{moseley_diffusion-weighted_1990, bammer_basic_2003}, perfusion weighted sequences~\cite{rosen_perfusion_1990, detre_perfusion_1992, barbier_methodology_2001}, BOLD-contrast images for functional MRI (fMRI)~\cite{ogawa_brain_1990, kwong_dynamic_1992}.
+
+\subsection{Spatial Encoding}
+The core concept that allowed the extension of NRM (which is based on the same principles described above) to MRI, is the spatial encoding. This technique, proposed by Paul Lauterbur, allows for the localization of RF emitting protons or, more precisely, the localization of an \textit{ensemble} of RF emitting protons within a small volume called voxels (note that the size and the shape of these voxels are defined by the configuration of MRI machine for the given acquisition). Specifically, the problem with static magnetic field is that, even though the net magnetization varies over the measured object based on the type of the tissue, the RF pulse excites the entire volume of the measured object, and therefore the induced signal of each voxel sum up making it impossible to separate them based on their position. In contrast, generating a secondary magnetic field with a gradient along a specific direction makes the Larmor frequency dependent on the position along that direction. That dependence can be exploited multiple ways allowing exact localization along all three dimensions. A possible (and quite common) way to do this is the following:
+\begin{enumerate}
+    \item Producing a gradient along the z-direction during the RF excitation permits the selection of a slice perpendicular to the z-axis by tuning the RF pulse to the frequency specific to the given slice because this pulse excites then only protons in the selected slice. In reality, however, not a single frequency used but rather a band of frequencies whose width matches the bandwidth of resonance frequencies of spins in the slice of interest. This approximately rectangular band of excitation frequencies is realized in time domain by a pulse of a shape similar to the sinc function.
+    \item Application of another gradient along the y-direction between the RF excitation and the readout of induced current causes a gradual de-synchronization of phase along the y-axis because protons experiencing higher external field will have a higher Larmor frequency as well. Therefore, the position along y-direction becomes \textit{phase-encoded}.
+    \item During the time window of readout, another gradient along the x-direction can be used to separate signal sources along that dimension by the difference in their frequency. This type of spacial encoding is called \textit{frequency encoding}.
+\end{enumerate}
+These steps are visually explained on fig.~\ref{fig:slice_selection} and~\ref{fig:phase_and_freq_encoding}.
+
+\begin{figure}[thb]
+    \centering
+    \begin{minipage}{.43\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/slice_selection.png}
+        \caption{\textbf{Mechanism of slice selection.} Producing a gradient along the z-direction during the RF excitation permits the selection of a slice perpendicular to the z-axis by tuning the RF pulse to cover the frequency range specific to the given slice with given thickness because this pulse excites then only protons in this slice. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \label{fig:slice_selection}
+    \end{minipage}%
+    \hspace{0.03\textwidth}
+    \begin{minipage}{0.53\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/phase_and_freq_encoding.png}
+        \caption{\textbf{Process of phase and frequency encoding.} First, a gradient along the y-direction between the RF excitation and the readout causes a gradual de-synchronization of phase along the y-axis because protons experiencing higher external field will have a higher Larmor frequency. Second, a gradient along the x-direction can be used to separate signal sources along that dimension by the difference in their frequency. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \label{fig:phase_and_freq_encoding}
+    \end{minipage}
+\end{figure}
+
+Decoding the spatial information becomes feasible then using the famous Bloch equation:
+\[\frac{d\mathbf{M}}{dt} = \mathbf{M} \times \boldsymbol{\gamma} \mathbf{B} - \frac{M_x\mathbf{i} + M_y\mathbf{j}}{T_2} - \frac{(M_z - M_0)\mathbf{k}}{T_1}.\]
+Knowing that the transversal component of the net magnetization (that is, the measured component) is non-zero only a selected slice and is dependent on the position within the slice assuming the excitation strategy above, a convenient formulation is to use a complex-valued function to denote the amplitude of the signal generated at position $(x,y)$ by $m(x,y) = m_x(x,y) + m_y(x,y)$, where $m_x(x,y)$ and $m_y(x,y)$ is the amplitude realized in a coil perpendicular to x-axis and y-axis, respectively. As a result of the phase-encoding, the phase of a spin at position $y$ along y-axis is given by $\omega_0 t_y + \gamma G_y t_y y,$ where $\omega_0$ is the base Larmor frequency of the selected slice, $t_y$ denotes the width of time window of phase-encoding, and $G_y$ corresponds to the slope of the linear gradient applied along the y-direction. Because $m(x,y)$ is a complex-valued function representing the magnetization in both the x and y-direction, the distribution $m(x,y)$ gets weighted by a complex exponential corresponding to the spatial frequency $\gamma/2\pi)G_y t_y$: $m(x,y)exp(-i\gamma G_y t_y y$. 
+
+Similarly, the shift in the frequency of precession during the readout characterized by $\gamma G_x x$ adds another weighting term to $m(x,y)$. Solving the Bloch equation for this configuration results in the following formula:
+\[s(t) = \int_x \int_y m(x,y) e^{-i\gamma G_x x t} e^{-i\gamma G_y y t_y} dx dy,\]
+where $s$ is the amplitude of signal to be measured, $t_y$ (length of time window for phase-encoding) is a fixed number and $t$ is a running variable. Having a look at the formula, one can immediately see that it is the 2-dimensional Fourier transform of $m(x,y)$ corresponding to the coordinate $((\gamma/2\pi)G_x t, (\gamma/2\pi)G_y t_y)$ in the Fourier space. Due to the discrete nature of this the acquisition process, the MRI machines can evaluate the Fourier space in discrete positions, that is, the collected data is the \textit{discrete Fourier transform} (DFT) of the object. Consequently, the space of measurements is usually referred to as k-space. This connection between the measured signal and Fourier transformation is beneficial in many aspects, as it will be apparent in the next sections.
+
+\subsection{Sampling Trajectories}
+The effect of the spatial encoding schema discussed above is that the k-space points can only be measured sequentially. Combined with the necessity of waiting for the $T_1$ relaxation (that tends to be in the timescale of  \SIrange{250}{1500}{\milli\second} at \SI{3}{T}, and somewhat shorter for \SI{1.5}{T}~\cite{gold_musculoskeletal_2004,bojorquez_what_2017,stanisz_t1_nodate}), it leads to the most important limitation of MR imaging: the acquisition is quite slow. While it is inconvenient for the patient to stay inside the narrow scanner bore (especially for claustrophobic patients), the more important issue is that the longer is the acquisition the more motion artifacts are introduced to the image. The type of such involuntary motions include bulk motion (e.g., coughing, change body position), respiratory motion, cardiac motion, and motion of other organs like blood vessels or parts of the gastrointestinal tract. Although some of them can be reduced by a large extent, for example, by asking patient to pay attention to remain still or to hold breath for a \SIrange{10}{20}{\second} long measurement, others are out of control. Reducing the k-space points, however, lead to various aliasing effects according to Nyquist-Shannon sampling theorem that might blur clinically relevant features or introduce misleading artifacts. Therefore, radiologists always seek to find an optimal compromise between the number of measured k-space points and the amount of motion artifacts introduced.
+
+One important aspect of dealing with that problem is determining which points are to be measured. Due to hardware limitations and because too rapidly changing electromagnetic field would overheat the measured tissues, arbitrary positioning in k-space is not feasible, and thus the order of measurement points are also a key aspects of the process. These constrains introduces the necessity of well-defined geometries describing the location and the order of measured k-space coordinates, called sampling trajectories.
+
+The traditional way of acquiring K-space data is through Cartesian trajectories. The concept of these trajectories is that equally spaced grid-points are selected in the slice or volume to be measured, and these points are evaluated systematically; for instance, row-by-row, zig-zag, or spirally. The main benefit of this method that a simple and fast reconstruction is possible via fast Fourier transform (FFT). Nevertheless, this method fails to exploit a very important feature of natural images in general: the energy tends to be concentrated in the center of the Fourier space; that is to say, the coefficients of lower frequencies have usually large magnitudes, and points further from the center have mostly a near-zero value. The significance of this observation is perfectly demonstrated by the success of the modern image and video compression algorithms making use of this uneven distribution, for instance, JPG~\cite{wallace_jpeg_1992} and H.26x video compression family~\cite{farooq_study_2017} (on which most modern video file formats are based on). Hence, multiple non-equidistant sampling trajectories are also used in practice. Such trajectories are radial~\cite{rasche_continuous_1995}, spiral~\cite{blum_fast_1987}, concentric rings~\cite{wu_mri_2008}, and 3D cones trajectories~\cite{gurney_design_2006}, just to name a few. A couple 3-dimensional trajectories are depicted in fig.~\ref{fig:trajectories}.
+
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/trajectories.png}
+    \caption{\textbf{A few example for 3D trajectories.} Source: Adapted from~\cite{noauthor_forschungszentrum_nodate}}
+    \label{fig:trajectories}
+\end{figure}
+
+\subsection{Accelerated MRI}
+For a deeper understanding of accelerating methods, one needs to get familiarized with the concept of field of view and its connection to the bandwidth of RF excitation pulse. The term \textit{field of view} (FOV) refers to the area or volume over which an MR image is acquired, and often also to its size as well. Due to the discrete nature of digital systems, the FOV is also discretized representing it with a grid of equidistant points whose values in grid points can then be displayed as pixels on computer screens. The two main parameters of FOV are therefore its size and the pixel width. The size of FOV is proportional to the bandwidth of RF excitation and inverse proportional to the strength of the frequency encoding gradient. Thus, it makes increasing the RF bandwidth is beneficial for the image quality (although is comes with increased production costs as well), and it limits the strength of the frequency encoding gradient, even though stronger gradient would be advantageous to better separate tissues by their precessional frequencies. In contrast, the pixel size is determined by the size of range over which k-spaces samples are collected. In case of equidistant sampling in k-space over a square shaped FOV, the connection between these parameters can be expressed by simple equations:
+\[\Delta k = 1 / FOV \text{ and } \Delta w = 1 / k_{FOV},\]
+where $\Delta k$ is the distance between k-space points, $FOV$ refers to the size of the FOV, $\Delta w$ is the pixel width, and $k_{FOV}$ is defined as the range between the highest positive and largest negative spacial frequencies in k-space. For a visual example, please refer to fig.~\ref{fig:cartesian}.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/cartesian.png}
+    \caption{\textbf{Connection between FOV and k-space} in case of Cartesian sampling: The size of FOV is inversely proportional to the distance of k-space points, and the pixel size is determined by the size of range over which k-spaces samples are collected. Source: Adapted from~\cite{noauthor_kspace_nodate}.}
+    \label{fig:cartesian}
+\end{figure}
+
+Using these concepts, one can formulate many methods to accelerate acquisition. For instance, it is possible to evaluate only half of the k-space exploiting the underlying symmetry in the Fourier transform. This method is successful in maintaining a high resolution, albeit it come with the cost of reduced signal-to-noise ratio (SNR) because of the lack of the noise-cancelling effect of two-sided measurements. Another popular method is to avoid acquiring the periphery of k-space by limiting the range of the phase-encoding frequencies (which, in fact, are connected to $T_1$ relaxation that contributes the most to the acqisition time). The advantage of this method is that it produces a decent speed-up keeping the SNR relatively high, but undersampling the high frequencies have a blurring effect, and therefore the resolution goes down. Finally, it is also possible to reduce the size of the FOV leading to a rectangular shaped image (also by reducing the phase-encoding step). The speed-up here, however, also comes with a cost: the amount of noise unfortunately remains the same as in the case of the wider FOV, but now it is distributed over a smaller area, and consequently the SNR also goes down.
+
+A similar, but more effective method is proposed to accelerate imaging using multiple independent RF coils are built around the measured object. That method is commonly referred to as parallel imaging (PI), and idea behind is that the placement and the sensitivity characteristics of the coils are known, therefore the amplitude of the measured signal can be used to assist the localization of the signal source. This additional information makes less phase-encoding steps sufficient for acquisition, and thus allows a potentially several-fold reduction in imaging time. For an illustrative example, see~\ref{fig:parallel_imaging}. While PI also have downsides, namely the increased production cost of PI-capable machines, the unavoidable reduction in SNR (because each coil has its own, independent noise that sums up at reconstruction), and the introduction of PI-specific artifacts that comes from the inaccurate estimation of the coils sensitivities over the FOV, and the uneven distribution of noise related to coil geometry, the effect of these drawbacks can be reduces by the increase of number of coils (albeit this further increases the production cost).
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\linewidth]{images/parallel_imaging.jpg}
+    \caption{\textbf{Illustrative example for parallel imaging technique.} Multiple independent RF coils are built around the measured object, and as the detection sensitivities of the coils are known, the amplitude of the measured signal can be used to assist the localization of the signal source. Source: Adapted from~\cite{hamilton_recent_2017}}
+    \label{fig:parallel_imaging}
+\end{figure}
+
+\subsection{Bottom Line}
+Since the advent of MR imaging, an explosion of the amount of MRI concepts and technologies is witnessed by the scientific community during the last 3-4 decades. Although the quality of the images has undergone drastic improvement, placing MRI to the focus of today's diagnostic, the speed of evolution based on hardware-related innovations seems to slow down as the technology approaches its physical limits (e.g., the strength of the static magnetic field cannot be increased infinitely and the number of coils in PI is limited, for example, by the space available inside the machine). And while the acquisition time is significantly improved over time, but MRI is still considered to be a slow imaging technique, making dynamic imaging a challenging task. Hence, there is an increasing interest towards software solutions which can push further down the number of k-space points required to produce images with a quality sufficient for successful diagnosis.
+
+\clearpage
