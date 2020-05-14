@@ -72,6 +72,9 @@
 % Handle UTF8 characters
 \usepackage[utf8]{inputenc}
 
+% Change numbering, e.g. to letters instead of numbers
+\usepackage{enumitem}
+
 % If you don't use \usepackage[T1]{fontenc},
 %  - Words containing accented characters cannot be automatically hyphenated,
 %  - You cannot properly copy-and-paste such words from the output (DVI/PS/PDF),
@@ -82,7 +85,45 @@
 \usepackage[english]{babel}
 
 % useful for equations
-\usepackage{mathtools}                        
+\usepackage{mathtools} 
+% Convenience command for norm
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\diag}{diag}
+
+\newenvironment{tight_equations}{
+    \setlength{\abovedisplayskip}{3pt}
+    \setlength{\belowdisplayskip}{3pt}
+}
+
+% For theorems
+\usepackage{amsthm}
+
+\newtheoremstyle{def_thm}% name of the style to be used
+  {20pt}% measure of space to leave above the theorem. E.g.: 3pt
+  {}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {}% measure of space to indent
+  {\bfseries}% name of head font
+  {:}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {}% Manually specify head
+\theoremstyle{def_thm}
+\newtheorem*{definition}{Definition}
+\newtheorem*{theorem}{Theorem}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{notation}{Notation}
+
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[]{algorithm2e}
+\usepackage{authblk}
 
 % Format references by IEEE guidlines
 \usepackage[style=ieee, backend=biber]{biblatex}
@@ -107,6 +148,8 @@
 
 % Support for set background colors for table cells
 \usepackage[table,xcdraw]{xcolor}
+% colorful text
+\usepackage{xcolor}
 
 % Transform URL-s in the text clickable automatically
 \usepackage{url}

@@ -1,11 +1,87 @@
 \chapter{Mathematical Foundation}
 
-\section{Non-Equidistant Fourier Transforms}
-
 \section{Basics of Compressed Sensing}
-"Compressed Sensing MRI" (2008) by Michael Lustig, David L. Donoho, Juan M. Santos, and John M. Pauly --> "A look at how CS can improve on current imaging techniques"
+As it was shortly mentioned in chapter~\ref{chapter:introduction}, a mathematical framework called compressed sensing revolutionized MR image acquisition process allowing reconstruction from much fewer k-space values \textit{under certain conditions} as it would be necessary according to the Nyquist criterion.
 
-"Sparse MRI: The Application of Compressed Sensing for Rapid MR Imaging" (2007) by Michael Lustig, David Donoho, and John M. Pauly
+To realize this promise, first and foremost, the signal to be recovered must be sparse in some transform domain. Fortunately, natural images are intrinsically sparse in the Fourier domain, MR images are being no exception to that, and as MRI scanners operates on Fourier transform, the sparsity condition is always satisfied by the very nature of the imaging process. The other conditions, however, are less intuitive, hence in this section we attempt to give a quick overview of the most important definitions and theorems needed for basic understanding, based on the book~\cite{foucart_mathematical_2013}, and on the lectures of the course titled \textit{Compressive Sampling} at Technical University of Munich by Alihan Kaplan.
+
+\subsection{Elementary Definitions}
+
+Although the reader might be to be familiar with the most of these definitions, for the sake of completeness and clarity of notation used in this work, we present here a list of definitions of elementary constructs, restricting ourselves to mere formulations with short remarks omitting further explanation.
+
+\begin{tight_equations}
+
+\begin{definition}[norm]
+A non-negative function $\norm{\cdot}: X \rightarrow [0, \infty)$ is called a norm, if 
+\begin{enumerate}[label=\alph*)]
+    \item $\norm{\mathbf{x}} = 0$ if and only if $\mathbf{x} = \mathbf{0}$,
+    \item $\norm{\lambda \mathbf{x}} = \Vert \lambda \Vert \norm{\mathbf{x}}$ for all scalars $\lambda$ and all vectors $\mathbf{x} \in X$, and
+    \item $\norm{\mathbf{x} + \mathbf{y}} \le \norm{\mathbf{x}} + \norm{\mathbf{y}}$ for all vectors $\mathbf{x, y} \in X$.
+\end{enumerate}
+\end{definition}
+
+\begin{remark}
+$X$ denotes a vector space on which the norm is defined. In MRI setting, however, $\mathbb{C}^N$ is the default vector space for computations, and therefore, we also define the following constructs in this space.
+\end{remark}
+
+\begin{definition}[$\ell_p$-norms for vectors]
+The $\ell_p$-norm on $\mathbb{C}^N$ is defined for $1 \le p < \infty$ as
+\begin{equation}\label{eq:p-norm}
+\norm{\mathbf{x}}_p = \left(\sum_{j=1}^n |x_j|^p\right)^{\frac{1}{p}},
+\end{equation}
+and for $p = \infty$ as
+\[\norm{\mathbf{x}}_\infty = \max_{j \in [n]} | x_j |.\]
+For $0 < p < 1$, (\ref{eq:p-norm}) defines a quasinorm, which means that from the definition of the norm a) and b) holds, but c) is replaced by the weaker quasitriangle inequality
+\[\norm{\mathbf{x} + \mathbf{y}}_p \le C\left(\norm{\mathbf{x}}_p + \norm{\mathbf{y}}_p\right)\]
+with $C = 2^{\frac{1}{2}-1}$.
+\end{definition}
+
+\begin{notation}
+$[n]$ denotes the set of integers form $0$ to $n-1$.
+\end{notation}
+
+\begin{remark}
+Using the schema above, it is impossible to have a proper norm for $p = 0$; nonetheless, is very common to define $\ell_0$-norm as the number of non-zero coordinates:
+\[\norm{\mathbf{x}}_0 = \left| \left\{x_i \ne 0 : i \in [n]\right\}\right| \text{ where } \mathbf{x} \in \mathbb{C}^N.\]
+Following this convention, $\norm{\cdot}_0$ always refers to that definition in the definitions and theorems below.
+\end{remark}
+
+\begin{definition}[sparsity]
+We call a vector $s$-sparse, if at most $s$ of its entries are non-zero; i.e. $\norm{\mathbf{x}}_0 \le s$.
+\end{definition}
+
+\begin{notation}
+By $\Sigma_s^N$ we denote the set of all s-sparse vectors in $\mathbb{C}^N$; that is,
+\[\Sigma_s^N = \left\{\mathbf{x} \in \mathbb{C}^N : \norm{\mathbf{x}}_0 \le s \right\}.\]
+\end{notation}
+
+\begin{notation}
+The solution set $\left\{\mathbf{x} \in \mathbb{C}^N : \mathbf{Ax} = \mathbf{y}\right\}$ is denoted by $L_\mathbf{A}(\mathbf{y})$ for a given $\mathbf{A} \in \mathbb{C}^{m \times N}$.
+\end{notation}
+
+\begin{definition}[unique sparse solution]
+A vector $\mathbf{x}_* \in \mathbb{C}^N$ is the unique $s$-sparse solution of equation $\mathbf{Ax} = \mathbf{y}$ with $\mathbf{A} \in \mathbb{C}^{m \times N}$ and $\mathbf{y} \in \mathbb{C}^m$, if $L_\mathbf{A}(\mathbf{y}) \cap \Sigma_s^N = \{\mathbf{x}_*\}$, in other words, it is the only $s$-sparse vector satisfying the  linear system defined by $\mathbf{A}$ and $\mathbf{y}$.
+\end{definition}
+
+\begin{definition}[kernel/null-space]
+The kernel/null-space of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as
+\[ker(\mathbf{A}) = \left\{\mathbf{x} \in \mathbb{C}^N : \mathbf{Ax} = \mathbf{0}\right\}.\]
+\end{definition}
+
+\begin{theorem}[SVD]
+For $\mathbf{A} \in \mathbb{C}^{m \times N}$, there exist unitary matrices $\mathbf{U} \in \mathbb{C}^{m \times m}$, $\mathbf{V} \in \mathbb{C}^{N \times N}$, and uniquely defined non-negative numbers $\sigma_1 \ge \sigma_2 \ge \ldots \ge \sigma_{min\{m,N\}} \ge 0$ called singular values of $\mathbf{A}$, such that 
+\[\mathbf{A} = \mathbf{U \Sigma V^*} \text{ where } \mathbf{\Sigma} = diag[\sigma_1, \sigma_2, \ldots, \sigma_{min\{m,N\}}] \in \mathbb{R}^{m \times N}.\]
+The process of obtaining these matrices is called Singular Value Decomposition (SVD).
+\end{theorem}
+
+\end{tight_equations}
+
+\subsection{Formulation of the Problem}
+In engineering settings, especially in signal processing context, engineers and scientist usually try first to model physical systems by a linear model because that way they describe the problem by a set of linear expressions, and then they can express it as a matrix-vector multiplication $\mathbf{Ax} = \mathbf{y}$, where vector $\mathbf{x}$ is the input of the system, vector $\mathbf{y}$ is the output (measured data), and \mathbf{A} characterizes the measurement (thus it is often referred to as \textit{measurement matrix}). A very common task then is to recover the input consisting of $N$ variables from the measurement data, and generally the number of measurements $m$ must obey $m > N$, otherwise the linear system is underdetermined, and hence there exist infinitely many solutions. In case of MRI setting, this statement corresponds to already mentioned Nyquist criterion that requires the sampling frequency in k-space to be twice as the highest frequency in the image space (vid. $k_{FOV} = 2 \cdot k_{max}$ in section~\ref{section:accelerated}).
+
+And that is the point when compressed sensing comes into play claiming that given a \textit{proper} measurement matrix $\mathbf{A}$, the problem
+\[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_0 \text{ subject to } \mathbf{Az} = \mathbf{y} = \mathbf{Ax}\]
+have a unique $s$-sparse solution with $s \ll N$. This problem is often referred to as $P_0$ problem.
 
 \section{First Order Gradient Methods}
 
@@ -14,16 +90,213 @@ My slideshow about first order methods: \url{https://docs.google.com/presentatio
 \subsection{Gradient Descent}
 From Cauchy to recent explosion of optimization algorithm.
 
+The nonlinear conjugate gradient method is mainly based on the same idea as gradient descent (GD) method: That method can be imagined as a hiker trying to get down from a mountain and that hiker always follows the steepest direction; i.e., he or she is moving along the negative gradient in each time step. On the other hand, while the basic GD is easy to understand, fairly efficient, and widely used method to solve unconstrained optimization problems, it has also its drawbacks compared to other variants of the method. The three main problems are 1) the optimal step size, 2) curved "valleys", and 3) flat areas on the cost function surface. Fig.~\ref{fig:grad_desc_problem} shows an example where the inappropriate step size and a "curved valley" produce zigzagging motion, and slow convergence as a result, which is slowed even further when the flat area in the bottom of that valley is reached.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\linewidth]{images/project with Wiem/Banana-SteepDesc.png}
+    \caption{Example of the effect of inappropriate step size, "curved valley" and flat area: slow convergence. Image from Wikipedia.org.}
+    \label{fig:grad_desc_problem}
+\end{figure}
+
 Why would second order methods speed up convergence and why aren't we able to apply them to our problem.
 
 \subsection{Conjugate Gradient}
 How do they work, and when can conjugate gradient outperform gradient descent
 
+\subsection{Conjugate Gradient Method - \cite{conjugate-wiki}}
+To overcome the drawbacks of the basic GD method, one can use the conjugate gradient method (CG) that is an improved version of the basic GD method: in that case, the direction of movement must be conjugate to the previous directions. Two non-zero vectors $\mathbf{u}$ and $\mathbf{v}$ are conjugate (with respect to some $\mathbf{A}$ matrix), if $$\mathbf{u}^T\mathbf{Av} = \mathbf{0}.$$
+Let us consider the following linear system as the subject of optimization:
+$$\mathbf{Ax} = \mathbf{b},$$
+where $\mathbf{A} $is symmetric, positive-definite and real matrix, and $\mathbf{b}$ is also known.
+
+\subsubsection{As a direct method} Since $\mathbf{A}$ is symmetric and positive-definite, it defines an inner product:
+$$\langle \mathbf{u}, \mathbf{v} \rangle_\mathbf{A} := \mathbf{u}^T\mathbf{Av}$$
+Using that inner product, it is possible to find $n$ pairwise conjugate vectors: $\mathcal{P} = \{\mathbf{p}_1,...\mathbf{p}_n\}$. Then $\mathcal{P}$ forms a basis in $\mathbb{R}^n$, so the solution ($\mathbf{x_*}$) of optimization problem can be represented in terms of that basis:
+\begin{equation} \label{eq:direct_method}
+    \mathbf{x_*} = \sum_{i=1}^{n} \alpha_i \mathbf{p}_i.
+\end{equation}
+Left multiplying both sides with $\mathbf{p}_k^T \mathbf{A}$ we get:
+$$\mathbf{p}_k^T\mathbf{Ax_*} = \sum_{i=1}^{n} \alpha_i \mathbf{p}_k^T \mathbf{A} \mathbf{p}_i = \sum_{i=1}^{n} \alpha_i \langle \mathbf{p}_k, \mathbf{p}_i \rangle_\mathbf{A}.$$
+As we know that $\mathbf{Ax_*} = \mathbf{b}$ and that $\langle \mathbf{p}_k, \mathbf{p}_i \rangle_\mathbf{A} = 0 : \forall i \ne k $  because $\mathbf{p}_i$ vectors are mutually conjugate (i.e. orthogonal with respect to the inner product defined by matrix $\mathbf{A}$):
+$$\mathbf{p}_k^T\mathbf{b} = \alpha_k \langle \mathbf{p}_k^T, \mathbf{p}_k \rangle_\mathbf{A}.$$
+That way we can calculate all $\alpha_i$ coefficients,:
+$$\alpha_i = \frac{\mathbf{p}_i^T\mathbf{b}}{\langle \mathbf{p}_i, \mathbf{i}_k \rangle_\mathbf{A}},$$
+and using these coefficients $\mathbf{x_*}$ can be calculated directly by equation \ref{eq:direct_method}.
+
+\subsubsection{As an iterative method} One weakness of direct method that for high dimensional vectors, we have to calculate high number of coefficients. On the other hand, it is not necessary to calculate all of them as a good approximation of $\mathbf{x_* }$ can be obtained using only a few well chosen $\mathbf{p_i}$ vectors. To achieve that we need to define a cost function:
+$$f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \mathbf{Ax} - \mathbf{x}^T \mathbf{b}.$$
+The existence of a unique minimizer is evident as its second derivative is given by a symmetric positive-definite matrix:
+$$\nabla^2 f(\mathbf{x}) = \mathbf{A}.$$
+Also, we can calculate the first derivative easily:
+$$\nabla f(\mathbf{x}) = \mathbf{Ax} - \mathbf{b}.$$
+After choosing an arbitrary starting point $\mathbf{x}_0$, we can start the iteration by calculating the so called \textit{residual}, which is apparently equal to the negative gradient:
+$$\mathbf{r}_{k+1} = \mathbf{b} - \mathbf{Ax}.$$
+Then we have to make sure to get a direction that is conjugate to all previous directions by applying an operation similar to the Gram-Schmidt orthonormalising:
+$$\mathbf{p}_k = \mathbf{r}_k - \sum_{i<k} \frac{\langle \mathbf{p}_i, \mathbf{r}_k \rangle_\mathbf{A}}{\langle \mathbf{p}_i, \mathbf{p}_i \rangle_\mathbf{A}} \mathbf{p}_i.$$
+Following this direction, the next optimal location is given by
+$$\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k,$$
+where $\alpha_k$ can be derived by substituting the previous formula for $\mathbf{x}_{k+1}$ to the the cost function and minimizing it with respect to $\alpha_k$ :
+$$\nabla f(\mathbf{x}_{k+1}) = \nabla f(\mathbf{x}_k + \alpha_k \mathbf{p}_k)  \overset{!}{=} 0 \Rightarrow ... \Rightarrow \alpha_k = \frac{\mathbf{p}_k^T \mathbf{r}_k}{\langle \mathbf{p}_k, \mathbf{p}_k \rangle_\mathbf{A}}$$
+Fig.~\ref{fig:CG_vs_GD} depicts the difference between CG and GD methods by showing an example when CG reaches the optimum in two steps, while GD needs approx. 6 steps.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\linewidth]{images/project with Wiem/Conjugate_gradient_illustration.png}
+    \caption{Visualization of the advantage of the CG method compared to GD: CG requires significantly fewer steps. The green line shows the path of the GD method, red shows the path of the CG method. Image from Wikipedia.org.}
+    \label{fig:CG_vs_GD}
+\end{figure}
+
+\subsection{Nonlinear Conjugate Gradient Method - \cite{conjugate}, \cite{nonlinear-wiki}}
+Our problem, however, is nonlinear, so the CG method described above needs some further adjustment. Therefore, the nonlinear conjugate gradient (NCG) method is used to minimize the cost function $f(\mathbf{x})$, and thus reconstruct the image:
+$$\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{d}_k$$
+\begin{align*}
+    \mathbf{d}_k &=
+    \begin{cases}
+    -\mathbf{g}_k & k = 1 \\
+    -\mathbf{g}_k + \beta_k \mathbf{d}_{k-1} & k > 1
+    \end{cases},
+\end{align*}
+where $\mathbf{g}_k$ denotes the gradient at the $k$th step.
+
+While that method appears to be even simpler than the CG method, unfortunately, there is no optimal way to calculate $\alpha_k$ and $\beta_k$ parameters, so multiple methods are proposed. The two main conditions of a good method are the following:
+\begin{itemize}
+    \item Descent property:
+    \begin{itemize}
+        \item Strict: Cost function must strictly decrease in each step ($\mathbf{g}_k \mathbf{d}_k < 0$)
+        \item Sufficient: We can allow a certain amount of increase in cost function ($\mathbf{g}_k \mathbf{d}_k < -c ||\mathbf{g}_k||^2$)
+    \end{itemize}
+    \item Global convergence
+    \item Fast convergence
+\end{itemize}
+While it is practically impossible to fully satisfy all these three conditions at the same time, but these can be used to compare the different methods.
+
+1) To get the $\alpha_k$ parameter, the most commonly used method is line search:
+$$\alpha_k = \argmin_{\alpha > 0} f(\mathbf{x}_k + \alpha_k \mathbf{d}_k).$$
+Since exact line search is usually expensive and impractical, the strong Wolfe line search is often considered in the implementation of nonlinear conjugate gradient methods. It aims to find a step size satisfying the strong Wolfe conditions:
+$$f(\mathbf{x}_k + \alpha_k \mathbf{d}_k) - f(\mathbf{x}_k) \leq \rho \alpha_k \mathbf{g}_k \mathbf{d}_k$$
+$$|g(\mathbf{x}_k + \alpha_k \mathbf{d}_k)^T \mathbf{d}_k| \leq - \sigma \mathbf{g}_k^T \mathbf{d}_k.$$
+One method to find an $\alpha$ satisfying the Wolfe conditions is backtracking line search, where the "query" point is initially moved to a certain distance from the current location along the selected direction, and then that distance is decreased in each step until the local minimum is reached.
+Fig.~\ref{fig:backtracking} visualizes that method in case of a simple quadratic function.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.3\linewidth]{images/project with Wiem/backtracking.png}
+    \caption{Example of backtracking line search.}
+    \label{fig:backtracking}
+\end{figure}
+
+2) Similarly, to obtain the $\beta_k$, there are multiple choices. The oldest method is the Fletcher-Reeves (FR) method:
+$$\beta_k^{FR} = \frac{||\mathbf{g}_k||^2}{||\mathbf{g}_{k-1}||^2}.$$
+The advantage of that method that global convergence is proved for $\sigma < \frac{1}{2}$ in the Wolfe condition using inexact line search~\cite{Al-Baali}. However, the convergence is relatively slow in many cases because it may fall into some circle of tiny steps, so that method is significantly outperformed by the Polak-Ribi\`{e}re-Polyak (PRP) method:
+$$\beta_k^{FR} = \frac{\mathbf{g}_k^T (\mathbf{g}_k - \mathbf{g}_{k-1}}{||\mathbf{g}_{k-1}||^2}.$$
+In spite of the improved speed, that method also has a serious problem: Global convergence can only be proved for strictly quadratic functions. There exist some sophisticated line search method that ensures global convergence for all nonlinear functions, but these methods are also computationally more intensive~\cite{grippo}.
+To overcome that problem, one can improve the convergence compared to FR method speed (but reduce compared to PRP) while keeping the global convergence property for Wolfe line search by combining the two methods: $\beta_k^{GN} = \max\{-\beta_k^{FR}, \min\{\beta_k^{PRP},\beta_k^{FR}\}\}.$
+Although there are multiple newer methods that are more efficient, these methods fall out of the scope of that study.
+
+3) To sum up, the algorithm used in \cite{sparse} is the following ($TolGrad$, $maxIter$, and $\mu$ variables are parameters to control the precision):
+\begin{algorithm}[H]
+ // Initialization:\\
+ $k \leftarrow 0$; $m \leftarrow 0$; $\mathbf{g}_0 \leftarrow \nabla f(\mathbf{x}_0);  \mathbf{d}_0 \leftarrow - \mathbf{g}_0$\;
+ -------------------------------------------------------------------- \\
+ // Iterations:\\
+ \While{$||\mathbf{g}_k\|_2 < TolGrad$ and $k > maxIter$}{
+  // Backtracking line search\\
+   ~~~~~~~(inner loop condition: 1st Wolfe condition)\\
+  $\alpha_k \leftarrow 1$\\
+  \While{$f(\mathbf{x}_k + t  \mathbf{d}_k) - f(\mathbf{x}_k) > \rho \alpha_k \cdot \mathbf{g}_k^*  \mathbf{d}_k$}{
+    $\alpha_k \leftarrow \mu \cdot \alpha_k$\\
+  }
+ ---------------------------------------------------------------- \\
+  // Changing position along the selected direction using the calculated $\alpha_k$\\
+  $\mathbf{x}_{k+1} \leftarrow \mathbf{x}_{k} + \alpha_k \mathbf{d}_{k}$\\
+ ---------------------------------------------------------------- \\
+  // Calculate next direction\\
+  $\mathbf{g}_{k+1} \leftarrow \nabla f(\mathbf{x}_{k+1})$\\
+  $\gamma \leftarrow \frac{||\mathbf{g}_{k+1}||_2^2}{||\mathbf{g}_{k}||_2^2}$ // Fletcher-Reeves method\\
+  $ \mathbf{d}_{k+1} \leftarrow - \mathbf{g}_{k+1} + \gamma \mathbf{x}_{k}$\\
+  $k \leftarrow k + 1$\\
+ }
+\end{algorithm}
+
+
 \subsection{Proximal Methods}
 Proximal operator, Iterative Shrinkage/Soft Thresholding Algorithm, Forward-Backward Splitting with linear line search, Wolfe conditions
 
-\subsection{Accelerated Proximal Methods}
-Momentum rule and its role in speeding up convergence
+To solve the optimization problem that leads to image reconstruction, a simple and widely applied method is the gradient descent and its derivatives (e.g. conjugate gradient); however, they cannot be applied simply in our case because the cost function
+$$f(\mathbf{x}) = \frac{1}{2} \sum_{\ell = 1}^L \sigma_\ell^{-2} \|F_\Omega \mathbf{S}_\ell \mathbf{x} - \mathbf{y}_\ell \|_2^2 + \lambda \|\mathbf{\Phi x} \|_1$$
+does not have a derivative as the $\ell^1$ norm cannot be differentiated.
+Finding a both universal and efficient method to solve constrained optimization problems, where either cost function or constraint does not have a gradient, is still unsolved, but we can solve that issue by restricting the class of problems to those that has the following general Lagrangian form:
+$$\mathbf{\hat{x}} = \argmin_{x \in \mathcal{H}} \{E(\mathbf{x}) + R(\mathbf{x})\},$$
+where $E(\mathbf{x})$ (empirical error) is continuously differentiable convex function with $\beta$-Lipschitz continuous gradient ($\|f(\mathbf{x}) - f(\mathbf{y})\| \leq \beta \|x - y\| : \forall \mathbf{x}, \mathbf{y} \in \mathbb{C}^N$), and $R(\mathbf{x})$ (regularization term) is a non-smooth, continuous function. For that class of problems, we can define the proximity operator instead of the gradient to find a local minimum in the proximity of the current location:
+$$prox_f(\mathbf{v}) := \argmin_x \frac{1}{2} \|\mathbf{x} - \mathbf{v} \|_2^2 + f(\mathbf{x}).$$
+
+\subsection{Forward-backward splitting}
+One possible implementation of proximity gradient method is forward-backward splitting (FB), which consists of two consecutive steps: First, the "forward step" that optimizes $E(x)$ with gradient ($\mathbf{w}_{k+1} = \mathbf{x}_k - t_k \nabla E(\mathbf{x}_k)$), then the "backward step" optimizes $R(\mathbf{x})$ by proximity operator ($\mathbf{x}_{k+1} = prox_R(\mathbf{w}_{k+1})$). That two steps can be merged into one formula:
+$$\mathbf{x}_{k+1} = prox_R(\mathbf{x}_k - t_k \nabla E(\mathbf{x}_k)).$$
+
+\subsection{ISTA: Iterative Shrinkage-Thresholding Algorithm}
+The most difficult part of FB splitting is the calculation of proximity operator in general. However, the problem can be tremendously simplified by restricting regularization term to $\ell^1$-norm, also known as LASSO (least absolute shrinkage and selection operator) regularization: $R(\mathbf{x}) = \lambda ||\mathbf{\Phi x} ||_1$. That way the proximity operator can be simplified to soft-thresholding function~\cite{combettes_wajs_2005}:
+$$soft(x,c) = sign(x) \cdot max(|x| - c, 0).$$
+Fig.~\ref{fig:soft-thres} shows an example for soft-thresholding functions. Because of that name, the algorithm is also commonly referred as iterative \textit{soft}-thresholding algorithm. In that special case of FB splitting, it is even possible to determine an upper bound for convergence, which is $\mathcal{O}(\frac{1}{\epsilon})$ in that case~\cite{FISTA}.
+
+\subsection{Relaxed Forward-Backward}
+While ISTA is a well-known and widely used optimization method, its convergence speed can be vastly improved by taking the "momentum" into account. As the name implies, there is an analogy from physics that explains well how that method works: Let's imagine a ball rolling down from a hill. That ball, obviously, always try to follow the gradient, but as it rolls down in one direction, it also gains speed, thus momentum and kinetic energy. If the direction gradient changes frequently, than the ball also changes directions often, and it cannot gain speed. But if there is a straight slope, then the ball gathers kinetic energy, and it takes more time to change the direction even if the direction of the gradient changes.
+
+That phenomenon can be expressed by the momentum term, which is basically the numerical derivative of the position, and we adjust the current position by that term:
+$$x_k = prox_{ \gamma || \cdot ||_1}(z_k - \frac{1}{L} \nabla E(z_k)),$$
+$$z_{k+1} = x_k + \mu (x_k - x_{k-1}),$$
+where $\mu$ is the weight that balances the effect of momentum and gradient. However, determining the $\mu$ value is not trivial, and the optimal value depends on the problem. Such a measurement that searches for the optimal value is presented in~\cite{peyre_2011}, and fig.~\ref{fig:mu} shows the result.
+
+%\begin{figure}
+%    \centering
+%    \includegraphics[width=0.5\linewidth]{relaxed-FB.png}
+%    \caption{Speed of convergence for different $\mu$ values. %Image from~\cite{peyre_2011}.}
+ %   \label{fig:mu}
+%\end{figure}
+
+\subsection{FISTA: Fast Iterative Shrinkage-Thresh. Algorithm}
+Whereas introducing momentum rule leads to significant gain in convergence speed, the upper bound of convergence is still $\mathcal{O}(\frac{1}{\epsilon})$, and determining an optimal $\mu$ is a problem, as well. However, Beck et al.~\cite{FISTA} presented a method that can determine $\mu$ easily in such a way that the rate of convergence is $\mathcal{O}(\frac{1}{\epsilon^2})$, which is the theoretical limit defined by Nesterov~\cite{nesterov_1983} for optimization methods:
+$$x_k = prox_{ \gamma || \cdot ||_1}(z_k - \frac{1}{\beta} \nabla E(z_k)),$$
+$$\tau_k = \frac{1 + \sqrt{1 + 4(\tau_{k-1})^2}}{2},$$
+$$\mu_k = \frac{\tau_{k-1} - 1}{\tau_k},$$
+$$z_{k+1} = x_k + \mu_k (x_k - x_{k-1}),$$
+where $\beta$ can easily calculated by power iteration method (eigenvalue decomp.) because of NFFT.
+
+The reason why that method is significantly faster than the previous method is that $\mu$ value changes through the optimization, so the effect of momentum is small in the beginning of the optimization process (as the gradient is large enough to provide good convergence speed), but later the importance of momentum is gradually increasing because the surface of cost function is flat around the solution in most cases (see fig.~\ref{fig:mu_FISTA}). That method provides even faster convergence than relaxed FB, and also solve the problem of finding optimal $\mu$ value. Fig.~\ref{fig:ISTA_vs_FISTA} shows a comparison of converge speed in case of a simple optimization problem presented in~\cite{peyre_2011}.
+
+%\begin{figure}
+ %   \centering
+ %   \includegraphics[width=0.5\linewidth]{mu.png}
+ %   \caption{Change of $\mu$ value during optimization steps.}
+ %   \label{fig:mu_FISTA}
+%\end{figure}
+
+%\begin{figure}
+ %   \centering
+ %   \includegraphics[width=0.5\linewidth]{ISTA_vs_FISTA.png}
+ %   \caption{Comparism of convergence speed of FB, relaxed FB, %and FISTA methods. Image from~\cite{peyre_2011}.}
+ %   \label{fig:ISTA_vs_FISTA}
+%\end{figure}
+
+\subsection{FOGM: Proximal Optimized Gradient Method}
+Another method to increase convergence speed is proposed in~\cite{hendrickx_2018}, which was further improved in~\cite{gueddari_2018}. The main features of that method is that it gives a changing weight ($\gamma_k$) to the proximity operator, uses a more advanced form momentum rule, and it increases $\tau$ value in the last two steps increasing the effect of momentum at the same time that helps to avoid the slowdown of the convergence in the flat area around the solution. Although these modifications do not change the theoretical lower bound for convergence speed ($\mathcal{O}(\frac{1}{\epsilon^2})$), they make the algorithm having an about two-times faster worst-case convergence speed compared to FISTA~\cite{kim, taylor}. The steps of that algorithm are the following:
+
+\begin{algorithm}[H]
+ $k \leftarrow 0$; $\tau_0 \leftarrow 1$; $\mathbf{y}_0, \mathbf{z}_0 \leftarrow$ arbitrary value\;
+ \While{$k \leq K - 1$}{
+  \eIf{$k < K - 1$}{
+    $\tau_k \leftarrow \frac{1 + \sqrt{1 + 4(\tau_{k-1})^2}}{2}$\\
+  } {
+    $\tau_k \leftarrow \frac{1 + \sqrt{1 + 8(\tau_{k-1})^2}}{2}$ // Extra speed in last two steps\\
+  }
+  $\gamma_{k+1} \leftarrow \frac{1}{\beta} \frac{2\tau_k + \tau_{k+1}-1}{\tau_{k+1}}$ // Weight for the proximity operator\\
+  $\mathbf{x}_{k+1} \leftarrow \mathbf{z}_k - \frac{1}{\beta} \nabla E(\mathbf{z}_k)$ // Move along the gradient\\
+  $\mathbf{z}_{k+1} \leftarrow \mathbf{x}_{k+1} + \frac{\tau_{k} - 1}{\tau_{k+1}} (\mathbf{x}_{k+1} - x_k) + \frac{\tau_k}{\tau_{k+1}}(\mathbf{x}_{k+1} - \mathbf{y}_k) + \frac{\tau_k - 1}{\beta \gamma_k \tau_{k+1}}(\mathbf{z}_k - \mathbf{y}_k)$ // More advanced momentum rule\\
+  $\mathbf{y}_{k+1} \leftarrow prox_{\gamma_{k+1}}(\mathbf{z}_{k+1})$\\
+  $k \leftarrow k + 1$\\
+ }
+\end{algorithm}
 
 \subsection{ADMM}
 what is it and why is it good

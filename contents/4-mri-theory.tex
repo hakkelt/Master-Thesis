@@ -17,7 +17,7 @@ The reason behind this elaborate design (depicted on fig.~\ref{fig:mri_schematic
 \begin{figure}
     \centering
     \includegraphics[width=.5\linewidth]{images/mri-scanner.jpg}
-    \caption{\textbf{Schematic illustration} of construction of a cylindrical MRI scanner. Source: Adapted from~\cite{coyne_mri_2020}.}
+    \caption{\textbf{Schematic illustration} of construction of a cylindrical MRI scanner. Source:~\cite{coyne_mri_2020}.}
     \label{fig:mri_schematic}
 \end{figure}
 
@@ -44,7 +44,7 @@ This ratio at room temperature in a static field with a couple teslas is a tiny 
     \begin{minipage}{0.44\textwidth}
         \centering
         \includegraphics[width=0.4\linewidth]{images/precession.pdf}
-        \caption{\textbf{Formation of precession.} As a result of RF excitation pulse, the magnetic momentum of protons deviates from the longitudinal direction and starts to precess due to its angular moment.}
+        \caption{\textbf{Precession of protons.} As a result of RF excitation pulse, the magnetic momentum of protons deviates from the longitudinal direction and starts to precess due to its angular moment.}
         \label{fig:precession}
     \end{minipage}
 \end{figure}
@@ -75,7 +75,7 @@ where $M_0$ is the amplitude of magnetization in the equilibrium and is often ca
 \begin{figure}[thb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/T1_relaxation.png}
-    \caption{\textbf{$T_1$ relaxation after a \SI{90}{\degree} RF excitation.} By the end of the pulse, the magnetization rotated from the z-direction to the x-y plane; therefore, the longitudinal component is reduced to zero, and gradually it returns to the equilibrium. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+    \caption{\textbf{$T_1$ relaxation after a \SI{90}{\degree} RF excitation.} By the end of the pulse, the magnetization rotated from the z-direction to the x-y plane; therefore, the longitudinal component is reduced to zero, and gradually it returns to the equilibrium. Source:~\cite{ridgway_cardiovascular_2010}.}
     \label{fig:T1_relaxation}
 \end{figure}
 
@@ -86,7 +86,7 @@ where $M_1$ is the initial amplitude of net magnetization in the beginning of th
 \begin{figure}[thb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/T2_relaxation.png}
-    \caption{\textbf{$T_2$ relaxation process.} Right after the RF pulse, thre precession of all protons are in the same phase, but they quickly desynchronize due to magnetic field inhomogeneities. The plot in the second row depicts the strength of current induced in the RF coils that corresponds to the projection of the x-y component ($M_{xy}$) of the net magnetization along the direction perpendicular to the surface of the coil. And as a result of the $T_2$ relaxation, the amplitude of this sinusoidal curve exponentially decays. The resultant decaying signal is known as the Free Induction Decay (FID). Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+    \caption{\textbf{$T_2$ relaxation process.} Right after the RF pulse, thre precession of all protons are in the same phase, but they quickly desynchronize due to magnetic field inhomogeneities. The plot in the second row depicts the strength of current induced in the RF coils that corresponds to the projection of the x-y component ($M_{xy}$) of the net magnetization along the direction perpendicular to the surface of the coil. And as a result of the $T_2$ relaxation, the amplitude of this sinusoidal curve exponentially decays. The resultant decaying signal is known as the Free Induction Decay (FID). Source:~\cite{ridgway_cardiovascular_2010}.}
     \label{fig:T2_relaxation}
 \end{figure}
 
@@ -102,7 +102,7 @@ The $TR$ parameter is connected to the $T_1$ value, as it determines the time be
 \begin{figure}[thb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/spin_echo.png}
-    \caption{\textbf{Process of spin echo sequence.} The echo is a temporary rephasing of spins caused by a second, \SI{180}{\degree} RF pulse emitted at $t = TE/2$. That pulse inverts spins, and therefore it makes spins with slower Larmor frequency, which lagged behind the faster ones previously, be ahead of the others in phase. At the time when faster precessing protons catch up, the transversal magnetization exhibits an echo peak. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+    \caption{\textbf{Process of spin echo sequence.} The echo is a temporary rephasing of spins caused by a second, \SI{180}{\degree} RF pulse emitted at $t = TE/2$. That pulse inverts spins, and therefore it makes spins with slower Larmor frequency, which lagged behind the faster ones previously, be ahead of the others in phase. At the time when faster precessing protons catch up, the transversal magnetization exhibits an echo peak. Source:~\cite{ridgway_cardiovascular_2010}.}
     \label{fig:spin_echo}
 \end{figure}
 
@@ -154,14 +154,14 @@ These steps are visually explained on fig.~\ref{fig:slice_selection} and~\ref{fi
     \begin{minipage}{.43\textwidth}
         \centering
         \includegraphics[width=\linewidth]{images/slice_selection.png}
-        \caption{\textbf{Mechanism of slice selection.} Producing a gradient along the z-direction during the RF excitation permits the selection of a slice perpendicular to the z-axis by tuning the RF pulse to cover the frequency range specific to the given slice with given thickness because this pulse excites then only protons in this slice. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \caption{\textbf{Mechanism of slice selection.} Producing a gradient along the z-direction during the RF excitation permits the selection of a slice perpendicular to the z-axis by tuning the RF pulse to cover the frequency range specific to the given slice with given thickness because this pulse excites then only protons in this slice. Source:~\cite{ridgway_cardiovascular_2010}.}
         \label{fig:slice_selection}
     \end{minipage}%
     \hspace{0.03\textwidth}
     \begin{minipage}{0.53\textwidth}
         \centering
         \includegraphics[width=\linewidth]{images/phase_and_freq_encoding.png}
-        \caption{\textbf{Process of phase and frequency encoding.} First, a gradient along the y-direction between the RF excitation and the readout causes a gradual de-synchronization of phase along the y-axis because protons experiencing higher external field will have a higher Larmor frequency. Second, a gradient along the x-direction can be used to separate signal sources along that dimension by the difference in their frequency. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
+        \caption{\textbf{Process of phase and frequency encoding.} First, a gradient along the y-direction between the RF excitation and the readout causes a gradual de-synchronization of phase along the y-axis because protons experiencing higher external field will have a higher Larmor frequency. Second, a gradient along the x-direction can be used to separate signal sources along that dimension by the difference in their frequency. Source:~\cite{ridgway_cardiovascular_2010}.}
         \label{fig:phase_and_freq_encoding}
     \end{minipage}
 \end{figure}
@@ -179,24 +179,24 @@ The effect of the spatial encoding schema discussed above is that the k-space po
 
 One important aspect of dealing with that problem is determining which points are to be measured. Due to hardware limitations and because too rapidly changing electromagnetic field would overheat the measured tissues, arbitrary positioning in k-space is not feasible, and thus the order of measurement points are also a key aspects of the process. These constrains introduces the necessity of well-defined geometries describing the location and the order of measured k-space coordinates, called sampling trajectories.
 
-The traditional way of acquiring K-space data is through Cartesian trajectories. The concept of these trajectories is that equally spaced grid-points are selected in the slice or volume to be measured, and these points are evaluated systematically; for instance, row-by-row, zig-zag, or spirally. The main benefit of this method that a simple and fast reconstruction is possible via fast Fourier transform (FFT). Nevertheless, this method fails to exploit a very important feature of natural images in general: the energy tends to be concentrated in the center of the Fourier space; that is to say, the coefficients of lower frequencies have usually large magnitudes, and points further from the center have mostly a near-zero value. The significance of this observation is perfectly demonstrated by the success of the modern image and video compression algorithms making use of this uneven distribution, for instance, JPG~\cite{wallace_jpeg_1992} and H.26x video compression family~\cite{farooq_study_2017} (on which most modern video file formats are based on). Hence, multiple non-equidistant sampling trajectories are also used in practice. Such trajectories are radial~\cite{rasche_continuous_1995}, spiral~\cite{blum_fast_1987}, concentric rings~\cite{wu_mri_2008}, and 3D cones trajectories~\cite{gurney_design_2006}, just to name a few. A couple 3-dimensional trajectories are depicted in fig.~\ref{fig:trajectories}.
+The traditional way of acquiring K-space data is through Cartesian trajectories. The concept of these trajectories is that equally spaced grid-points are selected in the slice or volume to be measured, and these points are evaluated systematically; for instance, row-by-row, zig-zag, or spirally. The main benefit of this method that a simple and fast reconstruction is possible via fast Fourier transform (FFT). Nevertheless, this method fails to exploit a very important feature of natural images in general: the energy tends to be concentrated in the center of the Fourier space; that is to say, the coefficients of lower frequencies have usually large magnitudes, and points further from the center have mostly a near-zero value. The significance of this observation is perfectly demonstrated by the success of the modern image and video compression algorithms making use of this uneven distribution, for instance, JPEG~\cite{wallace_jpeg_1992} and H.26x video compression family~\cite{farooq_study_2017} (on which most modern audio video file formats are based on, like mp3 and mp4). Hence, multiple non-equidistant sampling trajectories are also used in practice. Such trajectories are radial~\cite{rasche_continuous_1995}, spiral~\cite{blum_fast_1987}, concentric rings~\cite{wu_mri_2008}, and 3D cones trajectories~\cite{gurney_design_2006}, just to name a few. A couple 3-dimensional trajectories are depicted in fig.~\ref{fig:trajectories}.
 
 \begin{figure}[tb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/trajectories.png}
-    \caption{\textbf{A few example for 3D trajectories.} Source: Adapted from~\cite{noauthor_forschungszentrum_nodate}}
+    \caption{\textbf{A few example for 3D trajectories.} Source:~\cite{noauthor_forschungszentrum_nodate}}
     \label{fig:trajectories}
 \end{figure}
 
-\subsection{Accelerated MRI}
+\subsection{Accelerated MRI}\label{section:accelerated}
 For a deeper understanding of accelerating methods, one needs to get familiarized with the concept of field of view and its connection to the bandwidth of RF excitation pulse. The term \textit{field of view} (FOV) refers to the area or volume over which an MR image is acquired, and often also to its size as well. Due to the discrete nature of digital systems, the FOV is also discretized representing it with a grid of equidistant points whose values in grid points can then be displayed as pixels on computer screens. The two main parameters of FOV are therefore its size and the pixel width. The size of FOV is proportional to the bandwidth of RF excitation and inverse proportional to the strength of the frequency encoding gradient. Thus, it makes increasing the RF bandwidth is beneficial for the image quality (although is comes with increased production costs as well), and it limits the strength of the frequency encoding gradient, even though stronger gradient would be advantageous to better separate tissues by their precessional frequencies. In contrast, the pixel size is determined by the size of range over which k-spaces samples are collected. In case of equidistant sampling in k-space over a square shaped FOV, the connection between these parameters can be expressed by simple equations:
 \[\Delta k = 1 / FOV \text{ and } \Delta w = 1 / k_{FOV},\]
-where $\Delta k$ is the distance between k-space points, $FOV$ refers to the size of the FOV, $\Delta w$ is the pixel width, and $k_{FOV}$ is defined as the range between the highest positive and largest negative spacial frequencies in k-space. For a visual example, please refer to fig.~\ref{fig:cartesian}.
+where $\Delta k$ is the distance between k-space points, $FOV$ refers to the size of the FOV, $\Delta w$ is the pixel width, and $k_{FOV}$ is defined as the range between the highest positive and largest negative spacial frequencies in k-space (i.e., $k_{FOV} = k_{max}^+ - k_{max}^- = 2 \cdot k_{max}$, if $k_{max}^+ = |k_{max}^-|$). For a visual example, please refer to fig.~\ref{fig:cartesian}.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.6\textwidth]{images/cartesian.png}
-    \caption{\textbf{Connection between FOV and k-space} in case of Cartesian sampling: The size of FOV is inversely proportional to the distance of k-space points, and the pixel size is determined by the size of range over which k-spaces samples are collected. Source: Adapted from~\cite{noauthor_kspace_nodate}.}
+    \caption{\textbf{Connection between FOV and k-space} in case of Cartesian sampling: The size of FOV is inversely proportional to the distance of k-space points, and the pixel size is determined by the size of range over which k-spaces samples are collected. Source:~\cite{noauthor_kspace_nodate}.}
     \label{fig:cartesian}
 \end{figure}
 
@@ -207,7 +207,7 @@ A similar, but more effective method is proposed to accelerate imaging using mul
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/parallel_imaging.jpg}
-    \caption{\textbf{Illustrative example for parallel imaging technique.} Multiple independent RF coils are built around the measured object, and as the detection sensitivities of the coils are known, the amplitude of the measured signal can be used to assist the localization of the signal source. Source: Adapted from~\cite{hamilton_recent_2017}}
+    \caption{\textbf{Illustrative example for parallel imaging technique.} Multiple independent RF coils are built around the measured object, and as the detection sensitivities of the coils are known, the amplitude of the measured signal can be used to assist the localization of the signal source. Source:~\cite{hamilton_recent_2017}}
     \label{fig:parallel_imaging}
 \end{figure}
 

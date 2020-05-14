@@ -1,4 +1,73 @@
 
+@book{foucart_mathematical_2013,
+	title = {A Mathematical Introduction to Compressive Sensing},
+	isbn = {978-0-8176-4947-0},
+	url = {https://www.springer.com/gp/book/9780817649470},
+	series = {Applied and Numerical Harmonic Analysis},
+	abstract = {At the intersection of mathematics, engineering, and computer science sits the thriving field of compressive sensing. Based on the premise that data acquisition and compression can be performed simultaneously, compressive sensing finds applications in imaging, signal processing, and many other domains. In the areas of applied mathematics, electrical engineering, and theoretical computer science, an explosion of research activity has already followed the theoretical results that highlighted the efficiency of the basic principles. The elegant ideas behind these principles are also of independent interest to pure mathematicians.A Mathematical Introduction to Compressive Sensing gives a detailed account of the core theory upon which the field is build. With only moderate prerequisites, it is an excellent textbook for graduate courses in mathematics, engineering, and computer science. It also serves as a reliable resource for practitioners and researchers in these disciplines who want to acquire a careful understanding of the subject. A Mathematical Introduction to Compressive Sensing uses a mathematical perspective to present the core of the theory underlying compressive sensing.},
+	publisher = {Birkhäuser Basel},
+	author = {Foucart, Simon and Rauhut, Holger},
+	urldate = {2020-05-14},
+	date = {2013},
+	langid = {english},
+	doi = {10.1007/978-0-8176-4948-7}
+}
+
+@article{candes_nearoptimal_2006,
+	title = {Near‒Optimal Signal Recovery From Random Projections: Universal Encoding Strategies?},
+	volume = {52},
+	issn = {1557-9654},
+	doi = {10.1109/TIT.2006.885507},
+	abstract = {Suppose we are given a vector f in a class {FsubeRopfN} , e.g., a class of digital signals or digital images. How many linear measurements do we need to make about f to be able to recover f to within precision epsi in the Euclidean (lscr2) metric? This paper shows that if the objects of interest are sparse in a fixed basis or compressible, then it is possible to reconstruct f to within very high accuracy from a small number of random measurements by solving a simple linear program. More precisely, suppose that the nth largest entry of the vector {\textbar}f{\textbar} (or of its coefficients in a fixed basis) obeys {\textbar}f{\textbar}(n){lesRmiddotn}-1p/, where R{\textgreater}0 and p{\textgreater}0. Suppose that we take measurements yk=langf\# ,Xkrang,k=1,...,K, where the Xk are N-dimensional Gaussian vectors with independent standard normal entries. Then for each f obeying the decay estimate above for some 0{\textless}p{\textless}1 and with overwhelming probability, our reconstruction ft, defined as the solution to the constraints yk=langf\# ,Xkrang with minimal lscr1 norm, obeys parf-f\#parlscr2lesCp {middotRmiddot}(K/{logN})-r, r=1/p-1/2. There is a sense in which this result is optimal; it is generally impossible to obtain a higher accuracy from any set of K measurements whatsoever. The methodology extends to various other random measurement ensembles; for example, we show that similar results hold if one observes a few randomly sampled Fourier coefficients of f. In fact, the results are quite general and require only two hypotheses on the measurement ensemble which are detailed.},
+	pages = {5406--5425},
+	number = {12},
+	journaltitle = {{IEEE} Transactions on Information Theory},
+	author = {Candès, Emmanuel and Tao, Terence},
+	date = {2006-12}
+}
+
+@article{donoho_compressed_2006,
+	title = {Compressed sensing},
+	volume = {52},
+	issn = {1557-9654},
+	doi = {10.1109/TIT.2006.871582},
+	abstract = {Suppose x is an unknown vector in Ropfm (a digital image or signal); we plan to measure n general linear functionals of x and then reconstruct. If x is known to be compressible by transform coding with a known transform, and we reconstruct via the nonlinear procedure defined here, the number of measurements n can be dramatically smaller than the size m. Thus, certain natural classes of images with m pixels need only n=O(m1/4log5/2(m)) nonadaptive nonpixel samples for faithful recovery, as opposed to the usual m pixel samples. More specifically, suppose x has a sparse representation in some orthonormal basis (e.g., wavelet, Fourier) or tight frame (e.g., curvelet, Gabor)-so the coefficients belong to an lscrp ball for 0{\textless}ples1. The N most important coefficients in that expansion allow reconstruction with lscr2 error O(N1/2-1p/). It is possible to design n=O(Nlog(m)) nonadaptive measurements allowing reconstruction with accuracy comparable to that attainable with direct knowledge of the N most important coefficients. Moreover, a good approximation to those N important coefficients is extracted from the n measurements by solving a linear program-Basis Pursuit in signal processing. The nonadaptive measurements have the character of "random" linear combinations of basis/frame elements. Our results use the notions of optimal recovery, of n-widths, and information-based complexity. We estimate the Gel'fand n-widths of lscrp balls in high-dimensional Euclidean space in the case 0{\textless}ples1, and give a criterion identifying near- optimal subspaces for Gel'fand n-widths. We show that "most" subspaces are near-optimal, and show that convex optimization (Basis Pursuit) is a near-optimal way to extract information derived from these near-optimal subspaces.},
+	pages = {1289--1306},
+	number = {4},
+	journaltitle = {{IEEE} Transactions on Information Theory},
+	author = {Donoho, David L.},
+	date = {2006-04}
+}
+
+@article{candes_robust_2006,
+	title = {Robust uncertainty principles: exact signal reconstruction from highly incomplete frequency information},
+	volume = {52},
+	issn = {1557-9654},
+	doi = {10.1109/TIT.2005.862083},
+	shorttitle = {Robust uncertainty principles},
+	abstract = {This paper considers the model problem of reconstructing an object from incomplete frequency samples. Consider a discrete-time signal f/spl isin/C/sup N/ and a randomly chosen set of frequencies /spl Omega/. Is it possible to reconstruct f from the partial knowledge of its Fourier coefficients on the set /spl Omega/? A typical result of this paper is as follows. Suppose that f is a superposition of {\textbar}T{\textbar} spikes f(t)=/spl sigma//sub /spl tau//spl isin/T/f(/spl tau/)/spl delta/(t-/spl tau/) obeying {\textbar}T{\textbar}/spl les/C/sub M//spl middot/(log N)/sup -1/ /spl middot/ {\textbar}/spl Omega/{\textbar} for some constant C/sub M/{\textgreater}0. We do not know the locations of the spikes nor their amplitudes. Then with probability at least 1-O(N/sup -M/), f can be reconstructed exactly as the solution to the /spl lscr//sub 1/ minimization problem. In short, exact recovery may be obtained by solving a convex optimization problem. We give numerical values for C/sub M/ which depend on the desired probability of success. Our result may be interpreted as a novel kind of nonlinear sampling theorem. In effect, it says that any signal made out of {\textbar}T{\textbar} spikes may be recovered by convex programming from almost every set of frequencies of size O({\textbar}T{\textbar}/spl middot/{logN}). Moreover, this is nearly optimal in the sense that any method succeeding with probability 1-O(N/sup -M/) would in general require a number of frequency samples at least proportional to {\textbar}T{\textbar}/spl middot/{logN}. The methodology extends to a variety of other situations and higher dimensions. For example, we show how one can reconstruct a piecewise constant (one- or two-dimensional) object from incomplete frequency samples - provided that the number of jumps (discontinuities) obeys the condition above - by minimizing other convex functionals such as the total variation of f.},
+	pages = {489--509},
+	number = {2},
+	journaltitle = {{IEEE} Transactions on Information Theory},
+	author = {Candes, E.J. and Romberg, J. and Tao, T.},
+	date = {2006-02},
+	keywords = {Biomedical imaging, Convex optimization, Fourier analysis, Fourier coefficient, Frequency, Image reconstruction, Linear programming, Mathematics, Robustness, Sampling methods, Signal processing, Signal reconstruction, Uncertainty, convex optimization, convex programming, discrete-time signal, duality in optimization, free probability, image reconstruction, image sampling, incomplete frequency information, indeterminancy, linear programming, minimisation, minimization problem, nonlinear sampling theorem, piecewise constant object, piecewise constant techniques, probability, probability value, random matrices, robust uncertainty principle, signal reconstruction, signal sampling, sparse matrices, sparse random matrix, sparsity, total-variation minimization, trigonometric expansion, trigonometric expansions, uncertainty principle}
+}
+
+@inreference{noauthor_mm_2020,
+	title = {{MM} algorithm},
+	rights = {Creative Commons Attribution-{ShareAlike} License},
+	url = {https://en.wikipedia.org/w/index.php?title=MM_algorithm&oldid=950831381},
+	abstract = {The {MM} algorithm is an iterative optimization method which exploits the convexity of a function in order to find their maxima or minima. The {MM} stands for “Majorize-Minimization” or “Minorize-Maximization”, depending on whether the desired optimization is a maximization or a minimization. {MM} itself is not an algorithm, but a description of how to construct an optimization algorithm.
+The expectation–maximization algorithm can be treated as a special case of the {MM} algorithm.
+However, in the {EM} algorithm conditional expectations are usually involved, while in the {MM} algorithm convexity and inequalities are the main focus, and it is easier to understand and apply in most cases.},
+	booktitle = {Wikipedia},
+	urldate = {2020-05-13},
+	date = {2020-04-14},
+	langid = {english},
+	note = {Page Version {ID}: 950831381}
+}
+
 @online{noauthor_forschungszentrum_nodate,
 	title = {Forschungszentrum Jülich - Comparison of methods for in vivo sodium imaging at 9.4 Tesla},
 	url = {https://www.fz-juelich.de/inm/inm-4/EN/Forschung/MR-Physik/TeamNatrium/Methodenvergleich/_node.html},
@@ -450,7 +519,6 @@
 	date = {1991-04-01},
 	langid = {english}
 }
-
 @article{fleckenstein_fast_1991,
 	title = {Fast short-tau inversion-recovery {MR} imaging.},
 	volume = {179},
@@ -560,6 +628,7 @@
 	langid = {english},
 	keywords = {{MRI}, diffusion, glioma resistance, sodium, ultra high magnetic field}
 }
+
 @article{richmond_sir_2004,
 	title = {Sir Godfrey Hounsfield},
 	volume = {329},
@@ -1046,7 +1115,6 @@ clustered point distributions are desired.},
 	eprint = {2002.02041},
 	keywords = {{IRLS}, Mathematics - Numerical Analysis, to-read}
 }
-
 @article{levine_3d_2017,
 	title = {3D Cartesian {MRI} with compressed sensing and variable view sharing using complementary poisson-disc sampling: 3D Cartesian {MRI} with Compressed Sensing and Variable View Sharing},
 	volume = {77},
