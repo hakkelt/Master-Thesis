@@ -55,16 +55,16 @@ By $\Sigma_s^N$ we denote the set of all s-sparse vectors in $\mathbb{C}^N$; tha
 \[\Sigma_s^N = \left\{\mathbf{x} \in \mathbb{C}^N : \norm{\mathbf{x}}_0 \le s \right\}.\]
 \end{notation}
 
-\begin{notation}
-The solution set $\left\{\mathbf{x} \in \mathbb{C}^N : \mathbf{Ax} = \mathbf{y}\right\}$ is denoted by $L_\mathbf{A}(\mathbf{y})$ for a given $\mathbf{A} \in \mathbb{C}^{m \times N}$.
-\end{notation}
+%\begin{notation}
+%The solution set $\left\{\mathbf{x} \in \mathbb{C}^N : \mathbf{Ax} = \mathbf{y}\right\}$ is denoted by $L_\mathbf{A}(\mathbf{y})$ for a given $\mathbf{A} \in \mathbb{C}^{m \times N}$.
+%\end{notation}
 
-\begin{definition}[unique sparse solution]
-A vector $\mathbf{x}_* \in \mathbb{C}^N$ is the unique $s$-sparse solution of equation $\mathbf{Ax} = \mathbf{y}$ with $\mathbf{A} \in \mathbb{C}^{m \times N}$ and $\mathbf{y} \in \mathbb{C}^m$, if $L_\mathbf{A}(\mathbf{y}) \cap \Sigma_s^N = \{\mathbf{x}_*\}$, in other words, it is the only $s$-sparse vector satisfying the  linear system defined by $\mathbf{A}$ and $\mathbf{y}$.
-\end{definition}
+%\begin{definition}[unique sparse solution]
+%A vector $\mathbf{x}_* \in \mathbb{C}^N$ is the unique $s$-sparse solution of equation $\mathbf{Ax} = \mathbf{y}$ with $\mathbf{A} \in \mathbb{C}^{m \times N}$ and $\mathbf{y} \in \mathbb{C}^m$, if $L_\mathbf{A}(\mathbf{y}) \cap \Sigma_s^N = \{\mathbf{x}_*\}$, in other words, it is the only $s$-sparse vector satisfying the  linear system defined by $\mathbf{A}$ and $\mathbf{y}$.
+%\end{definition}
 
-\begin{definition}[kernel/null-space]
-The kernel/null-space of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as
+\begin{definition}[kernel/null space]
+The kernel/null space of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as
 \[ker(\mathbf{A}) = \left\{\mathbf{x} \in \mathbb{C}^N : \mathbf{Ax} = \mathbf{0}\right\}.\]
 \end{definition}
 
@@ -77,11 +77,114 @@ The process of obtaining these matrices is called Singular Value Decomposition (
 \end{tight_equations}
 
 \subsection{Formulation of the Problem}
-In engineering settings, especially in signal processing context, engineers and scientist usually try first to model physical systems by a linear model because that way they describe the problem by a set of linear expressions, and then they can express it as a matrix-vector multiplication $\mathbf{Ax} = \mathbf{y}$, where vector $\mathbf{x}$ is the input of the system, vector $\mathbf{y}$ is the output (measured data), and \mathbf{A} characterizes the measurement (thus it is often referred to as \textit{measurement matrix}). A very common task then is to recover the input consisting of $N$ variables from the measurement data, and generally the number of measurements $m$ must obey $m > N$, otherwise the linear system is underdetermined, and hence there exist infinitely many solutions. In case of MRI setting, this statement corresponds to already mentioned Nyquist criterion that requires the sampling frequency in k-space to be twice as the highest frequency in the image space (vid. $k_{FOV} = 2 \cdot k_{max}$ in section~\ref{section:accelerated}).
+In engineering settings, especially in signal processing context, engineers and scientist usually try first to model physical systems by a linear model because that way they describe the problem by a set of linear expressions, and then they can express it as a matrix-vector multiplication $\mathbf{Ax} = \mathbf{y}$, where vector $\mathbf{x}$ is the input of the system, vector $\mathbf{y}$ is the output (measured data), and $\mathbf{A}$ characterizes the measurement (thus it is often referred to as \textit{measurement matrix}). A very common task then is to recover the input consisting of $N$ variables from the measurement data, and generally the number of measurements $m$ must obey $m > N$, otherwise the linear system is underdetermined, and hence there exist infinitely many solutions. In case of MRI setting, this statement corresponds to already mentioned Nyquist criterion that requires the sampling frequency in k-space to be twice as the highest frequency in the image space (vid. $k_{FOV} = 2 \cdot k_{max}$ in section~\ref{section:accelerated}).
 
 And that is the point when compressed sensing comes into play claiming that given a \textit{proper} measurement matrix $\mathbf{A}$, the problem
-\[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_0 \text{ subject to } \mathbf{Az} = \mathbf{y} = \mathbf{Ax}\]
-have a unique $s$-sparse solution with $s \ll N$. This problem is often referred to as $P_0$ problem.
+
+\begin{equation}
+    \tag{P\textsubscript{0}}\label{eq:P_0}
+    \min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_0 \text{ subject to } \mathbf{Az} = \mathbf{y} = \mathbf{Ax}
+\end{equation}
+have a unique $s$-sparse solution with $s \ll N$. This optimization problem is often referred to as (\ref{eq:P_0}). The number of necessary measurement, however, still a difficult question. There are theoretical results stating that $m = 2s$ is the lower bound for a perfect recovery~\citationneeded and that a stable recovery (later explained) occurs with high probability with $m \ge C s log(N / m)$ for random measurement matrices~\citationneeded, but in practice, reconstruction algorithms struggle to reach these theoretical limits (albeit, the achieved $m$ is still drastically improved compared to the Nyquist sampled case).
+
+The main reason why the optimal bounds are usually not reached is that the measurement matrices of real life systems have often have less favorable properties as random matrices and, more importantly, (\ref{eq:P_0}) is a NP-hard problem~\citationneeded; thus, only relaxations can be solved. The most commonly used relaxations are the so called $\ell_1$ minimization or Basis Pursuit (BP)~\citationneeded defined as
+\begin{equation}
+    \tag{P\textsubscript{1}}\label{eq:P_1}
+    \min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_1 \text{ subject to } \mathbf{Az} = \mathbf{y},
+\end{equation}
+the Basis Pursuit DeNoising (BPDN)~\citationneeded formulated as
+
+\begin{equation}
+    \tag{P\textsubscript{1}, \texteta}\label{eq:P_1_noisy}
+    \min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_1 \text{ subject to } \norm{\mathbf{Az} - \mathbf{y}}_2 \le \eta,
+\end{equation}
+and the LASSO (Least Absolute Shrinkage and Selection Operator)~\citationneeded problem expressed by
+\[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{Az} - \mathbf{y}}_2 \text{ subject to } \norm{\mathbf{z}}_1 \le s.\]
+By the aid of a Lagrangian multiplier $\lambda$, the latter two can be transformed to the same unconstrained minimization problem
+\[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{Az} - \mathbf{y}}_2 + \lambda \norm{\mathbf{z}}_1.\]
+
+\subsection{Conditions and Guarantees}
+While $\ell_1$-relaxation (often referred to as (\ref{eq:P_1}) problem) might be appealing as it can be solved efficiently in polynomial time, it needs a more careful approach to guarantee that the minimum of the $\ell_1$ problem is also a solution of (\ref{eq:P_0}). The $\ell_2$-relaxation, for example, always has a unique solution, but this solution is not necessarily sparse. In contrast, $\ell_1$ problem has a solution which is both unique and $s$-sparse given that the matrix $\mathbf{A}$ fulfills the so called \textit{null space property} of order $s$, introduced by Cohen, Dahmen and DeVore in~\cite{cohen_compressed_2009}.
+
+\begin{definition}[NSP]
+A matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is said to satisfy the null space property (NSP) of order $s$, if for any set $S \subset [N]$ with $|S| = s$
+\[\norm{\mathbf{v}_S}_1 < \norm{\mathbf{v}_{S^C}}_1 : \forall \mathbf{v} \in ker(\mathbf{A})  \setminus \{\mathbf{0}\}.\]
+\end{definition}
+
+\begin{notation}
+For a vector $\mathbf{v} \in \mathbb{C}^N$ and a set $S \subset [N]$, we denote by $\mathbf{v}_S$ either the vector in $\mathbb{C}^{|S|}$ which is the restriction of $\mathbf{v}$ to the indices in $S$, or the vector in $\mathbb{C}^N$ which coincides with $\mathbf{v}$ on the indices in $S$ and is zero elsewhere. Similarly, $\mathbf{v}_{S^C}$ means the same with the complement of $S$.
+\end{notation}
+
+\begin{theorem}
+Given a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$, every $s$-sparse vector $\mathbf{x} \in \Sigma_s^N \subset \mathbb{C}^N$ is the unique solution of (\ref{eq:P_1}) with $\mathbf{y} = \mathbf{Ax}$ if and only if $\mathbf{A}$ satisfies the NSP of order $s$.
+\end{theorem}
+
+\begin{remark}
+This theorem shows that for every $\mathbf{y} = \mathbf{Ax}$ with $s$-sparse $\mathbf{x}$, the $\ell_1$-minimization (\ref{eq:P_1}) actually solves the $\ell_0$-minimization (\ref{eq:P_0}) when the NSP of order $s$ holds.
+\end{remark}
+
+Although NSP is a formidable construct that allows relatively easy and straightforward proofs, in realistic settings, signals are rarely sparse, but rather \textit{almost} $s$-sparse vectors, meaning that the most part of the energy of the signal is concentrated in $s$ coefficients with the the largest values. To involve these cases in the compressed sensing framework, an extension of NSP is used, called \textit{stable NSP}. Proving the stable NSP property, one can then approximate the almost $s$-sparse signal with the \textit{best $s$-term approximation} having a tight bound on the error term.
+
+\begin{definition}[$\ell_p$-error of best $s$-term approximation]
+For $p > 0$, the $\ell_p$-error of best $s$-term approximation to a vector $\mathbf{x} \in \mathbb{C}^N$ is defined by
+\[\sigma_s(\mathbf{x})_p = \inf\left\{\norm{\mathbf{x} - \mathbf{z}}_p : \mathbf{z} \in \Sigma_s^N\right\}.\]
+\end{definition}
+
+\begin{remark}
+The  infimum is always achieved by an $\mathbf{z} \in \Sigma_s^N$ whose non-zero entries equal the $s$ largest absolute entries of $\mathbf{x}$.
+\end{remark}
+
+\begin{definition}[stable NSP]
+A matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is said to satisfy the stable NSP with constant $0 < \rho < 1$ of order $s$, if for any set $S \subset [N]$ with $|S| = s$
+\[\norm{\mathbf{v}_S}_1 \le \rho \norm{\mathbf{v}_{S^C}}_1 : \forall \mathbf{v} \in ker(\mathbf{A}).\]
+\end{definition}
+
+\begin{theorem}
+The matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ satisfies the stable NSP with constant $0 < \rho < 1$ of order $s$ if and only if for any set $S \subset [N]$ with $|S| = s$
+\begin{equation}\label{eq:stable_nsp}
+    \norm{\mathbf{z} - \mathbf{x}}_1 \le \frac{1 + \rho}{1 - \rho} \left(\norm{\mathbf{z}}_1 - \norm{\mathbf{x}}_1 + 2\norm{\mathbf{x}_{S^C}}\right)
+\end{equation}
+holds for any set $S \subset [N]$ with $|S| = s$ and for all vectors $\mathbf{x,z} \in \mathbb{C}^N$ with $\mathbf{Az} = \mathbf{Ax}$.
+\end{theorem}
+
+\begin{remark}
+The estimation (\ref{eq:stable_nsp}) can be upper-bounded by means of the $\ell_1$-error of best $s$-term approximation $\sigma_s(\mathbf{x})_1$ as
+\[\norm{\mathbf{z} - \mathbf{x}}_1 \le \frac{1 + \rho}{1 - \rho} \left(\norm{\mathbf{z}}_1 - \norm{\mathbf{x}}_1 + 2\norm{\mathbf{x}_{S^C}}\right) \le 2 \cdot \frac{1 + \rho}{1 - \rho}\sigma_s(\mathbf{x})_1.\]
+\end{remark}
+
+The significance of this theorem is that it implies that having the stable NSP fulfilled, the unique $s$-sparse solution $\mathbf{z}$ of (\ref{eq:P_1}) with $\mathbf{y} = \mathbf{Ax}$ approximates the vector $\mathbf{x}$ with a bounded $\ell_1$-error. Therefore, by a good approximation of the sparsity $s$ of the signal and an upper bound $\epsilon$ of $\sigma_s(\mathbf{x})_1$ (both can be inferred by the statistics of the signal), one can construct or select a measurement matrix $\mathbf{A}$ such that the solution of \textit{any} algorithm solving (\ref{eq:P_1}) is an approximation of the input signal with the maximal error of
+\[\frac{1 + \rho}{1 - \rho} \cdot 2\epsilon,\]
+where $\rho$ depends only on the measurement matrix and $\epsilon$ is a small number because only little energy is stored in the entries contributing the the $\ell_p$-error of best $s$-term approximation.
+Practically that means that by the careful design of the measurement, arbitrary precision recovery is possible (having Nyquist sampling as a special case for guaranteed perfect recovery), and that in case of almost $s$-sparse signals, the number of measurements can be drastically reduced without significant amount of error introduced.
+
+Finally, this construct can be further extended  to handle noisy measurement: proving the \textit{robust NSP} for the measurement matrix, the same guaranties apply to the $\ell_1$-error as in case of stable recovery, extended by an extra term characterizing the noise on the measurement. As a result, arbitrary precision is allowed for arbitrary optimization algorithm capable of solving (\ref{eq:P_1_noisy}) given a measurement matrix satisfying the \textit{robust NSP}.
+
+\begin{definition}[robust NSP]
+A matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is said to satisfy the robust NSP with constants $0 < \rho < 1$ and $0 < \tau$ of order $s$, if for any set $S \subset [N]$ with $|S| = s$
+\[\norm{\mathbf{v}_S}_1 \le \rho \norm{\mathbf{v}_{S^C}}_1 + \tau \norm{\mathbf{Av}}_2 : \forall \mathbf{v} \in \mathbb{C}^N.\]
+\end{definition}
+
+\begin{remark}
+Note that $\mathbf{v}$ is not required to be in $ker(\mathbf{A})$.  In fact, if $\mathbf{v} \in ker(\mathbf{A})$, then $\mathbf{Av} = \mathbf{0}$, and we obtain the definition of stable NSP. Therefore, the robust NSP implies stable NSP.
+\end{remark}
+
+\begin{theorem}
+The matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ satisfies the robust NSP with constants $0 < \rho < 1$ and $0 < \tau$ of order $s$ if and only if
+\begin{equation}\label{eq:robust_nsp}
+    \norm{\mathbf{z} - \mathbf{x}}_1 \le \frac{1 + \rho}{1 - \rho} \left(\norm{\mathbf{z}}_1 - \norm{\mathbf{x}}_1 + 2\norm{\mathbf{x}_{S^C}}\right) + \frac{2\tau}{1-\rho}\norm{\mathbf{A(z-x)}}_2
+\end{equation}
+holds for any set $S \subset [N]$ with $|S| = s$ and for all vectors $\mathbf{x,z} \in \mathbb{C}^N$ with $\mathbf{Az} = \mathbf{Ax}$.
+\end{theorem}
+
+\begin{remark}
+Supposing that a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ satisfies the robust NSP of order $s$, (\ref{eq:robust_nsp}) implies that for any $\mathbf{x} \in \mathbb{C}^N$, a solution $\mathbf{z}$ of (\ref{eq:P_1_noisy}) with $\norm{\mathbf{Ax - y}} \le \eta$ approximates $\mathbf{x}$ with $\ell_1$-error \footnote{Number $4$ in the numerator of the error term at (\ref{eq:error_bound}) is not a typo as one would expect, but a counterintuitive result of some basic arithmetics leading to this expression.}
+\begin{equation}\label{eq:error_bound}
+    \norm{\mathbf{z} - \mathbf{x}}_1 \le 2 \cdot \frac{1 + \rho}{1 - \rho}\sigma_s(\mathbf{x})_1 + \frac{4\tau}{1-\rho}\eta.
+\end{equation}
+\end{remark}
+
+
+\iffalse
 
 \section{First Order Gradient Methods}
 
@@ -104,7 +207,7 @@ Why would second order methods speed up convergence and why aren't we able to ap
 \subsection{Conjugate Gradient}
 How do they work, and when can conjugate gradient outperform gradient descent
 
-\subsection{Conjugate Gradient Method - \cite{conjugate-wiki}}
+\subsection{Conjugate Gradient Method}
 To overcome the drawbacks of the basic GD method, one can use the conjugate gradient method (CG) that is an improved version of the basic GD method: in that case, the direction of movement must be conjugate to the previous directions. Two non-zero vectors $\mathbf{u}$ and $\mathbf{v}$ are conjugate (with respect to some $\mathbf{A}$ matrix), if $$\mathbf{u}^T\mathbf{Av} = \mathbf{0}.$$
 Let us consider the following linear system as the subject of optimization:
 $$\mathbf{Ax} = \mathbf{b},$$
@@ -147,7 +250,7 @@ Fig.~\ref{fig:CG_vs_GD} depicts the difference between CG and GD methods by show
     \label{fig:CG_vs_GD}
 \end{figure}
 
-\subsection{Nonlinear Conjugate Gradient Method - \cite{conjugate}, \cite{nonlinear-wiki}}
+\subsection{Nonlinear Conjugate Gradient Method}
 Our problem, however, is nonlinear, so the CG method described above needs some further adjustment. Therefore, the nonlinear conjugate gradient (NCG) method is used to minimize the cost function $f(\mathbf{x})$, and thus reconstruct the image:
 $$\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{d}_k$$
 \begin{align*}
@@ -300,3 +403,5 @@ Another method to increase convergence speed is proposed in~\cite{hendrickx_2018
 
 \subsection{ADMM}
 what is it and why is it good
+
+\fi

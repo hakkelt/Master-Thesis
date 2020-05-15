@@ -72,6 +72,8 @@
 % Handle UTF8 characters
 \usepackage[utf8]{inputenc}
 
+\setlength{\emergencystretch}{10pt}
+
 % Change numbering, e.g. to letters instead of numbers
 \usepackage{enumitem}
 
@@ -99,13 +101,18 @@
     \setlength{\belowdisplayskip}{3pt}
 }
 
+\newcommand{\citationneeded}{~[\color{red}citation needed\color{black}]}
+
+% greek letters in text mode (used in equation tags
+\usepackage[euler]{textgreek}
+
 % For theorems
 \usepackage{amsthm}
 
 \newtheoremstyle{def_thm}% name of the style to be used
   {20pt}% measure of space to leave above the theorem. E.g.: 3pt
   {}% measure of space to leave below the theorem. E.g.: 3pt
-  {}% name of font to use in the body of the theorem
+  {\itshape}% name of font to use in the body of the theorem
   {}% measure of space to indent
   {\bfseries}% name of head font
   {:}% punctuation between head and body
@@ -177,7 +184,7 @@
 % First page + empty page after it
 % You should bind the the original copy of the Diploma Thesis Proposal Form (collected from the Registrar’s Office) right after this blank page!
 % ---------------------------------------------------
-\author{\name\\\program}
+\author{\name \\ \Program}
 \title{\Huge{\thesisType}\\[1cm]
     \huge{\title}}
 \date{\the\year}

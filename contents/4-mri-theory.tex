@@ -1,5 +1,18 @@
 \chapter{Theoretical Background of MRI}
 
+\section{History of Medical Imaging}
+The beginning of the history of medical images dates back to November of 1895, when Wilhelm Conrad Röntgen discovered X-rays. The significance of his discovery is well demonstrated by the fact that up until the 1960's X-rays were the only non-invasive way to look into the body, and hence he was awarded the first Nobel Prize in Physics in 1901. During the first 60 years of X-ray radiography, it underwent a remarkable development gradually increasing the resolution of images and decreasing the radiation dose that threatened both the patients' and the doctors' health. Since the 1920s, visualization of motions (i.e. dynamic imaging) became possible by fluoroscopy, although only to a limited extent~\cite{bradley_history_2008}.
+
+Although the theoretical background of later advances in medical images were present much earlier, for the introduction of modern imaging technologies to clinical medicine are delayed to the time when the computers became powerful enough for image reconstruction tasks concerning both the computational speed and the available memory. Therefore, the major breakthrough came only in the 1960-70s, and then suddenly multiple imaging techniques were introduced shortly after each other.
+
+The first of these methods was the ultrasound imaging. It was devised by Floyd Firestone in 1940 to detect internal flaws in metal castings~\cite{singh_origin_2007}, and it was proposed for medical purposes first in 1949 by John Wild~\cite{watts_john_2009}, but it was not until 1961 when David Robinson and George Kossoff developed the first commercially practical water path ultrasonic scanner~\cite{griffiths_historical_nodate}.
+
+Similarly, the concept of emission and transmission tomography was proposed in the late 1950s by David E. Kuhl, Luke Chapman and Roy Edwards, but computer tomography was invented only in 1972 by Godfrey Hounsfield and Allan Cormack~\cite{richmond_sir_2004}, and the first PET camera was built for human studies by Edward Hoffman, Michael M. Ter-Pogossian, and Michael E. Phelps in 1973~\cite{noauthor_us_nodate}.
+
+Finally, the youngest imaging technology, the MRI, became available for diagnostics by the end of the 1970s, even though the nuclear magnetic resonance (NMR) spectroscopy that has the same mechanism was discovered by Felix Bloch and Edward Purcell already in 1946. Then Reymond Vahan Damadian proposed the first MR body scanner in 1969, and soon Paul Lauterbur had the idea of applying magnetic field gradients in all three dimensions and a back-projection technique to create images in 1971, and he also published the first MRI images: water tubes, a living clam, and the thoracic cavity of a mouse in 1973 and 1974~\cite{rinck_short_2008}.
+
+Since their appearance, these computer-aided methods continue to develop at a very fast pace, becoming essential tools for today's practitioners despite the fact that they are relative new technologies.
+
 \section{Physics of MRI}
 
 This section attempts to dive into the physics of MRI giving a quick overview of the theory of nuclear magnetic resonance following~\cite{nishimura_principles_1996, kurzhunov_novel_2017, pooley_fundamental_2005}.
@@ -32,7 +45,7 @@ Using this factor, the ratio of unpaired protons (these protons give the net mag
 \[\frac{N_+ - N_-}{N_+ + N_-} = \frac{\gamma \hbar B_0}{2 k_B T}.\]
 This ratio at room temperature in a static field with a couple teslas is a tiny number (in the order of \num{1e-6} multiplied by $B_0$), so that explains why do MRI machines need such a strong electromagnets. (Note that this ratio also can be increased by increasing the temperature, but it is not feasible for human imaging.)
 
-\begin{figure}[thb]
+\begin{figure}[tb]
     \centering
     \begin{minipage}{.52\textwidth}
         \centering
@@ -72,7 +85,7 @@ For a more accurate model, one should consider that as the protons emit RF signa
 \[M_z = M_0 (1 - e^{-t/T_1}),\]
 where $M_0$ is the amplitude of magnetization in the equilibrium and is often called Boltzmann magnetization, and $T_1$ time constant is a property of the protons dependent on the tissue where they are located. The name of this process is $T_1$ relaxation.
 
-\begin{figure}[thb]
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/T1_relaxation.png}
     \caption{\textbf{$T_1$ relaxation after a \SI{90}{\degree} RF excitation.} By the end of the pulse, the magnetization rotated from the z-direction to the x-y plane; therefore, the longitudinal component is reduced to zero, and gradually it returns to the equilibrium. Source:~\cite{ridgway_cardiovascular_2010}.}
@@ -83,7 +96,7 @@ Furthermore, the net magnetization is also affected by another relaxation proces
 \[M_{xy} = M_1\,e^{-t/T_2^*},\]
 where $M_1$ is the initial amplitude of net magnetization in the beginning of the $T_2$ relaxation process. For illustration of this process, see fig.~\ref{fig:T1_relaxation}. The resultant decaying signal is known as the Free Induction Decay (FID). Using, however, the later described \textit{spin-echo} acquisition protocol, the last three inhomogeneity-causing factors can be cancelled out leading to a slightly different time constant denoted by $T_2$.
 
-\begin{figure}[thb]
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/T2_relaxation.png}
     \caption{\textbf{$T_2$ relaxation process.} Right after the RF pulse, thre precession of all protons are in the same phase, but they quickly desynchronize due to magnetic field inhomogeneities. The plot in the second row depicts the strength of current induced in the RF coils that corresponds to the projection of the x-y component ($M_{xy}$) of the net magnetization along the direction perpendicular to the surface of the coil. And as a result of the $T_2$ relaxation, the amplitude of this sinusoidal curve exponentially decays. The resultant decaying signal is known as the Free Induction Decay (FID). Source:~\cite{ridgway_cardiovascular_2010}.}
@@ -99,7 +112,7 @@ Since the advent of MRI, numerous methods were developed and are used in today's
 
 The $TR$ parameter is connected to the $T_1$ value, as it determines the time between two excitation pulses. Having a larger $TR$ value allows protons to get better aligned with the external magnetic field before the next excitation, which results in a higher initial value for $M_{xy}$, leading to a stronger current in the detector coils, but it also makes the entire measurement longer. On the other hand, $TE$ determines the delay between the peak of the RF pulse and the peak of the echo. That echo is a temporary rephasing of spins caused by a second, \SI{180}{\degree} RF pulse emitted at $t = TE/2$. That pulse inverts spins, and therefore it makes spins with slower Larmor frequency, which lagged behind the faster ones previously, be ahead of the others in phase. At the time when faster precessing protons catch up, the transversal magnetization exhibits an echo peak (see~\ref{fig:spin_echo}). As stated earlier, an important advantage of spin echo technique is that three factors of magnetic inhomogeneity is cancelled out by the inversion as these factors are constant over time, while spin-spin interactions are random interactions between protons that cause random local changes in the magnetic fields experienced by the protons.
 
-\begin{figure}[thb]
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/spin_echo.png}
     \caption{\textbf{Process of spin echo sequence.} The echo is a temporary rephasing of spins caused by a second, \SI{180}{\degree} RF pulse emitted at $t = TE/2$. That pulse inverts spins, and therefore it makes spins with slower Larmor frequency, which lagged behind the faster ones previously, be ahead of the others in phase. At the time when faster precessing protons catch up, the transversal magnetization exhibits an echo peak. Source:~\cite{ridgway_cardiovascular_2010}.}
@@ -110,11 +123,11 @@ Before moving forward, an important thing to note that the $T_1$ relaxation is m
 
 Based on the choice of $TR$ and $TE$ values, we can talk about three types of spin echo sequences: $T_1$ weighted sequence has intermediate $TR$ value in the magnitude of $T_1$ producing maximal T1 weighting (at this point, the difference caused by different $T_1$ value between the amplitude of signals coming from different tissues are maximal) and short $TE$ value magnitudes smaller than $T_2$ producing minimal T2 weighting (there is not enough time to have significant difference between decay curves with different $T_2$). To the contrary, T2-weighted images have a long $TE$ (maximizing the difference in $T_2$ relaxation) and long $TR$ (reducing the weight of $T_1$ relaxation). And the third type, called proton density (PD) weighting, uses short $TE$ and long $TE$, so that the pixel intensities on the resulted image will reflect only the density of protons (that also differs between tissues), and the $T_1$ and $T_2$ values have little effect on it.
 
-\begin{figure}[thb]
+\begin{figure}[tb]
     \centering
-    \begin{minipage}[t]{.28\textwidth}
+    \begin{minipage}[t]{.31\textwidth}
         \centering
-        \includegraphics[width=.8\linewidth]{images/T1_weighted.png}
+        \includegraphics[width=.7\linewidth]{images/T1_weighted.png}
         \caption{\textbf{$T_1$ weighted sequence.} Choosing the $TR$ value to be relatively short, and $TE$ to be relatively short, the difference due to the variation of $T_1$ value over tissues would dominate over differences caused by different $T_2$ value. Source: Adapted from~\cite{ridgway_cardiovascular_2010}.}
         \label{fig:T1_weighted}
     \end{minipage}%
@@ -149,7 +162,7 @@ The core concept that allowed the extension of NRM (which is based on the same p
 \end{enumerate}
 These steps are visually explained on fig.~\ref{fig:slice_selection} and~\ref{fig:phase_and_freq_encoding}.
 
-\begin{figure}[thb]
+\begin{figure}[tb]
     \centering
     \begin{minipage}{.43\textwidth}
         \centering
@@ -167,7 +180,7 @@ These steps are visually explained on fig.~\ref{fig:slice_selection} and~\ref{fi
 \end{figure}
 
 Decoding the spatial information becomes feasible then using the famous Bloch equation:
-\[\frac{d\mathbf{M}}{dt} = \mathbf{M} \times \boldsymbol{\gamma} \mathbf{B} - \frac{M_x\mathbf{i} + M_y\mathbf{j}}{T_2} - \frac{(M_z - M_0)\mathbf{k}}{T_1}.\]
+\[\frac{d\textbf{M}}{dt} = \textbf{M} \times \boldsymbol{\gamma} \textbf{B} - \frac{M_x\textbf{i} + M_y\textbf{j}}{T_2} - \frac{(M_z - M_0)\textbf{k}}{T_1}.\]
 Knowing that the transversal component of the net magnetization (that is, the measured component) is non-zero only a selected slice and is dependent on the position within the slice assuming the excitation strategy above, a convenient formulation is to use a complex-valued function to denote the amplitude of the signal generated at position $(x,y)$ by $m(x,y) = m_x(x,y) + m_y(x,y)$, where $m_x(x,y)$ and $m_y(x,y)$ is the amplitude realized in a coil perpendicular to x-axis and y-axis, respectively. As a result of the phase-encoding, the phase of a spin at position $y$ along y-axis is given by $\omega_0 t_y + \gamma G_y t_y y,$ where $\omega_0$ is the base Larmor frequency of the selected slice, $t_y$ denotes the width of time window of phase-encoding, and $G_y$ corresponds to the slope of the linear gradient applied along the y-direction. Because $m(x,y)$ is a complex-valued function representing the magnetization in both the x and y-direction, the distribution $m(x,y)$ gets weighted by a complex exponential corresponding to the spatial frequency $\gamma/2\pi)G_y t_y$: $m(x,y)exp(-i\gamma G_y t_y y$. 
 
 Similarly, the shift in the frequency of precession during the readout characterized by $\gamma G_x x$ adds another weighting term to $m(x,y)$. Solving the Bloch equation for this configuration results in the following formula:
@@ -179,7 +192,7 @@ The effect of the spatial encoding schema discussed above is that the k-space po
 
 One important aspect of dealing with that problem is determining which points are to be measured. Due to hardware limitations and because too rapidly changing electromagnetic field would overheat the measured tissues, arbitrary positioning in k-space is not feasible, and thus the order of measurement points are also a key aspects of the process. These constrains introduces the necessity of well-defined geometries describing the location and the order of measured k-space coordinates, called sampling trajectories.
 
-The traditional way of acquiring K-space data is through Cartesian trajectories. The concept of these trajectories is that equally spaced grid-points are selected in the slice or volume to be measured, and these points are evaluated systematically; for instance, row-by-row, zig-zag, or spirally. The main benefit of this method that a simple and fast reconstruction is possible via fast Fourier transform (FFT). Nevertheless, this method fails to exploit a very important feature of natural images in general: the energy tends to be concentrated in the center of the Fourier space; that is to say, the coefficients of lower frequencies have usually large magnitudes, and points further from the center have mostly a near-zero value. The significance of this observation is perfectly demonstrated by the success of the modern image and video compression algorithms making use of this uneven distribution, for instance, JPEG~\cite{wallace_jpeg_1992} and H.26x video compression family~\cite{farooq_study_2017} (on which most modern audio video file formats are based on, like mp3 and mp4). Hence, multiple non-equidistant sampling trajectories are also used in practice. Such trajectories are radial~\cite{rasche_continuous_1995}, spiral~\cite{blum_fast_1987}, concentric rings~\cite{wu_mri_2008}, and 3D cones trajectories~\cite{gurney_design_2006}, just to name a few. A couple 3-dimensional trajectories are depicted in fig.~\ref{fig:trajectories}.
+The traditional way of acquiring K-space data is through Cartesian trajectories. The concept of these trajectories is that equally spaced grid-points are selected in the slice or volume to be measured, and these points are evaluated systematically; for instance, row-by-row, zig-zag, or spirally. The main benefit of this method that a simple and fast reconstruction is possible via fast Fourier transform (FFT). Nevertheless, this method fails to exploit a very important feature of natural images in general: the energy tends to be concentrated in the center of the Fourier space; that is to say, the coefficients of lower frequencies have usually large magnitudes, and points further from the center have mostly a near-zero value. The significance of this observation is perfectly demonstrated by the success of the modern image and video compression algorithms making use of this uneven distribution, for instance, JPEG, MP3, and standards. Hence, multiple non-equidistant sampling trajectories are also used in practice. Such trajectories are radial~\cite{rasche_continuous_1995}, spiral~\cite{blum_fast_1987}, concentric rings~\cite{wu_mri_2008}, and 3D cones trajectories~\cite{gurney_design_2006}, just to name a few. A couple 3-dimensional trajectories are depicted in fig.~\ref{fig:trajectories}.
 
 \begin{figure}[tb]
     \centering
@@ -193,7 +206,7 @@ For a deeper understanding of accelerating methods, one needs to get familiarize
 \[\Delta k = 1 / FOV \text{ and } \Delta w = 1 / k_{FOV},\]
 where $\Delta k$ is the distance between k-space points, $FOV$ refers to the size of the FOV, $\Delta w$ is the pixel width, and $k_{FOV}$ is defined as the range between the highest positive and largest negative spacial frequencies in k-space (i.e., $k_{FOV} = k_{max}^+ - k_{max}^- = 2 \cdot k_{max}$, if $k_{max}^+ = |k_{max}^-|$). For a visual example, please refer to fig.~\ref{fig:cartesian}.
 
-\begin{figure}[htb]
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.6\textwidth]{images/cartesian.png}
     \caption{\textbf{Connection between FOV and k-space} in case of Cartesian sampling: The size of FOV is inversely proportional to the distance of k-space points, and the pixel size is determined by the size of range over which k-spaces samples are collected. Source:~\cite{noauthor_kspace_nodate}.}
@@ -204,9 +217,9 @@ Using these concepts, one can formulate many methods to accelerate acquisition. 
 
 A similar, but more effective method is proposed to accelerate imaging using multiple independent RF coils are built around the measured object. That method is commonly referred to as parallel imaging (PI), and idea behind is that the placement and the sensitivity characteristics of the coils are known, therefore the amplitude of the measured signal can be used to assist the localization of the signal source. This additional information makes less phase-encoding steps sufficient for acquisition, and thus allows a potentially several-fold reduction in imaging time. For an illustrative example, see~\ref{fig:parallel_imaging}. While PI also have downsides, namely the increased production cost of PI-capable machines, the unavoidable reduction in SNR (because each coil has its own, independent noise that sums up at reconstruction), and the introduction of PI-specific artifacts that comes from the inaccurate estimation of the coils sensitivities over the FOV, and the uneven distribution of noise related to coil geometry, the effect of these drawbacks can be reduces by the increase of number of coils (albeit this further increases the production cost).
 
-\begin{figure}[htb]
+\begin{figure}[tb]
     \centering
-    \includegraphics[width=0.8\linewidth]{images/parallel_imaging.jpg}
+    \includegraphics[width=0.6\linewidth]{images/parallel_imaging.jpg}
     \caption{\textbf{Illustrative example for parallel imaging technique.} Multiple independent RF coils are built around the measured object, and as the detection sensitivities of the coils are known, the amplitude of the measured signal can be used to assist the localization of the signal source. Source:~\cite{hamilton_recent_2017}}
     \label{fig:parallel_imaging}
 \end{figure}
