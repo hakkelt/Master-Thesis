@@ -38,43 +38,6 @@ In the following, we attempt to briefly explain the motivation behind the \texti
 
 \paragraph{Transform Sparsity}
  Sparse signals are signals that have a few non zero coefficients. Most natural signals like images and sounds are compressible i.e. can be represented with few nonzero coefficients in a certain basis without a big loss of information. While MR images are sparse in discrete cosine transform (DCT) and wavelet transform domains, angiograms, for instance, have already a sparse pixel representation.  One famous sparsifying transform is the Spatial Finite Differences which consists in computing the difference between neighboring pixels so the only non zero values are those of the pixels at the edges. Dynamic MR images are also highly compressible and have a sparse representation in the temporal Fourier Domain~\cite{parrish, lustig}.
- 
-\subsection{Incoherence of Artifacts}
-Since a complete sampling of the k-space is a time-consuming process, only a subset is generally acquired by MRI scanners. Due to the sparse nature of the original signal, the latter can still be recovered from a small number of measurements. However, due to the violation of the Nyquist criterion, undersampling in the frequency domain results in aliasing artifacts. In the case of equidistant undersampling, the artifacts are coherent which makes it difficult to reconstruct the signal. For an intuitive visualization, see fig.~\ref{fig:incoherence}. However, taking random samples results in incoherent artifacts that behave like additive noise.
-Truly random sampling in the k-space is generally impractical due to hardware and physiological constraints. The sampling must follow smooth lines and curves and be robust to real-life situations. Several sampling trajectories exist and can be seen in Fig.~\ref{fig:trajectories}.
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{images/project with Wiem/fig-001.png}
-    \caption{An intuitive reconstruction of a sparse signal from pseudo-random k-space undersampling. A sparse signal (a) is 8-fold undersampled in k -space (b). Equispaced undersampling results incoherent signal aliasing (c) that cannot be recovered. Pseudo-random undersampling results in incoherent aliasing (c). Strong signal components stick above the interference, are detected (e) and recovered (f) by thresholding. The interference of these components is computed (g) and subtracted (h), lowering the total interference level and enabling recovery of weaker components. Image and caption from~\cite{sparse}.}
-    \label{fig:incoherence}
-\end{figure}
-
-\subsubsection{Measuring Coherence} 
-In the following we introduce two tools to measure the coherence between samples: 
-Point Spread Function (PSF) and Transform Point Spread Function (TPSF).
-\begin{itemize}
-    \item Point Spread Function (PSF):
-    $$PSF(i,j)=e_{j}^{*}F_{u}^{*}F_{u}e_{i}$$
-    measures contribution of a unit-intensity pixel at the $i^{th}$ position to a pixel at $j^{th}$ position  
-    \item Transform Point Spread Function (TPSF):
-    $$TPSF(i,j)=e_{j}^{*}\Psi F_{u}^{*}\Psi_{*} F_{u}e_{i}$$
-    measures influence of a single transform
-    coefficient to other transform coefficients. Here $F_{u}$ is the undersampled Fourier Operator, $\Psi$ is an orthogonal sparsifying matrix, $e_{i}$ and $e_{j}$ are basis vectors.
-\end{itemize}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{images/project with Wiem/non-cartesian-sampling.png}
-    \caption{PSFs of various sampling trajectories: (a) random lines in 2-D, (b) random points in 2-D or cross-section of random lines in 3-D, (c) radial, (d) uniform spirals, (e) variable density spirals, and (f) variable density perturbed spirals. The height of the red lines measures coherence. Image and caption from~\cite{compressed}.}
-    \label{fig:trajectories}
-\end{figure}
-
-\subsubsection{Variable Density Random Undersampling}
-Our incoherence analysis assumes nonzero elements scattered randomly in the k-space in a sparse representation.  However, in natural images, most of the energy is concentrated around the origin of the k-space.
-A uniform random distribution of samples in the spatial-frequency domain does not
-take into account the energy distribution of MR images in k-space.   Therefore it makes more sense to opt for a nonuniform variable
-density sampling matching energy distribution in k-space. Precisely, we should consider having more samples from the central part of the frequency domain and less highfrequency components. One possibility is sampling with density scaling according to a power of distance from the origin. Fig.~\ref{fig:trajectories} shows examples of physically feasible sampling patterns.
 
 \fi
 

@@ -1,6 +1,58 @@
 
+@online{zhao_compressed_2014,
+	title = {Compressed Sensing {MR} Image Reconstruction Exploiting {TGV} and Wavelet Sparsity},
+	url = {https://www.hindawi.com/journals/cmmm/2014/958671/},
+	abstract = {Compressed sensing ({CS}) based methods make it possible to reconstruct magnetic resonance ({MR}) images from undersampled measurements, which is known as {CS}-{MRI}. The reference-driven {CS}-{MRI} reconstruction schemes can further decrease the sampling ratio by exploiting the sparsity of the difference image between the target and the reference {MR} images in pixel domain. Unfortunately existing methods do not work well given that contrast changes are incorrectly estimated or motion compensation is inaccurate. In this paper, we propose to reconstruct {MR} images by utilizing the sparsity of the difference image between the target and the motion-compensated reference images in wavelet transform and gradient domains. The idea is attractive because it requires neither the estimation of the contrast changes nor multiple times motion compensations. In addition, we apply total generalized variation ({TGV}) regularization to eliminate the staircasing artifacts caused by conventional total variation ({TV}). Fast composite splitting algorithm ({FCSA}) is used to solve the proposed reconstruction problem in order to improve computational efficiency. Experimental results demonstrate that the proposed method can not only reduce the computational cost but also decrease sampling ratio or improve the reconstruction quality alternatively.},
+	titleaddon = {Computational and Mathematical Methods in Medicine},
+	type = {Research Article},
+	author = {Zhao, Di and Du, Huiqian and Han, Yu and Mei, Wenbo},
+	urldate = {2020-05-21},
+	date = {2014},
+	langid = {english},
+	doi = {https://doi.org/10.1155/2014/958671},
+	doi = {https://doi.org/10.1155/2014/958671},
+	note = {{ISSN}: 1748-670X
+Library Catalog: www.hindawi.com
+Pages: e958671
+Publisher: Hindawi
+Volume: 2014}
+}
+
+@online{noauthor_mri_nodate,
+	title = {{MRI} Angiography},
+	url = {https://www.materprivate.ie/dublin/centre-services/all-services/mri-angiography/},
+	titleaddon = {Mater Private Hospital},
+	urldate = {2020-05-21}
+}
+
+@book{fornasier_theoretical_2010,
+	title = {Theoretical Foundations and Numerical Methods for Sparse Recovery},
+	isbn = {978-3-11-022615-7},
+	abstract = {The present collection is the very first contribution of this type in the field of sparse recovery. Compressed sensing is one of the important facets of the broader concept presented in the book, which by now has made connections with other branches such as mathematical imaging, inverse problems, numerical analysis and simulation. The book consists of four lecture notes of courses given at the Summer School on "Theoretical Foundations and Numerical Methods for Sparse Recovery" held at the Johann Radon Institute for Computational and Applied Mathematics in Linz, Austria, in September 2009. This unique collection will be of value for a broad community and may serve as a textbook for graduate courses. From the contents: "Compressive Sensing and Structured Random Matrices" by Holger Rauhut "Numerical Methods for Sparse Recovery" by Massimo Fornasier "Sparse Recovery in Inverse Problems" by Ronny Ramlau and Gerd Teschke "An Introduction to Total Variation for Image Analysis" by Antonin Chambolle, Vicent Caselles, Daniel Cremers, Matteo Novaga and Thomas Pock},
+	pagetotal = {351},
+	publisher = {Walter de Gruyter},
+	author = {Fornasier, Massimo},
+	date = {2010-07-30},
+	langid = {english},
+	keywords = {Mathematics / Applied, Mathematics / Differential Equations / General, Mathematics / General, Mathematics / Numerical Analysis}
+}
+
+@inproceedings{fazel_log-det_2003,
+	title = {Log-det heuristic for matrix rank minimization with applications to Hankel and Euclidean distance matrices},
+	volume = {3},
+	doi = {10.1109/ACC.2003.1243393},
+	abstract = {We present a heuristic for minimizing the rank of a positive semidefinite matrix over a convex set. We use the logarithm of the determinant as a smooth approximation for rank, and locally minimize this function to obtain a sequence of trace minimization problems. We then present a lemma that relates the rank of any general matrix to that of a corresponding positive semidefinite one. Using this, we readily extend the proposed heuristic to handle general matrices. We examine the vector case as a special case, where the heuristic reduces to an iterative l/sub 1/-norm minimization technique. As practical applications of the rank minimization problem and our heuristic, we consider two examples: minimum-order system realization with time-domain constraints, and finding lowest-dimension embedding of points in a Euclidean space from noisy distance data.},
+	eventtitle = {Proceedings of the 2003 American Control Conference, 2003.},
+	pages = {2156--2162 vol.3},
+	booktitle = {Proceedings of the 2003 American Control Conference, 2003.},
+	author = {Fazel, M. and Hindi, H. and Boyd, S.P.},
+	date = {2003-06},
+	note = {{ISSN}: 0743-1619},
+	keywords = {Computational geometry, Constraint optimization, Control systems, Electronic mail, Euclidean distance, Euclidean distance matrices, Euclidean space, Hankel distance matrices, Hankel matrices, Signal processing, Statistics, System identification, Time domain analysis, Yttrium, convex programming, convex set, determinants, general matrix, iterative methods, iterative minimization technique, lemma, local minimization, log det heuristics, lowest dimension embedding points, matrix rank minimization, minimisation, minimum-order system realization, noisy distance data, positive semidefinite matrix, smooth rank approximation, time domain constraints, time-domain analysis, trace minimization problems, vector case}
+}
+
 @article{cohen_compressed_2009,
-	title = {Compressed sensing and best 𝑘-term approximation},
+	title = {Compressed sensing and best k-term approximation},
 	volume = {22},
 	issn = {0894-0347, 1088-6834},
 	url = {https://www.ams.org/jams/2009-22-01/S0894-0347-08-00610-3/},
@@ -15,6 +67,20 @@
 	date = {2009},
 	langid = {english},
 	keywords = {Compressed sensing, Gaussian and Bernoulli ensembles, Gelfand width, best 𝑘-term approximation, instance optimal decoders, instance optimality in probability., mixed instance optimality, null space property, random matrices, restricted isometry property, ℓ₁-minimization}
+}
+
+@article{gottschling_troublesome_2020,
+	title = {The troublesome kernel: why deep learning for inverse problems is typically unstable},
+	url = {http://arxiv.org/abs/2001.01258},
+	shorttitle = {The troublesome kernel},
+	abstract = {There is overwhelming empirical evidence that Deep Learning ({DL}) leads to unstable methods in applications ranging from image classification and computer vision to voice recognition and automated diagnosis in medicine. Recently, a similar instability phenomenon has been discovered when {DL} is used to solve certain problems in computational science, namely, inverse problems in imaging. In this paper we present a comprehensive mathematical analysis explaining the many facets of the instability phenomenon in {DL} for inverse problems. Our main results not only explain why this phenomenon occurs, they also shed light as to why finding a cure for instabilities is so difficult in practice. Additionally, these theorems show that instabilities are typically not rare events - rather, they can occur even when the measurements are subject to completely random noise - and consequently how easy it can be to destablise certain trained neural networks. We also examine the delicate balance between reconstruction performance and stability, and in particular, how {DL} methods may outperform state-of-the-art sparse regularization methods, but at the cost of instability. Finally, we demonstrate a counterintuitive phenomenon: training a neural network may generically not yield an optimal reconstruction method for an inverse problem.},
+	journaltitle = {{arXiv}:2001.01258 [cs]},
+	author = {Gottschling, Nina M. and Antun, Vegard and Adcock, Ben and Hansen, Anders C.},
+	urldate = {2020-05-16},
+	date = {2020-01-05},
+	eprinttype = {arxiv},
+	eprint = {2001.01258},
+	keywords = {65R32, 94A08, 68T05, 65M12, Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning}
 }
 
 @book{foucart_mathematical_2013,
@@ -415,7 +481,6 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	langid = {english},
 	pmid = {2124706}
 }
-
 @article{barbier_methodology_2001,
 	title = {Methodology of brain perfusion imaging},
 	volume = {13},
@@ -519,6 +584,7 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	langid = {english},
 	keywords = {Brain, Double inversion recovery, Magnetic resonance imaging, Multiple sclerosis}
 }
+
 @article{ashgriz_flair_1991,
 	title = {{FLAIR}: Flux line-segment model for advection and interface reconstruction},
 	volume = {93},
@@ -993,7 +1059,6 @@ clustered point distributions are desired.},
 	eprint = {1903.03510},
 	keywords = {Electrical Engineering and Systems Science - Image and Video Processing, Mathematics - Optimization and Control, already-read, implemented}
 }
-
 @article{lustig_sparse_2007,
 	title = {Sparse {MRI}: The application of compressed sensing for rapid {MR} imaging},
 	volume = {58},
@@ -1120,6 +1185,7 @@ clustered point distributions are desired.},
 	eprint = {1811.07472},
 	keywords = {Computer Science - Information Theory, {IRLS}, Mathematics - Optimization and Control, to-read}
 }
+
 @article{adams_iterative_2020,
 	title = {An Iterative Method for Structured Matrix Completion},
 	url = {http://arxiv.org/abs/2002.02041},

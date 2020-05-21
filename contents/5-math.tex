@@ -1,9 +1,9 @@
 \chapter{Mathematical Foundation}
 
 \section{Basics of Compressed Sensing}
-As it was shortly mentioned in chapter~\ref{chapter:introduction}, a mathematical framework called compressed sensing revolutionized MR image acquisition process allowing reconstruction from much fewer k-space values \textit{under certain conditions} as it would be necessary according to the Nyquist criterion.
+As it was shortly mentioned in chapter~\ref{chapter:introduction}, a mathematical framework called compressed sensing (CS) revolutionized MR image acquisition process allowing reconstruction from much fewer k-space values \textit{under certain conditions} as it would be necessary according to the Nyquist criterion.
 
-To realize this promise, first and foremost, the signal to be recovered must be sparse in some transform domain. Fortunately, natural images are intrinsically sparse in the Fourier domain, MR images are being no exception to that, and as MRI scanners operates on Fourier transform, the sparsity condition is always satisfied by the very nature of the imaging process. The other conditions, however, are less intuitive, hence in this section we attempt to give a quick overview of the most important definitions and theorems needed for basic understanding, based on the book~\cite{foucart_mathematical_2013}, and on the lectures of the course titled \textit{Compressive Sampling} at Technical University of Munich by Alihan Kaplan.
+To realize this promise, first and foremost, the signal to be recovered must be sparse in some transform domain. Fortunately, natural images are intrinsically sparse in the Fourier domain and in many other wavelet domains, MR images are being no exception to that, and as MRI scanners operates on Fourier transform, the sparsity condition is always satisfied by the very nature of the imaging process. The other conditions, however, are less intuitive, hence in this section we attempt to give a quick overview of the most important definitions and theorems needed for basic understanding, based on the book~\cite{foucart_mathematical_2013}, and on the lectures of the course titled \textit{Compressive Sampling} at Technical University of Munich by Alihan Kaplan.
 
 \subsection{Elementary Definitions}
 
@@ -35,6 +35,17 @@ For $0 < p < 1$, (\ref{eq:p-norm}) defines a quasinorm, which means that from th
 \[\norm{\mathbf{x} + \mathbf{y}}_p \le C\left(\norm{\mathbf{x}}_p + \norm{\mathbf{y}}_p\right)\]
 with $C = 2^{\frac{1}{2}-1}$.
 \end{definition}
+
+\begin{remark}
+Figure~\ref{fig:balls} is showing 2-dimensional balls defined by $\ell_p$-norm with various $p$ values.
+\end{remark}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/balls.pdf}
+    \caption{\textbf{$\ell_p$ balls in 2D.}}
+    \label{fig:balls}
+\end{figure}
 
 \begin{notation}
 $[n]$ denotes the set of integers form $0$ to $n-1$.
@@ -104,7 +115,24 @@ By the aid of a Lagrangian multiplier $\lambda$, the latter two can be transform
 \[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{Az} - \mathbf{y}}_2 + \lambda \norm{\mathbf{z}}_1.\]
 
 \subsection{Conditions and Guarantees}
-While $\ell_1$-relaxation (often referred to as (\ref{eq:P_1}) problem) might be appealing as it can be solved efficiently in polynomial time, it needs a more careful approach to guarantee that the minimum of the $\ell_1$ problem is also a solution of (\ref{eq:P_0}). The $\ell_2$-relaxation, for example, always has a unique solution, but this solution is not necessarily sparse. In contrast, $\ell_1$ problem has a solution which is both unique and $s$-sparse given that the matrix $\mathbf{A}$ fulfills the so called \textit{null space property} of order $s$, introduced by Cohen, Dahmen and DeVore in~\cite{cohen_compressed_2009}.
+While $\ell_1$-relaxation (often referred to as (\ref{eq:P_1}) problem) might be appealing as it can be solved efficiently in polynomial time, it needs a more careful approach to guarantee that the minimum of the $\ell_1$ problem is also a solution of (\ref{eq:P_0}). The $\ell_2$-relaxation, for example, always has a unique solution, but this solution is not necessarily sparse (for a figurative illustration, see fig.~\ref{fig:sparse_solution} and fig.~\ref{fig:3D_l1_min}). In contrast, $\ell_1$ problem has a solution which is both unique and $s$-sparse given that the matrix $\mathbf{A}$ fulfills the so called \textit{null space property} of order $s$, introduced by Cohen, Dahmen and DeVore in~\cite{cohen_compressed_2009}.
+
+\begin{figure}[tb]
+    \centering
+    \begin{minipage}{.63\textwidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{images/sparse_solution.pdf}
+        \caption{\textbf{Solution of $\ell_1$ and $\ell_2$ minimization problems.} Matrix $\mathbf{A} \in \mathbb{R}^{1 \times 2}$ is an underdetermined linear system, and the task is to find $\mathbf{x} \in \mathbb{R}^2$ with minimal $\ell_1$-norm such that it satisfies the equation $\mathbf{Ax} = \mathbf{y}$ for fixed $\mathbf{y} \in \mathbb{R}$. The number of solutions are infinite (all points along the blue line), and the unique solution of minimization problem is marked with a green star. Note that $\ell_1$ minimization gives sparse solution, while $\ell_2$ minimization is not sparsity seeking.}
+        \label{fig:sparse_solution}
+    \end{minipage}%
+    \hspace{0.02\textwidth}
+    \begin{minipage}{0.34\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/3D_l1_min.pdf}
+        \caption{\textbf{$\ell_1$ minimization in 3D.} This figure demonstrates the sparsity seeking nature of $\ell_1$ minimization in a 3-dimensional space. The image is taken from the interactive demo available at \url{https://hakkelt.github.io/CS-demo/}}
+        \label{fig:3D_l1_min}
+    \end{minipage}
+\end{figure}
 
 \begin{definition}[NSP]
 A matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is said to satisfy the null space property (NSP) of order $s$, if for any set $S \subset [N]$ with $|S| = s$
@@ -183,10 +211,61 @@ Supposing that a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ satisfies the r
 \end{equation}
 \end{remark}
 
+\begin{remark}
+The main problem with the NSP is that proving it is actually NP-hard in general. Hence, the \textit{restricted isometry property (RIP)} is more commonly used in theoretical works because it is easier to handle, and at the same time it implies stable NSP.
+\end{remark}
 
-\iffalse
+\subsection{The Connection Between CS and MRI}
+Although it is not always trivial to apply the compressed sensing scheme to different measurement methods, MRI is in a lucky position with the Fourier transform in its core as random partial discrete Fourier transform (i.e., selecting $m$ rows randomly with uniform distribution from the $N$ rows, or in other words, observing only $m$ entries of the Fourier transform) is proved to satisfy the RIP and thus also the NSP~\cite{fornasier_theoretical_2010}. That discovery has enormous significance as is offers a way to speed up the inherently slow MRI measurements by measuring only a few randomly selected points from the k-space, and then solve the $\ell_1$-minimization problem via an arbitrarily selected optimization algorithm.
 
-\section{First Order Gradient Methods}
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\linewidth]{images/random_sampling2.png}
+    \caption{\textbf{Connection between the sampling pattern and the introduced inference.} Using inverse DFT replacing the missing values with zeros leads to different type of undersampling artifacts. Sampling only the center reduces the resolution, undersampled equispaced scheme adds shifted copies of the signal to the recovered image, and random sampling spreads the inference uniformly. Source: Adapted from~\cite{lustig_compressed_2008}.}
+    \label{fig:random_sampling_images}
+\end{figure}
+
+One can think of this recovery scheme as a denoising or inference cancelling process where the noise/inference to be removed is the sum of undersampling artifacts predicted by Nyquist-Shannon theorem. If we use an equispaced sampling pattern, then the resulted noise is basically shifted copies of the signal and hence recovery of the original signal is impossible as each replica is an equally likely candidate. In contrast, random sampling "spreads" the noise uniformly over the image, so the inference acts mostly like white noise (see fig.~\ref{fig:random_sampling_images}). This approach is particularly appealing as countless denoising algorithms exists, and as many of them are based on minimization of the $\ell_1$-norm of the transform of signal, these methods provide a convenient way to solve (\ref{eq:P_1}) problem. The transform used is always depends on the type of image in interest: MR angiograms (imaging technique visualizing blood vessels) are sparse even in the image domain, but edge detection algorithms like finite differences transform (that leads to the well-known total variation (TV) penalty) can further enhance sparsity (fig.~\ref{fig:MRA}); brain images have a sparse representation in various wavelet transformations~\ref{fig:brain_wavelet}, and dynamic MR images tend to be sparse after temporal Fourier transform is applied.
+
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{0.65\linewidth}
+        \centering
+        \begin{tabular}{c}
+            \includegraphics[width=0.95\linewidth]{images/MRI-Angiography.jpg}
+            \\
+            \includegraphics[width=0.95\linewidth]{images/MRI-Angiography_edges.jpg}
+        \end{tabular}
+        \caption{\textbf{MR angiograms} (MR images tuned to show blood vessels) are intrinsically sparse even in image domain (top image), but sparseness can be further improved by edge detection algorithms (botton image) because only the morphology of the blood vessels are diagnostically relevant. Source: Adapted from~\cite{noauthor_mri_nodate}.}
+        \label{fig:MRA}
+    \end{minipage}
+    \hspace{0.02\linewidth}
+    \begin{minipage}[t]{0.31\linewidth}
+        \centering
+        \begin{tabular}{c}
+            \includegraphics[width=0.65\linewidth]{images/brain_MRI.png}
+            \\ 
+            \includegraphics[width=0.65\linewidth]{images/brain_MRI_wavelet.png}
+        \end{tabular}
+        \caption{\textbf{MRI images of the brain} are not sparse in image domain, but they are in various wavelet transformations. Source:~\cite{zhao_compressed_2014}.}
+        \label{fig:brain_wavelet}
+    \end{minipage}
+\end{figure}
+
+A truly random sampling in the k-space, however, is generally impractical due to hardware and physiological constraints. For example, the sampling must follow smooth lines and curves and be robust to real-life situations such as motion artifacts. Also, a uniform random distribution of samples in the spatial-frequency domain does not take into account the energy distribution of MR images in k-space. Therefore it makes more sense to opt for a nonuniform variable density sampling matching energy distribution in k-space. Precisely, we should consider having more samples from the central part of the frequency domain and less high frequency components. Consequently, carefully designed pseudo-random sampling trajectories are utilized in practice. To quantify  evaluate the "randomness" of the trajectories, authors of~\cite{lustig_compressed_2008} and~\cite{lustig_sparse_2007} suggested using point spread function (PSF) to measure the desirable incoherence of the aliasing interference, defined as
+\[PSF = (\mathbf{e}_j^* \mathcal{F}_u^* \mathcal{F}_u \mathbf{e}_i)_{i,j}\]
+where $\mathcal{F}_u$ is the undersampling Fourier transform operator, $\mathbf{e}_i$ and $\mathbf{e}_j$ are of the natural basis having $0$ in each coordinate except the $i$-th and $j$-th position, resprectively, where $1$ is located. Thus, $PSF_{i,j}$ measures the contribution of a unit-intensity pixel at the $i$-th position of the image to the $j$-th position in the k-space. In case of fully sampled measurement, the $PSF$ is an identity matrix, and undersampling induces non-zero off-diagonal terms. Figuratively speaking, $PSF$ measures the leakage of energy from a Kronecker delta input. Figure~\ref{fig:trajectory_coherence} is showing $PSF$ for a central pixel for a couple sampling trajectories. This quantitiy then can serve as a simple measure for the overall incoherence by calculating the sidelobe-to-peak ratio:
+\[SPR = \max_{i \ne j} \left|\frac{PSF_{i,j}}{PSF_{i,i}}\right|.\]
+As a result, the design of an incoherent sampling trajetory aims to minimize $SPR$.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/PSF_trajectories.png}
+    \caption{$PSF$ of the central pixel for various sampling trajectories: (a) randomly chosen horizontal lines, (b) uniformly selected random points, (c) radial, (d) uniform spirals, (e) variable density spirals, and (f) variable density perturbed spirals. The red line marks the overall coherence level. Source: Adapted from~\cite{lustig_compressed_2008}.}
+    \label{fig:trajectory_coherence}
+\end{figure}
+
+\section{Gradient Methods}
 
 My slideshow about first order methods: \url{https://docs.google.com/presentation/d/1tIZSSfzzHUgo9tlKlmhSUCCWD3ynzyZwnWtpBUe--6g/edit}
 
@@ -242,6 +321,13 @@ $$\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k,$$
 where $\alpha_k$ can be derived by substituting the previous formula for $\mathbf{x}_{k+1}$ to the the cost function and minimizing it with respect to $\alpha_k$ :
 $$\nabla f(\mathbf{x}_{k+1}) = \nabla f(\mathbf{x}_k + \alpha_k \mathbf{p}_k)  \overset{!}{=} 0 \Rightarrow ... \Rightarrow \alpha_k = \frac{\mathbf{p}_k^T \mathbf{r}_k}{\langle \mathbf{p}_k, \mathbf{p}_k \rangle_\mathbf{A}}$$
 Fig.~\ref{fig:CG_vs_GD} depicts the difference between CG and GD methods by showing an example when CG reaches the optimum in two steps, while GD needs approx. 6 steps.
+
+\begin{figure}
+    \centering
+    \minipage
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
 
 \begin{figure}
     \centering
