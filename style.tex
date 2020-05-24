@@ -129,17 +129,19 @@
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
-\usepackage[]{algorithm2e}
+\usepackage[ruled,vlined]{algorithm2e}
 %\usepackage{authblk}                     
 
 % Format references by IEEE guidlines
 \usepackage[style=ieee, backend=biber]{biblatex}
 
+\DeclareBibliographyAlias{artwork}{misc}
+
 % Needed for positioning the logo of the Faculty on the first page
 \usepackage[export]{adjustbox}
 
 % Display SI units
-\usepackage{siunitx}
+\usepackage[binary-units=true]{siunitx}
 
 % vulgar fractions
 \usepackage{textcomp}
