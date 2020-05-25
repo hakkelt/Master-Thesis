@@ -1,4 +1,302 @@
 
+@online{noauthor_novel_nodate,
+	title = {Novel Algorithms based on Majorization Minimization for Nonnegative Matrix Factorization},
+	url = {https://www.groundai.com/project/novel-algorithms-based-on-majorization-minimization-for-nonnegative-matrix-factorization/1},
+	abstract = {Matrix decomposition is ubiquitous and has applications in various fields like speech processing, data mining and image processing to name a few. Under matrix decomposition, nonnegative matrix factorization is used to decompose a nonnegative matrix into a product of two nonnegative matrices which gives some meaningful interpretation of the data. Thus, nonnegative matrix factorization has an edge over the other decomposition techniques. In this paper, we propose two novel iterative algorithms based on Majorization Minimization ({MM})-in which we formulate a novel upper bound and minimize it to get a closed form solution at every iteration. Since the algorithms are based …},
+	titleaddon = {{GroundAI}},
+	urldate = {2020-05-25},
+	langid = {english},
+	note = {Library Catalog: www.groundai.com}
+}
+
+@article{daubechies_iteratively_2010,
+	title = {Iteratively reweighted least squares minimization for sparse recovery},
+	volume = {63},
+	rights = {Copyright © 2009 Wiley Periodicals, Inc.},
+	issn = {1097-0312},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/cpa.20303},
+	doi = {10.1002/cpa.20303},
+	abstract = {Under certain conditions (known as the restricted isometry property, or {RIP}) on the m × N matrix Φ (where m {\textless} N), vectors x ∈ ℝN that are sparse (i.e., have most of their entries equal to 0) can be recovered exactly from y := Φx even though Φ−1(y) is typically an (N − m)—dimensional hyperplane; in addition, x is then equal to the element in Φ−1(y) of minimal 𝓁1-norm. This minimal element can be identified via linear programming algorithms. We study an alternative method of determining x, as the limit of an iteratively reweighted least squares ({IRLS}) algorithm. The main step of this {IRLS} finds, for a given weight vector w, the element in Φ−1(y) with smallest 𝓁2(w)-norm. If x(n) is the solution at iteration step n, then the new weight w(n) is defined by w := [{\textbar}x{\textbar}2 + ε]−1/2, i = 1, …, N, for a decreasing sequence of adaptively defined εn; this updated weight is then used to obtain x(n + 1) and the process is repeated. We prove that when Φ satisfies the {RIP} conditions, the sequence x(n) converges for all y, regardless of whether Φ−1(y) contains a sparse vector. If there is a sparse vector in Φ−1(y), then the limit is this sparse vector, and when x(n) is sufficiently close to the limit, the remaining steps of the algorithm converge exponentially fast (linear convergence in the terminology of numerical optimization). The same algorithm with the “heavier” weight w = [{\textbar}x{\textbar}2 + ε]−1+τ/2, i = 1, …, N, where 0 {\textless} τ {\textless} 1, can recover sparse solutions as well; more importantly, we show its local convergence is superlinear and approaches a quadratic rate for τ approaching 0. © 2009 Wiley Periodicals, Inc.},
+	pages = {1--38},
+	number = {1},
+	journaltitle = {Communications on Pure and Applied Mathematics},
+	author = {Daubechies, Ingrid and {DeVore}, Ronald and Fornasier, Massimo and Güntürk, C. Si̇nan},
+	urldate = {2020-05-25},
+	date = {2010},
+	langid = {english},
+	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1002/cpa.20303}
+}
+
+@inproceedings{chartrand_iteratively_2008,
+	title = {Iteratively reweighted algorithms for compressive sensing},
+	doi = {10.1109/ICASSP.2008.4518498},
+	abstract = {The theory of compressive sensing has shown that sparse signals can be reconstructed exactly from many fewer measurements than traditionally believed necessary. In [1], it was shown empirically that using lscrp minimization with p {\textless} 1 can do so with fewer measurements than with p = 1. In this paper we consider the use of iteratively reweighted algorithms for computing local minima of the nonconvex problem. In particular, a particular regularization strategy is found to greatly improve the ability of a reweighted least-squares algorithm to recover sparse signals, with exact recovery being observed for signals that are much less sparse than required by an unregularized version (such as {FOCUSS}, [2]). Improvements are also observed for the reweighted-lscr1 approach of [3].},
+	eventtitle = {2008 {IEEE} International Conference on Acoustics, Speech and Signal Processing},
+	pages = {3869--3872},
+	booktitle = {2008 {IEEE} International Conference on Acoustics, Speech and Signal Processing},
+	author = {Chartrand, Rick and Wotao Yin},
+	date = {2008-03},
+	note = {{ISSN}: 2379-190X},
+	keywords = {Biomedical imaging, Compressive sensing, Focusing, Image coding, Image reconstruction, Iterative algorithms, Laboratories, Least squares methods, Pursuit algorithms, Signal reconstruction, Size measurement, compressive sensing theory, iterative methods, iteratively reweighted algorithm, iteratively reweighted least squares, least squares approximations, nonconvex optimization, reweighted least-squares algorithm, signal reconstruction, ℓ1 minimization}
+}
+
+@article{gorodnitsky_neuromagnetic_1995,
+	title = {Neuromagnetic source imaging with {FOCUSS}: a recursive weighted minimum norm algorithm},
+	volume = {95},
+	issn = {0013-4694},
+	url = {http://www.sciencedirect.com/science/article/pii/001346949500107A},
+	doi = {10.1016/0013-4694(95)00107-A},
+	shorttitle = {Neuromagnetic source imaging with {FOCUSS}},
+	abstract = {The paper describes a new algorithm for tomographic source reconstruction in neural electromagnetic inverse problems. Termed {FOCUSS} ({FOCal} Underdetermined System Solution), this algorithm combines the desired features of the two major approaches to electromagnetic inverse procedures. Like multiple current dipole modeling methods, {FOCUSS} produces high resolution solutions appropriate for the highly localized sources often encountered in electromagnetic imaging. Like linear estimation methods, {FOCUSS} allows current sources to assume arbitrary shapes and it preserves the generality and ease of application characteristic of this group of methods. It stands apart from standard signal processing techniques because, as an initialization-dependent algorithm, it accommodates the non-unique set of feasible solutions that arise from the neuroelectric source constraints. {FOCUSS} is based on recursive, weighted norm minimization. The consequence of the repeated weighting procedure is, in effect, to concentrate the solution in the minimal active regions that are essential for accurately reproducing the measurements. The {FOCUSS} algorithm is introduced and its properties are illustrated in the context of a number of simulations, first using exact measurements in 2- and 3-D problems, and then in the presence of noise and modeling errors. The results suggest that {FOCUSS} is a powerful algorithm with considerable utility for tomographic current estimation.},
+	pages = {231--251},
+	number = {4},
+	journaltitle = {Electroencephalography and Clinical Neurophysiology},
+	shortjournal = {Electroencephalography and Clinical Neurophysiology},
+	author = {Gorodnitsky, Irina F. and George, John S. and Rao, Bhaskar D.},
+	urldate = {2020-05-25},
+	date = {1995-10-01},
+	langid = {english},
+	keywords = {{EEG}/{MEG}, Neuromagnetic source localization, Recursive weighted minimum norm algorithm}
+}
+
+@article{recht_guaranteed_2010,
+	title = {Guaranteed Minimum-Rank Solutions of Linear Matrix Equations via Nuclear Norm Minimization},
+	volume = {52},
+	issn = {0036-1445},
+	url = {https://epubs.siam.org/doi/abs/10.1137/070697835},
+	doi = {10.1137/070697835},
+	abstract = {The affine rank minimization problem consists of finding a matrix of minimum rank that satisfies a given system of linear equality constraints. Such problems have appeared in the literature of a diverse set of fields including system identification and control, Euclidean embedding, and collaborative filtering. Although specific instances can often be solved with specialized algorithms, the general affine rank minimization problem is {NP}-hard because it contains vector cardinality minimization as a special case. In this paper, we show that if a certain restricted isometry property holds for the linear transformation defining the constraints, the minimum-rank solution can be recovered by solving a convex optimization problem, namely, the minimization of the nuclear norm over the given affine space. We present several random ensembles of equations where the restricted isometry property holds with overwhelming probability, provided the codimension of the subspace is sufficiently large. The techniques used in our analysis have strong parallels in the compressed sensing framework. We discuss how affine rank minimization generalizes this preexisting concept and outline a dictionary relating concepts from cardinality minimization to those of rank minimization. We also discuss several algorithmic approaches to minimizing the nuclear norm and illustrate our results with numerical examples.},
+	pages = {471--501},
+	number = {3},
+	journaltitle = {{SIAM} Review},
+	shortjournal = {{SIAM} Rev.},
+	author = {Recht, Benjamin and Fazel, Maryam and Parrilo, Pablo A.},
+	urldate = {2020-05-25},
+	date = {2010-01-01},
+	note = {Publisher: Society for Industrial and Applied Mathematics}
+}
+
+@article{burer_nonlinear_2003,
+	title = {A nonlinear programming algorithm for solving semidefinite programs via low-rank factorization},
+	volume = {95},
+	issn = {1436-4646},
+	url = {https://doi.org/10.1007/s10107-002-0352-8},
+	doi = {10.1007/s10107-002-0352-8},
+	abstract = {In this paper, we present a nonlinear programming algorithm for solving semidefinite programs ({SDPs}) in standard form. The algorithm's distinguishing feature is a change of variables that replaces the symmetric, positive semidefinite variable X of the {SDP} with a rectangular variable R according to the factorization X={RRT}. The rank of the factorization, i.e., the number of columns of R, is chosen minimally so as to enhance computational speed while maintaining equivalence with the {SDP}. Fundamental results concerning the convergence of the algorithm are derived, and encouraging computational results on some large-scale test problems are also presented.},
+	pages = {329--357},
+	number = {2},
+	journaltitle = {Mathematical Programming},
+	shortjournal = {Math. Program., Ser. B},
+	author = {Burer, Samuel and Monteiro, Renato D.C.},
+	urldate = {2020-05-25},
+	date = {2003-02-01},
+	langid = {english}
+}
+
+@online{bezanson_why_2012,
+	title = {Why We Created Julia},
+	url = {https://julialang.org/blog/2012/02/why-we-created-julia/},
+	abstract = {Official website for the Julia programming language},
+	titleaddon = {The Julia Language},
+	author = {Bezanson, Jeff and Karpinski, Stephan and Shah, Viral and Edelman, Alan},
+	urldate = {2020-05-25},
+	date = {2012-02-14},
+	langid = {english},
+	note = {Library Catalog: julialang.org}
+}
+
+@software{noauthor_kul-forbesabstractoperatorsjl_2020,
+	title = {kul-forbes/{AbstractOperators}.jl},
+	url = {https://github.com/kul-forbes/AbstractOperators.jl},
+	abstract = {Abstract operators for large scale optimization in Julia},
+	publisher = {{KUL} {ForBES}},
+	urldate = {2020-05-25},
+	date = {2020-04-05},
+	note = {original-date: 2017-05-26T11:58:10Z},
+	keywords = {automatic-differentiation, back-propagation, derivatives, julia-language, large-scale, optimization}
+}
+
+@software{noauthor_juliasmoothoptimizerslinearoperatorsjl_2020,
+	title = {{JuliaSmoothOptimizers}/{LinearOperators}.jl},
+	rights = {{MPL}-2.0},
+	url = {https://github.com/JuliaSmoothOptimizers/LinearOperators.jl},
+	abstract = {Linear Operators for Julia. Contribute to {JuliaSmoothOptimizers}/{LinearOperators}.jl development by creating an account on {GitHub}.},
+	publisher = {{JuliaSmoothOptimizers}},
+	urldate = {2020-05-25},
+	date = {2020-04-24},
+	note = {original-date: 2014-05-24T18:01:00Z},
+	keywords = {julia, julia-language, linear-maps, linear-operators, matrices, preconditioner}
+}
+
+@software{jutho_jutholinearmapsjl_2020,
+	title = {Jutho/{LinearMaps}.jl},
+	url = {https://github.com/Jutho/LinearMaps.jl},
+	abstract = {A Julia package for defining and working with linear maps, also known as linear transformations or linear operators acting on vectors. The only requirement for a {LinearMap} is that it can act on a v...},
+	author = {Jutho},
+	urldate = {2020-05-25},
+	date = {2020-05-09},
+	note = {original-date: 2014-06-15T12:24:03Z}
+}
+
+@online{noauthor_k-space_nodate,
+	title = {k-space: {FOV}},
+	url = {http://mriquestions.com/field-of-view-fov.html},
+	shorttitle = {k-space},
+	abstract = {How does k-space relate to field-of-view ({FOV}) and pixel width?},
+	titleaddon = {Questions and Answers in {MRI}},
+	urldate = {2020-05-13},
+	langid = {english}
+}
+
+@article{van_der_vorst_bi-cgstab_1992,
+	title = {Bi-{CGSTAB}: A Fast and Smoothly Converging Variant of Bi-{CG} for the Solution of Nonsymmetric Linear Systems},
+	volume = {13},
+	issn = {0196-5204},
+	url = {https://epubs.siam.org/doi/10.1137/0913035},
+	doi = {10.1137/0913035},
+	shorttitle = {Bi-{CGSTAB}},
+	abstract = {Recently the Conjugate Gradients-Squared ({CG}-S) method has been proposed as an attractive variant of the Bi-Conjugate Gradients (Bi-{CG}) method. However, it has been observed that {CG}-S may lead to a rather irregular convergence behaviour, so that in some cases rounding errors can even result in severe cancellation effects in the solution. In this paper, another variant of Bi-{CG} is proposed which does not seem to suffer from these negative effects. Numerical experiments indicate also that the new variant, named Bi-{CGSTAB}, is often much more efficient than {CG}-S.},
+	pages = {631--644},
+	number = {2},
+	journaltitle = {{SIAM} Journal on Scientific and Statistical Computing},
+	shortjournal = {{SIAM} J. Sci. and Stat. Comput.},
+	author = {van der Vorst, H. A.},
+	urldate = {2020-05-23},
+	date = {1992-03-01},
+	note = {Publisher: Society for Industrial and Applied Mathematics}
+}
+
+@inproceedings{fazel_log-det_2003,
+	title = {Log-det heuristic for matrix rank minimization with applications to Hankel and Euclidean distance matrices},
+	volume = {3},
+	doi = {10.1109/ACC.2003.1243393},
+	abstract = {We present a heuristic for minimizing the rank of a positive semidefinite matrix over a convex set. We use the logarithm of the determinant as a smooth approximation for rank, and locally minimize this function to obtain a sequence of trace minimization problems. We then present a lemma that relates the rank of any general matrix to that of a corresponding positive semidefinite one. Using this, we readily extend the proposed heuristic to handle general matrices. We examine the vector case as a special case, where the heuristic reduces to an iterative l/sub 1/-norm minimization technique. As practical applications of the rank minimization problem and our heuristic, we consider two examples: minimum-order system realization with time-domain constraints, and finding lowest-dimension embedding of points in a Euclidean space from noisy distance data.},
+	eventtitle = {Proceedings of the 2003 American Control Conference, 2003.},
+	pages = {2156--2162 vol.3},
+	booktitle = {Proceedings of the 2003 American Control Conference, 2003.},
+	author = {Fazel, M. and Hindi, H. and Boyd, S.P.},
+	date = {2003-06},
+	note = {{ISSN}: 0743-1619},
+	keywords = {Computational geometry, Constraint optimization, Control systems, Electronic mail, Euclidean distance, Euclidean distance matrices, Euclidean space, Hankel distance matrices, Hankel matrices, Signal processing, Statistics, System identification, Time domain analysis, Yttrium, convex programming, convex set, determinants, general matrix, iterative methods, iterative minimization technique, lemma, local minimization, log det heuristics, lowest dimension embedding points, matrix rank minimization, minimisation, minimum-order system realization, noisy distance data, positive semidefinite matrix, smooth rank approximation, time domain constraints, time-domain analysis, trace minimization problems, vector case}
+}
+
+@article{otazo_low-rank_2015,
+	title = {Low-rank plus sparse matrix decomposition for accelerated dynamic {MRI} with separation of background and dynamic components},
+	volume = {73},
+	rights = {© 2014 Wiley Periodicals, Inc.},
+	issn = {1522-2594},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.25240},
+	doi = {10.1002/mrm.25240},
+	abstract = {Purpose To apply the low-rank plus sparse (L+S) matrix decomposition model to reconstruct undersampled dynamic {MRI} as a superposition of background and dynamic components in various problems of clinical interest. Theory and Methods The L+S model is natural to represent dynamic {MRI} data. Incoherence between k-t space (acquisition) and the singular vectors of L and the sparse domain of S is required to reconstruct undersampled data. Incoherence between L and S is required for robust separation of background and dynamic components. Multicoil L+S reconstruction is formulated using a convex optimization approach, where the nuclear norm is used to enforce low rank in L and the l1 norm is used to enforce sparsity in S. Feasibility of the L+S reconstruction was tested in several dynamic {MRI} experiments with true acceleration, including cardiac perfusion, cardiac cine, time-resolved angiography, and abdominal and breast perfusion using Cartesian and radial sampling. Results The L+S model increased compressibility of dynamic {MRI} data and thus enabled high-acceleration factors. The inherent background separation improved background suppression performance compared to conventional data subtraction, which is sensitive to motion. Conclusion The high acceleration and background separation enabled by L+S promises to enhance spatial and temporal resolution and to enable background suppression without the need of subtraction or modeling. Magn Reson Med 73:1125–1136, 2015. © 2014 Wiley Periodicals, Inc.},
+	pages = {1125--1136},
+	number = {3},
+	journaltitle = {Magnetic Resonance in Medicine},
+	author = {Otazo, Ricardo and Candès, Emmanuel and Sodickson, Daniel K.},
+	urldate = {2020-05-24},
+	date = {2015},
+	langid = {english},
+	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1002/mrm.25240},
+	keywords = {compressed sensing, dynamic {MRI}, for-reference, low-rank matrix completion, sparsity, to-read}
+}
+
+@article{roohi_multi-dimensional_2017,
+	title = {Multi-dimensional low rank plus sparse decomposition for reconstruction of under-sampled dynamic {MRI}},
+	volume = {63},
+	issn = {0031-3203},
+	url = {http://www.sciencedirect.com/science/article/pii/S0031320316302965},
+	doi = {10.1016/j.patcog.2016.09.040},
+	abstract = {In this paper, we introduce a multi-dimensional approach to the problem of reconstruction of {MR} image sequences that are highly undersampled in k-space. By formulating the reconstruction as a high-order low rank tensor plus sparse tensor decomposition problem, we propose an efficient numerical algorithm based on the alternating direction method of multipliers ({ADMM}) to solve the optimization. Using Tucker representation, the sparse component is learnt efficiently with different sparsifying matrices along the modes of dynamic {MR} data. To estimate the low rank tensor, a convex cost function is defined to be the weighted sum of nuclear norms of its 3 unfolding matrices. Through extensive experimental results we show that our proposed method achieves superior reconstruction quality, compared to the state-of-the-art reconstruction methods.},
+	pages = {667--679},
+	journaltitle = {Pattern Recognition},
+	shortjournal = {Pattern Recognition},
+	author = {Roohi, Shahrooz F. and Zonoobi, Dornoosh and Kassim, Ashraf A. and Jaremko, Jacob L.},
+	urldate = {2020-05-24},
+	date = {2017-03-01},
+	langid = {english},
+	keywords = {Compressive sensing, Dynamic 3D {MRI}, Image reconstruction, Low-rank and sparse tensor decomposition}
+}
+
+@article{ong_extreme_2020,
+	title = {Extreme {MRI}: Large-scale volumetric dynamic imaging from continuous non-gated acquisitions},
+	volume = {n/a},
+	rights = {© 2020 International Society for Magnetic Resonance in Medicine},
+	issn = {1522-2594},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.28235},
+	doi = {10.1002/mrm.28235},
+	shorttitle = {Extreme {MRI}},
+	abstract = {Purpose To develop a framework to reconstruct large-scale volumetric dynamic {MRI} from rapid continuous and non-gated acquisitions, with applications to pulmonary and dynamic contrast-enhanced ({DCE}) imaging. Theory and Methods The problem considered here requires recovering 100 gigabytes of dynamic volumetric image data from a few gigabytes of k-space data, acquired continuously over several minutes. This reconstruction is vastly under-determined, heavily stressing computing resources as well as memory management and storage. To overcome these challenges, we leverage intrinsic three-dimensional (3D) trajectories, such as 3D radial and 3D cones, with ordering that incoherently cover time and k-space over the entire acquisition. We then propose two innovations: (a) A compressed representation using multiscale low-rank matrix factorization that constrains the reconstruction problem, and reduces its memory footprint. (b) Stochastic optimization to reduce computation, improve memory locality, and minimize communications between threads and processors. We demonstrate the feasibility of the proposed method on {DCE} imaging acquired with a golden-angle ordered 3D cones trajectory and pulmonary imaging acquired with a bit-reversed ordered 3D radial trajectory. We compare it with “soft-gated' dynamic reconstruction for {DCE} and respiratory-resolved reconstruction for pulmonary imaging. Results The proposed technique shows transient dynamics that are not seen in gating-based methods. When applied to datasets with irregular, or non-repetitive motions, the proposed method displays sharper image features. Conclusions We demonstrated a method that can reconstruct massive 3D dynamic image series in the extreme undersampling and extreme computation setting.},
+	pages = {1-- 18},
+	issue = {n/a},
+	journaltitle = {Magnetic Resonance in Medicine},
+	author = {Ong, Frank and Zhu, Xucheng and Cheng, Joseph Y. and Johnson, Kevin M. and Larson, Peder E. Z. and Vasanawala, Shreyas S. and Lustig, Michael},
+	urldate = {2020-05-25},
+	date = {2020-04},
+	langid = {english},
+	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1002/mrm.28235},
+	keywords = {{DCE}-{MRI}, Electrical Engineering and Systems Science - Image and Video Processing, Physics - Medical Physics, Pulmonary {MRI}, already-read, multiscale low rank, stochastic optimization, volumetric dynamic {MRI}}
+}
+
+@article{ong_extreme_2020-1,
+	title = {Extreme {MRI}: Large-Scale Volumetric Dynamic Imaging from Continuous Non-Gated Acquisitions},
+	url = {http://arxiv.org/abs/1909.13482},
+	shorttitle = {Extreme {MRI}},
+	abstract = {Purpose: To develop a framework to reconstruct large-scale volumetric dynamic {MRI} from rapid continuous and non-gated acquisitions, with applications to pulmonary and dynamic contrast enhanced ({DCE}) imaging. Theory and Methods: The problem considered here requires recovering hundred-gigabytes of dynamic volumetric image data from a few gigabytes of k-space data, acquired continuously over several minutes. This reconstruction is vastly under-determined, heavily stressing computing resources as well as memory management and storage. To overcome these challenges, we leverage intrinsic three dimensional (3D) trajectories, such as 3D radial and 3D cones, with ordering that incoherently cover time and k-space over the entire acquisition. We then propose two innovations: (1) A compressed representation using multi-scale low rank matrix factorization that constrains the reconstruction problem, and reduces its memory footprint. (2) Stochastic optimization to reduce computation, improve memory locality, and minimize communications between threads and processors. We demonstrate the feasibility of the proposed method on {DCE} imaging acquired with a golden-angle ordered 3D cones trajectory and pulmonary imaging acquired with a bit-reversed ordered 3D radial trajectory. We compare it with "soft-gated" dynamic reconstruction for {DCE} and respiratory resolved reconstruction for pulmonary imaging. Results: The proposed technique shows transient dynamics that are not seen in gating based methods. When applied to datasets with irregular, or non-repetitive motions, the proposed method displays sharper image features. Conclusion: We demonstrated a method that can reconstruct massive 3D dynamic image series in the extreme undersampling and extreme computation setting.},
+	journaltitle = {{arXiv}:1909.13482 [physics]},
+	author = {Ong, Frank and Zhu, Xucheng and Cheng, Joseph Y. and Johnson, Kevin M. and Larson, Peder E. Z. and Vasanawala, Shreyas S. and Lustig, Michael},
+	urldate = {2020-05-25},
+	date = {2020-02-05},
+	eprinttype = {arxiv},
+	eprint = {1909.13482},
+	keywords = {Electrical Engineering and Systems Science - Image and Video Processing, Physics - Medical Physics}
+}
+
+@article{mccoy_convexity_2014,
+	title = {Convexity in Source Separation : Models, geometry, and algorithms},
+	volume = {31},
+	issn = {1558-0792},
+	doi = {10.1109/MSP.2013.2296605},
+	shorttitle = {Convexity in Source Separation},
+	abstract = {Source separation, or demixing, is the process of extracting multiple components entangled within a signal. Contemporary signal processing presents a host of difficult source separation problems, from interference cancellation to background subtraction, blind deconvolution, and even dictionary learning. Despite the recent progress in each of these applications, advances in high-throughput sensor technology place demixing algorithms under pressure to accommodate extremely high-dimensional signals, separate an ever larger number of sources, and cope with more sophisticated signal and mixing models. These difficulties are exacerbated by the need for real-time action in automated decision-making systems.},
+	pages = {87--95},
+	number = {3},
+	journaltitle = {{IEEE} Signal Processing Magazine},
+	author = {{McCoy}, Michael B. and Cevher, Volkan and Dinh, Quoc Tran and Asaei, Afsaneh and Baldassarre, Luca},
+	date = {2014-05},
+	note = {Conference Name: {IEEE} Signal Processing Magazine},
+	keywords = {Algorithm design and analysis, Atomic measurements, Convex functions, Principal component analysis, Signal processing algorithms, Source separation, Sparse matrices, automated decision-making systems, background subtraction, blind deconvolution, contemporary signal processing, demixing algorithms, dictionary learning, high-throughput sensor technology, interference cancellation, interference suppression, signal processing, source separation, source separation problems}
+}
+
+@article{mccoy_sharp_2014,
+	title = {Sharp Recovery Bounds for Convex Demixing, with Applications},
+	volume = {14},
+	issn = {1615-3383},
+	url = {https://doi.org/10.1007/s10208-014-9191-2},
+	doi = {10.1007/s10208-014-9191-2},
+	abstract = {Demixing refers to the challenge of identifying two structured signals given only the sum of the two signals and prior information about their structures. Examples include the problem of separating a signal that is sparse with respect to one basis from a signal that is sparse with respect to a second basis, and the problem of decomposing an observed matrix into a low-rank matrix plus a sparse matrix. This paper describes and analyzes a framework, based on convex optimization, for solving these demixing problems, and many others. This work introduces a randomized signal model that ensures that the two structures are incoherent, i.e., generically oriented. For an observation from this model, this approach identifies a summary statistic that reflects the complexity of a particular signal. The difficulty of separating two structured, incoherent signals depends only on the total complexity of the two structures. Some applications include (1) demixing two signals that are sparse in mutually incoherent bases, (2) decoding spread-spectrum transmissions in the presence of impulsive errors, and (3) removing sparse corruptions from a low-rank matrix. In each case, the theoretical analysis of the convex demixing method closely matches its empirical behavior.},
+	pages = {503--567},
+	number = {3},
+	journaltitle = {Foundations of Computational Mathematics},
+	shortjournal = {Found Comput Math},
+	author = {{McCoy}, Michael B. and Tropp, Joel A.},
+	urldate = {2020-05-25},
+	date = {2014-06-01},
+	langid = {english}
+}
+
+@article{mccoy_achievable_2013,
+	title = {The achievable performance of convex demixing},
+	url = {http://arxiv.org/abs/1309.7478},
+	abstract = {Demixing is the problem of identifying multiple structured signals from a superimposed, undersampled, and noisy observation. This work analyzes a general framework, based on convex optimization, for solving demixing problems. When the constituent signals follow a generic incoherence model, this analysis leads to precise recovery guarantees. These results admit an attractive interpretation: each signal possesses an intrinsic degrees-of-freedom parameter, and demixing can succeed if and only if the dimension of the observation exceeds the total degrees of freedom present in the observation.},
+	journaltitle = {{arXiv}:1309.7478 [cs, math]},
+	author = {{McCoy}, Michael B. and Tropp, Joel A.},
+	urldate = {2020-05-25},
+	date = {2013-09-28},
+	eprinttype = {arxiv},
+	eprint = {1309.7478},
+	note = {version: 1},
+	keywords = {94A15, 90C25, 60D05, 94B75, Computer Science - Information Theory, Mathematics - Optimization and Control}
+}
+
 @article{nakarmi_accelerating_2016,
 	title = {{ACCELERATING} {DYNAMIC} {MAGNETIC} {RESONANCE} {IMAGING} {BY} {NONLINEAR} {SPARSE} {CODING}},
 	volume = {2016},
@@ -31,25 +329,6 @@
 	keywords = {Algorithms, Compressive sensing ({CS}), Heart, Humans, Image Processing, Computer-Assisted, Image reconstruction, Licenses, Magnetic Resonance Imaging, Magnetic resonance imaging, Matrix decomposition, Phantoms, Imaging, Principal Component Analysis, Robustness, Sparse matrices, alternating direction method, biomedical {MRI}, cardiac {MRI} data, cardiology, convex optimization problem, dynamic {MR} image reconstruction method, dynamic magnetic resonance ({MR}) imaging, dynamic magnetic resonance imaging, high spatial resolution, high temporal resolution, image reconstruction, inverse problem, inverse transforms, low-rank, medical image processing, motion estimation, numerical analysis, numerical phantom simulation, optimisation, partial (k,t )-space measurements, phantoms, principal component analysis, robust principal component analysis, sparse decomposition prior, sparsity, state of the art reconstruction techniques, undersampled (K,t )-space measurement}
 }
 
-@article{otazo_lowrank_2015,
-	title = {Low—rank plus sparse matrix decomposition for accelerated dynamic {MRI} with separation of background and dynamic components},
-	volume = {73},
-	rights = {© 2014 Wiley Periodicals, Inc.},
-	issn = {1522-2594},
-	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.25240},
-	doi = {10.1002/mrm.25240},
-	abstract = {Purpose To apply the low-rank plus sparse (L+S) matrix decomposition model to reconstruct undersampled dynamic {MRI} as a superposition of background and dynamic components in various problems of clinical interest. Theory and Methods The L+S model is natural to represent dynamic {MRI} data. Incoherence between k-t space (acquisition) and the singular vectors of L and the sparse domain of S is required to reconstruct undersampled data. Incoherence between L and S is required for robust separation of background and dynamic components. Multicoil L+S reconstruction is formulated using a convex optimization approach, where the nuclear norm is used to enforce low rank in L and the l1 norm is used to enforce sparsity in S. Feasibility of the L+S reconstruction was tested in several dynamic {MRI} experiments with true acceleration, including cardiac perfusion, cardiac cine, time-resolved angiography, and abdominal and breast perfusion using Cartesian and radial sampling. Results The L+S model increased compressibility of dynamic {MRI} data and thus enabled high-acceleration factors. The inherent background separation improved background suppression performance compared to conventional data subtraction, which is sensitive to motion. Conclusion The high acceleration and background separation enabled by L+S promises to enhance spatial and temporal resolution and to enable background suppression without the need of subtraction or modeling. Magn Reson Med 73:1125–1136, 2015. © 2014 Wiley Periodicals, Inc.},
-	pages = {1125--1136},
-	number = {3},
-	journaltitle = {Magnetic Resonance in Medicine},
-	author = {Otazo, Ricardo and Candès, Emmanuel and Sodickson, Daniel K.},
-	urldate = {2020-05-24},
-	date = {2015},
-	langid = {english},
-	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1002/mrm.25240},
-	keywords = {compressed sensing, dynamic {MRI}, for-reference, low-rank matrix completion, sparsity, to-read}
-}
-
 @article{cai_singular_2008,
 	title = {A Singular Value Thresholding Algorithm for Matrix Completion},
 	url = {http://arxiv.org/abs/0810.3286},
@@ -61,37 +340,6 @@
 	eprinttype = {arxiv},
 	eprint = {0810.3286},
 	keywords = {Mathematics - Optimization and Control}
-}
-
-@article{roohi_multidimensional_2017,
-	title = {Multi—dimensional low rank plus sparse decomposition for reconstruction of under-sampled dynamic {MRI}},
-	volume = {63},
-	issn = {0031-3203},
-	url = {http://www.sciencedirect.com/science/article/pii/S0031320316302965},
-	doi = {10.1016/j.patcog.2016.09.040},
-	abstract = {In this paper, we introduce a multi-dimensional approach to the problem of reconstruction of {MR} image sequences that are highly undersampled in k-space. By formulating the reconstruction as a high-order low rank tensor plus sparse tensor decomposition problem, we propose an efficient numerical algorithm based on the alternating direction method of multipliers ({ADMM}) to solve the optimization. Using Tucker representation, the sparse component is learnt efficiently with different sparsifying matrices along the modes of dynamic {MR} data. To estimate the low rank tensor, a convex cost function is defined to be the weighted sum of nuclear norms of its 3 unfolding matrices. Through extensive experimental results we show that our proposed method achieves superior reconstruction quality, compared to the state-of-the-art reconstruction methods.},
-	pages = {667--679},
-	journaltitle = {Pattern Recognition},
-	shortjournal = {Pattern Recognition},
-	author = {Roohi, Shahrooz F. and Zonoobi, Dornoosh and Kassim, Ashraf A. and Jaremko, Jacob L.},
-	urldate = {2020-05-24},
-	date = {2017-03-01},
-	langid = {english},
-	keywords = {Compressive sensing, Dynamic 3D {MRI}, Image reconstruction, Low-rank and sparse tensor decomposition}
-}
-
-@inproceedings{fazel_logdet_2003,
-	title = {Log—det heuristic for matrix rank minimization with applications to Hankel and Euclidean distance matrices},
-	volume = {3},
-	doi = {10.1109/ACC.2003.1243393},
-	abstract = {We present a heuristic for minimizing the rank of a positive semidefinite matrix over a convex set. We use the logarithm of the determinant as a smooth approximation for rank, and locally minimize this function to obtain a sequence of trace minimization problems. We then present a lemma that relates the rank of any general matrix to that of a corresponding positive semidefinite one. Using this, we readily extend the proposed heuristic to handle general matrices. We examine the vector case as a special case, where the heuristic reduces to an iterative l/sub 1/-norm minimization technique. As practical applications of the rank minimization problem and our heuristic, we consider two examples: minimum-order system realization with time-domain constraints, and finding lowest-dimension embedding of points in a Euclidean space from noisy distance data.},
-	eventtitle = {Proceedings of the 2003 American Control Conference, 2003.},
-	pages = {2156--2162 vol.3},
-	booktitle = {Proceedings of the 2003 American Control Conference, 2003.},
-	author = {Fazel, M. and Hindi, H. and Boyd, S.P.},
-	date = {2003-06},
-	note = {{ISSN}: 0743-1619},
-	keywords = {Computational geometry, Constraint optimization, Control systems, Electronic mail, Euclidean distance, Euclidean distance matrices, Euclidean space, Hankel distance matrices, Hankel matrices, Signal processing, Statistics, System identification, Time domain analysis, Yttrium, convex programming, convex set, determinants, general matrix, iterative methods, iterative minimization technique, lemma, local minimization, log det heuristics, lowest dimension embedding points, matrix rank minimization, minimisation, minimum-order system realization, noisy distance data, positive semidefinite matrix, smooth rank approximation, time domain constraints, time-domain analysis, trace minimization problems, vector case}
 }
 
 @article{lingala_accelerated_2011,
@@ -246,24 +494,6 @@
 	keywords = {Language Arts \& Disciplines / Library \& Information Science / General, Mathematics / Calculus, Mathematics / Functional Analysis, Mathematics / General, Science / System Theory}
 }
 
-@article{van_der_vorst_bicgstab_1992,
-	title = {Bi—{CGSTAB}: A Fast and Smoothly Converging Variant of Bi-{CG} for the Solution of Nonsymmetric Linear Systems},
-	volume = {13},
-	issn = {0196-5204},
-	url = {https://epubs.siam.org/doi/10.1137/0913035},
-	doi = {10.1137/0913035},
-	shorttitle = {Bi-{CGSTAB}},
-	abstract = {Recently the Conjugate Gradients-Squared ({CG}-S) method has been proposed as an attractive variant of the Bi-Conjugate Gradients (Bi-{CG}) method. However, it has been observed that {CG}-S may lead to a rather irregular convergence behaviour, so that in some cases rounding errors can even result in severe cancellation effects in the solution. In this paper, another variant of Bi-{CG} is proposed which does not seem to suffer from these negative effects. Numerical experiments indicate also that the new variant, named Bi-{CGSTAB}, is often much more efficient than {CG}-S.},
-	pages = {631--644},
-	number = {2},
-	journaltitle = {{SIAM} Journal on Scientific and Statistical Computing},
-	shortjournal = {{SIAM} J. Sci. and Stat. Comput.},
-	author = {van der Vorst, H. A.},
-	urldate = {2020-05-23},
-	date = {1992-03-01},
-	note = {Publisher: Society for Industrial and Applied Mathematics}
-}
-
 @article{polak_note_1969,
 	title = {Note sur la convergence de méthodes de directions conjuguées},
 	volume = {3},
@@ -320,7 +550,6 @@
 	urldate = {2020-05-23},
 	date = {2007-06-20}
 }
-
 @artwork{simionescu_illustration_2006,
 	title = {Illustration descente de gradient},
 	rights = {Permission is granted to copy, distribute and/or modify this document under the terms of the {GNU} Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled {GNU} Free Documentation License. Subject to disclaimers.http://www.gnu.org/copyleft/fdl.{htmlGFDLGNU} Free Documentation Licensetruetrue},
@@ -536,6 +765,7 @@ Volume: 2014}
 	langid = {english},
 	keywords = {Mathematics / Applied, Mathematics / Differential Equations / General, Mathematics / General, Mathematics / Numerical Analysis}
 }
+
 @article{cohen_compressed_2009,
 	title = {Compressed sensing and best k-term approximation},
 	volume = {22},
@@ -658,16 +888,6 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	date = {2017-08-01},
 	langid = {english},
 	keywords = {Non-Cartesian, Parallel imaging, Phase-constrained, Simultaneous multi-slice, Spectroscopic imaging}
-}
-
-@online{noauthor_kspace_nodate,
-	title = {k—space: {FOV}},
-	url = {http://mriquestions.com/field-of-view-fov.html},
-	shorttitle = {k-space},
-	abstract = {How does k-space relate to field-of-view ({FOV}) and pixel width?},
-	titleaddon = {Questions and Answers in {MRI}},
-	urldate = {2020-05-13},
-	langid = {english}
 }
 
 @article{ridgway_cardiovascular_2010,
@@ -857,7 +1077,6 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	langid = {english},
 	keywords = {Compressed Sensing, Low-rank matrix completion, Offline dynamic {MRI} reconstruction, Sparse recovery}
 }
-
 @online{noauthor_newsletter_2019,
 	title = {Newsletter January 2019},
 	url = {https://juliacomputing.com/blog/2019/01/04/january-newsletter.html},
@@ -1016,6 +1235,7 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	urldate = {2020-05-10},
 	date = {1990-08-01}
 }
+
 @article{bammer_basic_2003,
 	title = {Basic principles of diffusion-weighted imaging},
 	volume = {45},
@@ -1392,7 +1612,6 @@ clustered point distributions are desired.},
 	eprint = {1810.09891},
 	keywords = {Computer Science - Mathematical Software}
 }
-
 @article{parikh_proximal_2014,
 	title = {Proximal Algorithms},
 	volume = {1},
@@ -1619,20 +1838,6 @@ clustered point distributions are desired.},
 	keywords = {Computer Science - Computer Vision and Pattern Recognition, Electrical Engineering and Systems Science - Image and Video Processing, for-reference}
 }
 
-@article{ong_extreme_2019,
-	title = {Extreme {MRI}: Large-Scale Volumetric Dynamic Imaging from Continuous Non-Gated Acquisitions},
-	url = {http://arxiv.org/abs/1909.13482},
-	shorttitle = {Extreme {MRI}},
-	abstract = {Purpose: To develop a framework to reconstruct large-scale volumetric dynamic {MRI} from rapid continuous and non-gated acquisitions, with applications to pulmonary and dynamic contrast enhanced ({DCE}) imaging. Theory and Methods: The problem considered here requires recovering hundred-gigabytes of dynamic volumetric image data from a few gigabytes of k-space data, acquired continuously over several minutes. This reconstruction is vastly under-determined, heavily stressing computing resources as well as memory management and storage. To overcome these challenges, we leverage intrinsic three dimensional (3D) trajectories, such as 3D radial and 3D cones, with ordering that incoherently cover time and k-space over the entire acquisition. We then propose two innovations: (1) A compressed representation using multi-scale low rank matrix factorization that constrains the reconstruction problem, and reduces its memory footprint. (2) Stochastic optimization to reduce computation, improve memory locality, and minimize communications between threads and processors. We demonstrate the feasibility of the proposed method on {DCE} imaging acquired with a golden-angle ordered 3D cones trajectory and pulmonary imaging acquired with a bit-reversed ordered 3D radial trajectory. We compare it with "soft-gated" dynamic reconstruction for {DCE} and respiratory resolved reconstruction for pulmonary imaging. Results: The proposed technique shows transient dynamics that are not seen in gating based methods. When applied to datasets with irregular, or non-repetitive motions, the proposed method displays sharper image features. Conclusion: We demonstrated a method that can reconstruct massive 3D dynamic image series in the extreme undersampling and extreme computation setting.},
-	journaltitle = {{arXiv}:1909.13482 [physics]},
-	author = {Ong, Frank and Zhu, Xucheng and Cheng, Joseph Y. and Johnson, Kevin M. and Larson, Peder E. Z. and Vasanawala, Shreyas S. and Lustig, Michael},
-	urldate = {2020-01-24},
-	date = {2019-12-23},
-	eprinttype = {arxiv},
-	eprint = {1909.13482},
-	keywords = {Electrical Engineering and Systems Science - Image and Video Processing, Physics - Medical Physics, already-read}
-}
-
 @article{kummerle_denoising_2018,
 	title = {Denoising and Completion of Structured Low-Rank Matrices via Iteratively Reweighted Least Squares},
 	url = {http://arxiv.org/abs/1811.07472},
@@ -1658,6 +1863,7 @@ clustered point distributions are desired.},
 	eprint = {2002.02041},
 	keywords = {{IRLS}, Mathematics - Numerical Analysis, to-read}
 }
+
 @article{levine_3d_2017,
 	title = {3D Cartesian {MRI} with compressed sensing and variable view sharing using complementary poisson-disc sampling: 3D Cartesian {MRI} with Compressed Sensing and Variable View Sharing},
 	volume = {77},
