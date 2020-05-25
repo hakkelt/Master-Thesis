@@ -1,54 +1,269 @@
 \chapter{Related Works}
 
-%\section{Parallel Imaging}
-%"Self-Calibrating Nonlinear Reconstruction Algorithms for Variable Density Sampling and Parallel Reception MRI" by Loubna El Gueddari, C. Lazarus, H Carrié, A. Vignaud, Ph Ciuciu
+As we seen in the previous chapters, the quest for finding practically feasible reconstruction methods that need the least number of measurements (ideally close to the theoretical limits of the compressed sensing framework) is a challenging task; nonetheless, it is a hot topic having very important new results an novel approaches outperforming the older ones almost in every year. In this chapter we will discuss two recently published research projects both presenting a state-of-the-art solution, and we will review a third project that proposes an algorithm that has the potential to drastically outperform the methods currently considered to be the best on this field.
 
-%SENSE and ESPIRiT for sensitivity map estimation
+\section{Low Rank and Sparse Decomposition}
 
-\iffalse
+Initially the compressed sensing framework was implemented in classic sparsity seeking settings, and the main question was which transform domain has the sparsest representation of the signal of interest. Although the authors of the first compressed sensing publications were aware of the low rank structure of certain MRI techniques back in 2007, this branch of research gained larger attention just in the recent years. An approach that appeared to be particularly suitable to dynamic MRI setting is decomposition of the image into a low rank and a sparse component~\cite{lingala_accelerated_2011, tremoulheac_dynamic_2014, otazo_lowrank_2015, roohi_multidimensional_2017}. The motivation behind such a decomposition comes from the inherent temporal correlation of the background---that correlation is captured by the low rank part usually denoted by $L$---and from the sparse nature of dynamic information that lies on top of the background, encompassed by the sparse component with the notation of $S$.
 
-\color{red}
-This chapter contains the text I copied from the project reports I've done with Wièm and Mahmoud, but this is far from ready!
-\color{black}
+A recent paper from Lin and Fessler~\cite{lin_efficient_2019}, published in 2019, attempts to summarize the advances in this field, then it proposes two new algorithms to accelerate the convergence of the most successful algorithms, and finally it presents the results of the numerical experiments they carried out to compare the convergence rate of different state-of-the-art algorithms.  
 
-\subsection{Sparse Formulation}
+\subsubsection{Formulation of the Problem}
+In contrast to the basic sparsity formulation discussed earlier as (\ref{eq:P_0}) problem and its relaxation to the (\ref{eq:P_1}) problem, the problem formulation of $L+S$ decomposition scheme (also called robust principal component analysis or RPCA) have two constraints in the place of the original constraint promoting sparsity in some transform domain. The first of these new constraints is the sparsity seeking $\ell_0$ norm that takes the sparse part as an argument, similarly to the original settings in (\ref{eq:P_0}). The other constraint, however, enforces the low-rankness of $L$. Putting it together, we get a LASSO-like formula
+\[\min_{\mathbf{L,S}} \norm{\mathcal{A}\mathbf{(L+S) - y}}_F\; \text{ subject to }\; rank(\mathbf{L}) < r\; \text{ and }\; \norm{\Phi \mathbf{S}}_1 < s,\]
+where $\mathcal{A}: \mathbb{C}^{N \times n_t} \rightarrow \mathbb{C}^{m \times n_c \times n_t}$ is a linear operator (often represented\footnote{This matrix representation requires the vectorization of the input before the matrix-vector multiplication; however, this operation is hardly ever indicated explicitly, but rather assumed to be performed implicitly. In this thesis work, we also omit denoting such vectorizations.} by a matrix in $\mathbb{C}^{m \cdot n_c \cdot n_t \times N \cdot n_t}$, especially in theoretical discussions) modelling the 2D parallel MRI acquisition scheme that assumes $N$ pixels in each frame, $n_c$ receiver coils and $n_t$ time frames that evaluates exactly $m$ k-space points. Moreover, $\Phi: \mathbb{C}^{N \times n_t} \rightarrow \mathbb{C}^{N \cdot n_t}$ is an appropriate sparsifying transform, $\mathbf{y}$ denotes the collection of measurement data, $\mathbf{L, S} \in \mathbb{C}^{N \times nt}$ hold the low rank and sparse components, and finally $r$ and $s$ are the target rank and sparsity. After solving this problem for $\mathbf{L}$ and $\mathbf{S}$, the reconstructed image can be obtained by the simple element-wise addition of components (of course, we need to reshape back the resulted matrix to be a 2D or 3D dynamic image instead $N\times n_t$ shape created by stacking the vectorized frames as the columns).
+
+The most common scenario to solve the $L+S$ problem follows the same line of arguments that was presented earlier: Instead of solving the problem that contains an $\ell_0$ and a $rank$ term, both being NP-hard to optimize even separately, one can relax both constraints to $\ell_1$-norm and nuclear norm minimization, respectively, resulting the Lagrangian formula
+\[\min_{\mathbf{L,S}} \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\Phi \mathbf{S}}_1.\]
+
+In the aforementioned paper, the authors considered the unitary temporal Fourier transform $\mathbb{T}_t$ as the sparsifying operator $\Phi$, which is a largely conventional for dynamic MR images, and they divided the analyzed algorithms into two main groups: methods based on proximal gradient technique and algorithms using variable splitting then solving the transformed problem in the augmented Lagrangian framework, possibly using the ADMM scheme.
+
+\subsubsection{Proximal Gradient Methods}
+In the first group they studied the three shrinkage-thresholding algorithms: ISTA, FISTA and POGM. While ISTA has already been utilized along with the $L+S$ modelling scheme in~\cite{otazo_lowrank_2015}, it was their contribution to show the applicability of accelerated schemes in this setting. First, they combined $\mathbf{L}$ and $\mathbf{S}$ into a single "stacked" variable $\mathbf{X} = \left[\begin{matrix}\mathbf{L} & \mathbf{S}\end{matrix}\right]^T$ to simplify the notation because that way the momentum step can be expressed by a single equation. Second, they recalled that the proximity operator has closed formula; namely, the composition soft-thresholding function with the sparsity transform and the singular-value thresholding, the latter defined as
+\[SVT_{\lambda_L}(\mathbf{L}) = \mathbf{U}\Lambda_\lambda(\boldsymbol{\Sigma})\mathbf{V}*,\]
+first proposed to enforce low-rankness in~\cite{cai_singular_2008}. Note that $\mathbf{U}\boldsymbol{\Sigma}\mathbf{V}*$ in the formula above stands for the singular value decomposition of the input matrix $\mathbf{L}$. Consequently, the forward-backward splitting scheme is easily applied to both variable performing
+\begin{align*}
+    & \mathbf{L}_k = SVT_{\lambda_L}(\mathbf{L}_{k-1} - t \nabla_L g(\mathbf{X}_{k-1})\\
+    & \mathbf{S}_k = \mathbf{T}*\left(\Lambda_{\lambda_S}\left(\mathbf{T}(\mathbf{S}_{k-1} - t \nabla_S g(\mathbf{X}_{k-1})\right)\right),
+\end{align*}
+where $g(\mathbf{X}) = \frac{1}{2}\norm{[\mathcal{A} \; \mathcal{A}]\mathbf{X} - \mathbf{y}}_2^2$ and therefore \[\nabla_L\; g(\mathbf{X}) = \nabla_S\; g(\mathbf{X}) = \mathcal{A}^*([\mathcal{A} \; \mathcal{A}]\mathbf{X} - \mathbf{y}) = \mathcal{A}^*(\mathcal{A} (\mathbf{L + S}) - \mathbf{y}).\] Accordingly, the algorithm takes form presented in algorithm~\ref{alg:ista-LS}.
+
+\begin{algorithm}
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{
+        $\mathbf{y}$: undersampled k-space data\\
+        $\mathcal{A}$: data acquisition operator\\
+        $\mathbf{T}$: temporal Fourier transform\\
+        $\lambda_L$: singular value threshold\\
+        $\lambda_S$: sparsity threshold\\
+        $N$: number of iterations}
+    \Output{$\mathbf{L, S} = \argmin_{\mathbf{L, S}}  \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{T} \mathbf{S}}_1$}
+    \BlankLine
+    initialization: $\mathbf{L}_0 = \mathcal{A}^* \mathbf{d}, \mathbf{S}_0 = \mathbf{0}, \theta_0 = 1, t = 0.99$\\
+    notation: $\mathbf{X}_i = \begin{bmatrix}\mathbf{L}_i \\ \mathbf{S}_i\end{bmatrix}$\\
+    \For{$k = 1 \ldots N$}{
+        $\nabla g_k = \mathcal{A}^*(\mathcal{A} (\mathbf{L_{k-1} + S_{k-1}}) - \mathbf{y})$\\
+        $\mathbf{L}_k = SVT_{\lambda_L}(\mathbf{L}_{k-1} - t \nabla g_k)$\\
+        $\mathbf{S}_k = \mathbf{T}^*\left(\Lambda_{\lambda_S}\left(\mathbf{T}(\mathbf{S}_{k-1} - t \nabla g_k)\right)\right)$
+    }
+    \Return{$\mathbf{L}_N + \mathbf{S}_N$}
+    \caption{ISTA for L+S decomposition}
+    \label{alg:ista-LS}
+\end{algorithm}
+
+\begin{algorithm}
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{same as input of algorithm~\ref{alg:ista-LS}}
+    \Output{$\mathbf{L, S} = \argmin_{\mathbf{L, S}}  \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{T} \mathbf{S}}_1$}
+    \BlankLine
+    initialization: $\mathbf{L}_0 = \mathcal{A}^* \mathbf{d}, \mathbf{S}_0 = \mathbf{0}, \theta_0 = 1, t = 0.5$\\
+    notation: $\mathbf{X}_i = \begin{bmatrix}\mathbf{L}_i \\ \mathbf{S}_i\end{bmatrix}, \mathbf{\tilde{X}}_i = \begin{bmatrix}\mathbf{\tilde{L}}_i \\ \mathbf{\tilde{S}}_i\end{bmatrix}, \mathbf{\bar{X}}_i = \begin{bmatrix}\mathbf{\bar{L}}_i \\ \mathbf{\bar{S}}_i\end{bmatrix}$\\
+    \For{$k = 1 \ldots N$}{
+        $\nabla g_k = \mathcal{A}^*(\mathcal{A} (\mathbf{L_{k-1} + S_{k-1}}) - \mathbf{y})$\\
+        
+        $\mathbf{\tilde{L}}_k = \mathbf{L}_{k-1} - t \nabla g_k$\\
+        $\mathbf{\tilde{S}}_k = \mathbf{S}_{k-1} - t \nabla g_k$\\
+        
+        $\theta_k = \frac{1}{2}\left(1 + \sqrt{1 + 4\theta_{k-1}^2}\right)$\\
+        
+        $\mathbf{\mathbf{\bar{X}}}_k = \mathbf{\tilde{X}}_k + \frac{\theta_{k-1}-1}{\theta_k}(\tilde{X}_k - \mathbf{\tilde{X}}_{k-1}) + \frac{\theta_{k-1}}{\theta_k}(\mathbf{\tilde{X}}_k - \mathbf{X}_{k-1})$\\
+        
+        $\mathbf{L}_k = SVT_{\lambda_L}(\mathbf{\bar{L}}_k)$\\
+        $\mathbf{S}_k = \mathbf{T}^*\left(\Lambda_{\lambda_S}\left(\mathbf{T}(\mathbf{\bar{L}}_k)\right)\right)$
+    }
+    \Return{$\mathbf{L}_N + \mathbf{S}_N$}
+    \caption{FISTA for L+S decomposition}
+    \label{alg:fista-LS}
+\end{algorithm}
+
+\begin{algorithm}[tb]
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{same as input of algorithm~\ref{alg:ista-LS}}
+    \Output{$\mathbf{L, S} = \argmin_{\mathbf{L, S}}  \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{T} \mathbf{S}}_1$}
+    \BlankLine
+    initialization: $\mathbf{L}_0 = \mathcal{A}^* \mathbf{d}, \mathbf{S}_0 = \mathbf{0}, \theta_0 = \zeta_0 = 1, t = 0.5$\\
+    notation: $\mathbf{X}_i = \begin{bmatrix}\mathbf{L}_i \\ \mathbf{S}_i\end{bmatrix}, \mathbf{\tilde{X}}_i = \begin{bmatrix}\mathbf{\tilde{L}}_i \\ \mathbf{\tilde{S}}_i\end{bmatrix}, \mathbf{\bar{X}}_i = \begin{bmatrix}\mathbf{\bar{L}}_i \\ \mathbf{\bar{S}}_i\end{bmatrix}$\\
+    \For{$k = 1 \ldots N$}{
+        $\nabla g_k = \mathcal{A}^*(\mathcal{A} (\mathbf{L_{k-1} + S_{k-1}}) - \mathbf{y})$\\
+        
+        $\mathbf{\tilde{L}}_k = \mathbf{L}_{k-1} - t \nabla g_k$\\
+        $\mathbf{\tilde{S}}_k = \mathbf{S}_{k-1} - t \nabla g_k$\\
+        
+        $\theta_k = \begin{cases} \frac{1}{2}\left(1+\sqrt{1 + 4\theta_{k-1}^2}\right) : k < N \\ \frac{1}{2}\left(1+\sqrt{1 + 8\theta_{k-1}^2}\right) : k = N \end{cases}$\\
+        
+        $\mathbf{\mathbf{\bar{X}}}_k = \mathbf{\tilde{X}}_k + \frac{\theta_{k-1}-1}{\theta_k}(\tilde{X}_k - \mathbf{\tilde{X}}_{k-1}) + \frac{\theta_{k-1}}{\theta_k}(\mathbf{\tilde{X}}_k - \mathbf{X}_{k-1}) + \frac{\theta_{k-1}-1}{\zeta_{k-1} \theta_k}(\mathbf{\bar{X}}_{k-1} - \mathbf{X}_{k-1})$\\
+        
+        $\zeta_k = t(1+\frac{\theta_{k-1}-1}{\theta_k} + \frac{\theta_{k-1}}{\theta_k})$
+        
+        $\mathbf{L}_k = SVT_{\lambda_L}(\mathbf{\bar{L}}_k)$\\
+        $\mathbf{S}_k = \mathbf{T}^*\left(\Lambda_{\lambda_S}\left(\mathbf{T}(\mathbf{\bar{L}}_k)\right)\right)$
+    }
+    \Return{$\mathbf{L}_N + \mathbf{S}_N$}
+    \caption{POGM for L+S decomposition}
+    \label{alg:pogm-LS}
+\end{algorithm}
 
 
-"Compressed Sensing MRI" (2008) by Michael Lustig, David L. Donoho, Juan M. Santos, and John M. Pauly --> "A look at how CS can improve on current imaging techniques"
+Next, they extended this base algorithm to the accelerated scheme by inserting a momentum step that resulted in algorithm~\ref{alg:fista-LS} for FISTA and algorithm~\ref{alg:pogm-LS} for POGM. For the sake of clarity and completeness, we note that the authors used a slightly different formulation than the algorithms presented here, as they followed the original formulation of ISTA given in~\cite{otazo_lowrank_2015}. The main difference is that they calculated the gradient at the \textit{end} of the loop body, not in the beginning, and they introduced an additional variable $\mathbf{M}$, named \textit{consistency term}, that was defined as 
+\[\mathbf{M = L + S - \mathbf{E}^*(\mathbf{E} (\mathbf{L_{k-1} + S_{k-1}}) - \mathbf{d})}\] ($\mathbf{E}$ and $\mathbf{d}$ corresponds to $\mathcal{A}$ and $\mathbf{y}$ in our notation). While this version avoids an unnecessary calculation of gradient in the very first iteration, it introduces a couple avoidable matrix additions in turn, and also it makes more difficult to understand how the algorithms are connected to the original, only sparsity seeking versions. We summarized all three algorithms in algorithm~\ref{alg:lin_pgm}, following their notation, and it is easy to see that there is no significant difference, but the clarity is enhanced.
 
-"Sparse MRI: The Application of Compressed Sensing for Rapid MR Imaging" (2007) by Michael Lustig, David Donoho, and John M. Pauly
+\begin{algorithm}
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{same as input of algorithm~\ref{alg:ista-LS}}
+    \Output{$\mathbf{L, S} = \argmin_{\mathbf{L, S}}  \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{T} \mathbf{S}}_1$}
+    \BlankLine
+    initialization: $\mathbf{M}_0 = \mathbf{L}_0 = \mathcal{A}^* \mathbf{d}, \mathbf{S}_0 = \mathbf{0}, \theta_0 = \zeta_0 = 1, t = \begin{cases}1 : \text{ISTA} \\ 0.5 : \text{FISTA and POGM}\end{cases}$\\
+    notation: $\mathbf{X}_i = \begin{bmatrix}\mathbf{L}_i \\ \mathbf{S}_i\end{bmatrix}, \mathbf{\tilde{X}}_i = \begin{bmatrix}\mathbf{\tilde{L}}_i \\ \mathbf{\tilde{S}}_i\end{bmatrix}, \mathbf{\bar{X}}_i = \begin{bmatrix}\mathbf{\bar{L}}_i \\ \mathbf{\bar{S}}_i\end{bmatrix}$\\
+    \For{$k = 1 \ldots N$}{
+        
+        $\mathbf{\tilde{L}}_k = \mathbf{M}_{k-1} - \mathbf{L}_{k-1}$\\
+        $\mathbf{\tilde{S}}_k = \mathbf{M}_{k-1} - \mathbf{S}_{k-1}$\\
+        
+        \uIf{ISTA}{
+            $\mathbf{\mathbf{\bar{X}}}_k = \mathbf{\tilde{X}}$
+        }
+        \uElseIf{FISTA}{
+            $\theta_k = \frac{1}{2}\left(1+\sqrt{1 + 4\theta_{k-1}^2}\right)$\\
+            $\mathbf{\mathbf{\bar{X}}}_k =
+            \mathbf{\tilde{X}}_k + \frac{\theta_{k-1}-1}{\theta_k}(\tilde{X}_k - \mathbf{\tilde{X}}_{k-1}) + \frac{\theta_{k-1}}{\theta_k}(\mathbf{\tilde{X}}_k - \mathbf{X}_{k-1})$\\
+        }
+        \ElseIf{POGM}{
+            $\theta_k = \begin{cases} \frac{1}{2}\left(1+\sqrt{1 + 4\theta_{k-1}^2}\right) : k < N \\ \frac{1}{2}\left(1+\sqrt{1 + 8\theta_{k-1}^2}\right) : k = N \end{cases}$\\
+            $\mathbf{\mathbf{\bar{X}}}_k =
+            \mathbf{\tilde{X}}_k + \frac{\theta_{k-1}-1}{\theta_k}(\tilde{X}_k - \mathbf{\tilde{X}}_{k-1}) + \frac{\theta_{k-1}}{\theta_k}(\mathbf{\tilde{X}}_k - \mathbf{X}_{k-1}) + \frac{\theta_{k-1}-1}{\zeta_{k-1} \theta_k}(\mathbf{\bar{X}}_{k-1} - \mathbf{X}_{k-1})$\\
+            $\zeta_k = t(1+\frac{\theta_{k-1}-1}{\theta_k} + \frac{\theta_{k-1}}{\theta_k})$
+        }
+        
+        $\mathbf{L}_k = SVT_{\lambda_L}(\mathbf{\bar{L}}_k)$\\
+        $\mathbf{S}_k = \mathbf{T}^*\left(\Lambda_{\lambda_S}\left(\mathbf{T}(\mathbf{\bar{L}}_k)\right)\right)$\\
+        
+        $\mathbf{M}_k = \mathbf{L}_k + \mathbf{S}_k - \mathcal{A}^*(\mathcal{A} (\mathbf{L_k + S_k}) - \mathbf{y})$
+    }
+    \Return{$\mathbf{L}_N + \mathbf{S}_N$}
+    \caption{ISTA/FISTA/POGM for L+S, as formulated in~\cite{lin_efficient_2019}}
+    \label{alg:lin_pgm}
+\end{algorithm}
 
-Having the measurement data that exhibit a required level of sparsity and incoherence, makes us able to apply optimization methods to reconstruct the original image from that undersampled measurement. The optimization problem is formulated in the following way: $$\textit{minimize} \lvert\lvert \Psi m \rvert\rvert_1 \textit{ such that } \lvert\lvert \mathcal{F}_u m - y \rvert\rvert_2 < \epsilon,$$
-where $m$ image of interest, $\Psi$ a sparsifying transform, $\mathcal{F}_u$ undersampled Fourier transform, $y$ measured k-space data, $\epsilon$ threshold for expected noise level (controls fidelity of reconstruction). Minimizing $\lvert\lvert \Psi m \rvert\rvert_1$ promotes sparsity, constraint $\lvert\lvert \mathcal{F}_u m - y \rvert\rvert_2 < \epsilon$ enforces data consistency. When $\Psi$ is finite-differences operator (difference of neighbors), then we refer to $\lvert\lvert \Psi m \rvert\rvert_1$ as $TV(m)$. That operator is used many times as additional penalty: \textit{minimize} $\lvert\lvert \Psi m \rvert\rvert_1 + \alpha TV(m)$ \textit{such that} $\lvert\lvert \mathcal{F}_u m - y \rvert\rvert_2 < \epsilon$ where $\alpha$ trades $\Psi$ sparsity with finite-differences sparsity. Although there exist multiple methods to solve that constrained optimization problem, constrained optimization problems are considered to be difficult tasks to solve, so most of the times researchers try to find a way to convert the problem to unconstrained formulation. In our case, the Lagrangian form is a good solution to that problem:
-$$\argmin_m \lvert\lvert\mathcal{F}_u m - y \rvert\rvert_2^2 + \lambda \lvert\lvert\Psi m \rvert\rvert_1,$$
-where $\lambda$ is a regularization parameter that determines the trade-off between data consistency and sparsity. if $\lambda$ properly selected, then the two problem statements yield same results. $\lambda$ can be determined by trying many values and choosing one so that $\lvert\lvert\mathcal{F}_u m - y \rvert\rvert_2 \approx \epsilon$. Adding the total variance term and introducing the $f$ function to note the cost function, we get the following formula:
-$$\argmin_m f(m)$$
-$$\text{ where } f(m) := \lvert\lvert\mathcal{F}_u m - y \rvert\rvert_2^2 + \lambda \lvert\lvert\Psi m \rvert\rvert_1 + \alpha TV(m).$$
+\subsubsection{Augmented Lagrangian Methods}
+The other approach they studied based on the augmented Lagrangian formulation combined with the variable splitting scheme. The conventional way, proposed in~\cite{tremoulheac_dynamic_2014}, to perform the variable splitting transform the original $L+S$ problem into 
+\[\min_{\mathbf{L,S}}\min_{\mathbf{P,Q}} \left\{\frac{1}{2}\norm{\mathcal{A}(\mathbf{L+S}) - \mathbf{y}}_2^2 + \lambda_L \norm{\mathbf{P}}_* + \lambda_S \norm{\mathbf{Q}}_1\right\} \textrm{ subject to } \begin{cases} \mathbf{P = L} \\ \mathbf{Q = TS} \end{cases}.\]
+Using ADMM technique, this formulation yields a modified augmented Lagrangian function
+\begin{align*}
+L(\mathbf{L, S, P, Q, V}_1, \mathbf{V}_2) = & \frac{1}{2}\norm{\mathcal{A}(\mathbf{L+S}) - \mathbf{y}}_2^2 + \lambda_L \norm{\mathbf{P}}_* + \lambda_S \norm{\mathbf{Q}}_1 + \ldots \\ & + \frac{\delta_1}{2}\norm{\mathbf{L - P + V}_1}_2^2 + \frac{\delta_2}{2}\norm{\mathbf{TS - Q + V}_2}_2^2,
+\end{align*}
+where $\mathbf{V}_1$ and $\mathbf{V}_2$ take the place of Lagrangian multipliers in the classic augmented Lagrangian method, and they come from the relaxation of equality constraints $\mathbf{P = L}$ and $\mathbf{Q = TS}$ to $\mathbf{L - P = V}_1$ and $\mathbf{TS - Q = V}_2$. Thus, setting $\mathbf{V}_1$ and $\mathbf{V}_2$ to $\mathbf{0}$ leads back to the solution of the constrained problem. These variables are adjusted after each step to penalize deviations from the equality constraints, specifically for each pixel.
 
-After these modifications, we can find many methods to minimize $f$ efficiently:
-\begin{itemize}
-    \item interior point methods
-    \item projections onto convex sets
-    \item homotopy
-    \item iterative soft thresholding
-    \item iteratively reweighted least squares
-    \item nonlinear conjugate gradients (used in that article)
+The associated algorithm (algorithm~\ref{alg:al-cg}) consists of four main steps, each optimizing $L$ function for one variable while fixing all others. The minimization for $\mathbf{P}$ and $\mathbf{Q}$ is quite straightforward as they can solved by the proximity operators: the soft-thresholding solves for the $\ell_1$-norm constraint on $\mathbf{Q}$ and $SVT$ minimizes for the nuclear norm. Although these steps also needs to take care of the other two terms introduced by the equality constraints, they still have a directly solvable formula. On the other hand, optimization for $\mathbf{L}$ and $\mathbf{S}$ needs more elaborate steps. In fact, the most general solution is utilized by the authors of the paper; namely, they try to find the root of the gradient. As all terms containing $\mathbf{L}$ and $\mathbf{S}$ are $\ell_2$ norms, the best (first-order) iterative method to find the root of these quadratic terms is certainly the conjugate gradient. The inputs of CG are derived as follows. Let us first take the partial derivate of the augmented Lagrangian:
+\[\frac{\partial}{\partial L} L(\mathbf{L, S, P, Q, V}_1, \mathbf{V}_2) = \mathcal{A}^*(\mathcal{A}(\mathbf{L} + \mathbf{S}) - \mathbf{y}) + \delta_1(\mathbf{L + P - V}_1) \overset{!}{=} \mathbf{0}.\]
+Then we can separate $\mathbf{L}$ from the rest of the formula by rearranging
+\begin{align*}
+    \mathcal{A}^*(\mathcal{A}(\mathbf{L} + &\mathbf{S}) - \mathbf{y}) + \delta_1(\mathbf{L + P - V}_1) = \mathcal{A}^*\mathcal{A}\mathbf{L} + \mathcal{A}^*\mathcal{A}\mathbf{S} - \mathcal{A}^*\mathbf{y} + \delta_1\mathbf{L} + \delta_1(\mathbf{P - V}_1) = \ldots \\ & = (\mathcal{A}^*\mathcal{A} + \delta_1\mathbf{I})\mathbf{L} + \mathcal{A}^*\mathcal{A}\mathbf{S} - \mathcal{A}^*\mathbf{y} + \delta_1(\mathbf{P - V}_1).
+\end{align*}
+Finally, putting it back to the previous equation and performing some further rearrangements, we get the equation
+\[(\mathcal{A}^*\mathcal{A} + \delta_1\mathbf{I})\mathbf{L} = \mathcal{A}^*\mathcal{A}\mathbf{S} - \mathcal{A}^*\mathbf{y} + \delta_1\mathbf{P - V}_1\]
+that fits the CG scheme as $\mathcal{A}^*\mathcal{A} + \delta_1\mathbf{I}$ is Hermitian and positive definite. Following the same line of arguments, the equation needs to be minimized for $\mathbf{S}$ is derived as 
+\[(\mathcal{A}^*\mathcal{A} + \delta_2\mathbf{I})\mathbf{S} = \mathcal{A}^*\mathcal{A}\mathbf{L} - \mathcal{A}^*\mathbf{y} + \delta_1\mathbf{Q - V}_2.\]
+
+\begin{algorithm}[tb]
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{
+        $\mathbf{y}$: undersampled k-space data\\
+        $\mathcal{A}$: data acquisition operator\\
+        $\mathbf{T}$: temporal Fourier transform\\
+        $\lambda_L$: singular value threshold\\
+        $\lambda_S$: sparsity threshold\\
+        $maxIter_L$: number of conjugate gradient iteration steps for $L$\\
+        $maxIter_S$: number of conjugate gradient iteration steps for $S$\\
+        $\delta_1$, $\delta_2$: AL penalty parameters\\
+        $N$: number of iterations}
+    \Output{$\mathbf{L, S} = \argmin_{\mathbf{L, S}}  \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{T} \mathbf{S}}_1$}
+    \BlankLine
+    initialization: $\mathbf{L}_0 = \mathcal{A}^* \mathbf{y}, \mathbf{S}_0 = \mathbf{V}_{1,0} = \mathbf{V}_{2,0} = \mathbf{0}$\\
+    \For{$k = 1 \ldots N$}{
+        $\mathbf{P}_k = SVT_{\lambda_L / \delta_1} (\mathbf{L}+\mathbf{V}_{2,k})$\\
+        $\mathbf{Q}_k = \mathbf{T}^* \Lambda_{\lambda_S / \delta_2} (\mathbf{T}S) + \mathbf{V}_{2,k} $\\
+        $\mathbf{L}_k = \argmin_{\mathbf{L}} (\mathcal{A}^*\mathcal{A} + \delta_1\mathbf{I})\mathbf{L} = \mathcal{A}^*\mathbf{y} - \mathcal{A}^*\mathcal{A}\mathbf{S} + \delta_1(\mathbf{P} - \mathbf{V}_{1,k}) \text{ starting from }\mathbf{L}_{k-1}$\\
+        $\mathbf{S}_k = \argmin_{\mathbf{S}} (\mathcal{A}^*\mathcal{A} + \delta_2\mathbf{I})\mathbf{S} = \mathcal{A}^*\mathbf{y} - \mathcal{A}^*\mathcal{A}\mathbf{S} + \delta_2(\mathbf{Q} - \mathbf{V}_{2,k}) \text{ starting from }\mathbf{S}_{k-1}$\\
+        $\mathbf{V}_{1,k} = \mathbf{V}_{1,k-1} + \mathbf{L}_k - \mathbf{P}$\\
+        $\mathbf{V}_{2,k} = \mathbf{V}_{2,k-1} + \mathbf{T}\mathbf{S}_k - \mathbf{Q}$
+    }
+    \Return{$\mathbf{L}_N + \mathbf{S}_N$}
+    \caption{AL method with CG steps}
+    \label{alg:al-cg}
+\end{algorithm}
+
+The second AL-type method that Lin and Fessler considered in their paper is a new method that decomposes the acquisition operator $\mathcal{A}$ into a coil sensitivity mapping $\mathcal{C}:\mathbb{C}^{N \times n_t} \rightarrow \mathbb{C}^{N \times n_c \times n_t}$ (briefly discussed in section~\ref{section:accelerated}), a spacial Fourier transform operator $\mathcal{F}: \mathbb{C}^{N \times n_c \times n_t} \rightarrow \mathbb{C}^{N \times n_c \times n_t}$, and an undersampling masking $\Omega: \mathbb{C}^{N \times n_c \times n_t} \rightarrow \mathbb{C}^{m \times n_c \times n_t}$ such that $\mathcal{A} = \Omega\mathcal{FC}$. They also assumed that $\mathcal{C}$ normalized and therefore it is also unitary; i.e., $\mathcal{C}^*\mathcal{C} = \mathbf{I}$. They can assume it without loss of generality as the image can be freely scaled without changing its rank or sparsity, and this is also true for the temporal Fourier domain. At the construction of the algorithm, they took advantage of the increased freedom in the choice of variable splitting. In particular, they split the acquisition operator together with the variables, and they arrived to the objective
+\[\argmin_{\mathbf{L,S}}\min_{\mathbf{Z,X}}\left\{\frac{1}{2}\norm{\Omega \mathbf{Z -d}}_2^2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{TS}}_1\right\} \text{ subject to } \begin{cases} \mathbf{Z} = \mathcal{FC}\mathbf{X} \\ \mathbf{X = L + S} \end{cases}.\]
+Afterwards, they defined the AL function by
+\begin{align*}
+    \argmin_{\mathbf{L,S}}&\min_{\mathbf{Z,X}}\left\{\frac{1}{2}\norm{\Omega \mathbf{Z -d}}_2^2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{TS}}_1\right\}\\
+    & + \frac{\delta_1}{2}\norm{\mathcal{FC}\mathbf{X - Z + V}_1}_2^2 + \frac{\delta_2}{2}\norm{\mathbf{L + S - X + V}_2}_2^2,
+\end{align*}
+and they solved the resulting steps, as follows, exploiting that both $\mathbf{T}$ and $\mathcal{F}$ is unitary, introducing an auxiliary variable $\mathbf{\tilde{S}} = \mathbf{TS}$, and using again soft-thresholding and singular-value thresholding for $\ell_1$ and nuclear norm minimization:
+\begin{itemize}[label={}]
+    \item $\begin{aligned}
+        \mathbf{Z}_k
+        & = \argmin_\mathbf{Z} \frac{1}{2} \norm{\Omega \mathbf{Z - y}}_2^2 + \frac{\delta_1}{2}\norm{\mathbf{X - (L + S) + V}_2}_2^2\\
+        & = \left(\Omega^*\Omega + \delta_1 \mathbf{I})^{-1}(\Omega^*\mathbf{y} + \delta_1(\mathcal{FC}\mathbf{X - V}_1)\right)
+    \end{aligned}$
+    \item $\begin{aligned}
+        \mathbf{X}_k
+        & = \argmin_\mathbf{X} \left\{ \frac{\delta_1}{2} \norm{\mathbf{Z} - \mathcal{FC}\mathbf{X + V}_1}_2^2 + \frac{\delta_2}{2} \norm{\mathbf{X - (L + S) + V}_2}_2^2 \right\}\\
+        & = \left(\mathcal{C}^*\mathcal{C} + \frac{\delta_1}{\delta_2}\mathbf{I}\right)^{-1}\left(\mathcal{C}^*\mathcal{F}^* (\mathbf{Z + V}_1) + \frac{\delta_1}{\delta_2}(\mathbf{L+S+V}_2)\right)\\
+        & = \frac{\delta_1}{\delta_1+\delta_2}\left(\mathcal{C}^*\mathcal{F}^* (\mathbf{Z+V}_1) + \frac{\delta_2}{\delta_1}(\mathbf{L+S-V}_2)\right)
+    \end{aligned}$
+    \item $\begin{aligned}
+        \mathbf{L}_k
+        & = \argmin_\mathbf{L} \left\{ (\lambda_L \norm{\mathbf{L}}_* + \frac{\delta_2}{2} \norm{\mathbf{X - (L + S) + V}_2}_2^2) \right\}\\
+        & = SVT_{\lambda_L / \delta_2} (\mathbf{X-S+V}_2)
+    \end{aligned}$
+    \item $\begin{aligned}
+        \mathbf{S}_k
+        & = \argmin_\mathbf{S} \left\{ (\lambda_S \norm{\mathbf{TS}}_1 + \frac{\delta_2}{2} \norm{\mathbf{X - (L + S) + V}_2}^2) \right\}\\
+        & = \mathbf{T}^* \left(\argmin_\mathbf{\tilde{S}} \left\{\lambda_S \norm{\mathbf{\mathbf{\tilde{S}}}}_1 + \frac{\delta_2}{2} \norm{\mathbf{T(X - (L + S) + V}_2) - \mathbf{\mathbf{\tilde{S}}}}_2^2\right\}\right)\\
+        & = \mathbf{T}^* \Lambda_{\lambda_S / \delta_2} (\mathbf{T}(\mathbf{X - L + V}_2)).
+    \end{aligned}$
 \end{itemize}
-In the following, we attempt to briefly explain the motivation behind the \textit{nonlinear conjugate gradient} method, and show its mechanism.
+Although these steps might look more complicated at first than the previous method, they can be calculated much faster indeed. In fact, the only inverse that needs to be calculated is $(\Omega^*\Omega + \delta_1 \mathbf{I})^{-1}$, but this calculation is quite cheap because $\Omega^*\Omega$ is diagonal. Algorithm~\ref{alg:al-2} summarizes the implementation of these steps, and describes the updates of the Lagrange multipliers.
 
-\paragraph{Transform Sparsity}
- Sparse signals are signals that have a few non zero coefficients. Most natural signals like images and sounds are compressible i.e. can be represented with few nonzero coefficients in a certain basis without a big loss of information. While MR images are sparse in discrete cosine transform (DCT) and wavelet transform domains, angiograms, for instance, have already a sparse pixel representation.  One famous sparsifying transform is the Spatial Finite Differences which consists in computing the difference between neighboring pixels so the only non zero values are those of the pixels at the edges. Dynamic MR images are also highly compressible and have a sparse representation in the temporal Fourier Domain~\cite{parrish, lustig}.
+\begin{algorithm}[tb]
+    \SetKwInOut{Input}{input}
+    \SetKwInOut{Output}{output}
+    \Input{
+        $\mathbf{y}$: undersampled k-space data\\
+        $\mathcal{C}$: coil sensitivity operator\\
+        $\mathcal{F}$: spacial Fourier transform operator\\
+        $\Omega$: undersampling masking\\
+        $\mathbf{T}$: temporal Fourier transform\\
+        $\lambda_L$: singular value threshold\\
+        $\lambda_S$: sparsity threshold\\
+        $\delta_1$, $\delta_2$: AL penalty parameters\\
+        $N$: number of iterations}
+    \Output{$\mathbf{L, S} = \argmin_{\mathbf{L, S}}  \norm{\mathcal{A}\mathbf{(L+S) - y}}_2 + \lambda_L \norm{\mathbf{L}}_* + \lambda_S \norm{\mathbf{T} \mathbf{S}}_1$}
+    \BlankLine
+    initialization: $\mathbf{X}_0 = \mathbf{L}_0 = \mathcal{C}^*\mathcal{F}^*\Omega^* \mathbf{y}, \mathbf{S}_0 = \mathbf{V}_{1,0} = \mathbf{V}_{2,0} = \mathbf{0}$\\
+    \For{$k = 1 \ldots N$}{
+        $\mathbf{Z}_k = \left(\Omega^*\Omega + \delta_1 \mathbf{I})^{-1}(\Omega^*\mathbf{y} + \delta_1(\mathcal{FC}\mathbf{X - V}_1)\right)$\\
+        $\mathbf{X}_k = \frac{\delta_1}{\delta_1+\delta_2}\left(\mathcal{C}^*\mathcal{F}^* (\mathbf{Z+V}_1) + \frac{\delta_2}{\delta_1}(\mathbf{L+S-V}_2)\right)$\\
+        $\mathbf{L}_k = SVT_{\lambda_L / \delta_2} (\mathbf{X-S+V}_2)$\\
+        $\mathbf{S}_k = \mathbf{T}^* \Lambda_{\lambda_S / \delta_2} (\mathbf{T}(\mathbf{X - L + V}_2))$\\
+        $\mathbf{V}_{1,k} = \mathbf{V}_{1,k-1} + (\mathbf{Z}_k - \mathcal{FC}\mathbf{X}_k)$\\
+        $\mathbf{V}_{2,k} = \mathbf{V}_{2,k-1} + \mathbf{X}_k - (\mathbf{L}_k + \mathbf{S}_k)$
+    }
+    \Return{$\mathbf{L}_N + \mathbf{S}_N$}
+    \caption{improved AL method}
+    \label{alg:al-2}
+\end{algorithm}
 
-\fi
+\subsubsection{Datasets and Results}
+To evaluate the convergence speed and time complexity of the examined algorithms, they performed numerical experiments on three Cartesian datasets and one another recorded via a non-Cartesian sampling trajectory. Two of the Cartesian images and the non-Cartesian one were published as a supplement to~\cite{otazo_lowrank_2015}, and a simulated Cartesian dataset is taken from~\cite{nakarmi_accelerating_2016}---which, in turn, was generated by the MRXCAT toolbox~\cite{wissmann_mrxcat_2014} that aims to provide realistic numerical phantoms for cardiovascular magnetic resonance. Their results on all datasets were consistent proving the claimed improvement induced by the two methods they proposed. They found that POGM outperforms all other methods in case of all the four datasets, the "second place" is shared between FISTA and the improved AL scheme, and the AL method with CG inner steps appears to be the slowest in both convergence rate and time complexity. The latter is mainly due to the time consuming CG steps, but also the improved AL algorithm is computationally more expensive. This comparison, however, is slightly unfair since it fails to consider a very important advantage of ADMM-like methods, notably the independence of steps that allows highly parallel implementations.
 
-\section{Decompositions}
-
-\subsection{Low rank and Sparse}
-C. Y. Lin and J. A. Fessler, “Efficient Dynamic Parallel MRI Reconstruction for the Low-Rank Plus Sparse Model,” IEEE Transactions on Computational Imaging, vol. 5, no. 1, pp. 17–26, Mar. 2019, doi: 10.1109/TCI.2018.2882089.
-
-J. A. Fessler, “Optimization methods for MR image reconstruction (long version),” arXiv:1903.03510 [eess, math], Jun. 2019.
-
-\subsection{Multiscale}
+\subsection{Multiscale Low Rank Decomposition}
 
 Ong's dissertation: “Low Dimensional Methods for High Dimensional Magnetic Resonance Imaging,” 2018.
 

@@ -1,4 +1,115 @@
 
+@article{nakarmi_accelerating_2016,
+	title = {{ACCELERATING} {DYNAMIC} {MAGNETIC} {RESONANCE} {IMAGING} {BY} {NONLINEAR} {SPARSE} {CODING}},
+	volume = {2016},
+	issn = {1945-7928},
+	url = {https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6839784/},
+	doi = {10.1109/ISBI.2016.7493319},
+	abstract = {Although being high-dimensional, dynamic magnetic resonance images usually lie on low-dimensional manifolds. Nonlinear models have been shown to capture well that latent low-dimensional nature of data, and can thus lead to improvements in the quality of constrained recovery algorithms. This paper advocates a novel reconstruction algorithm for dynamic magnetic resonance imaging ({dMRI}) based on nonlinear dictionary learned from low-spatial but high-temporal resolution images. The nonlinear dictionary is initially learned using kernel dictionary learning, and the proposed algorithm subsequently alternates between sparsity enforcement in the feature space and the data-consistency constraint in the original input space. Extensive numerical tests demonstrate that the proposed scheme is superior to popular methods that use linear dictionaries learned from the same set of training data.},
+	pages = {510--513},
+	journaltitle = {Proceedings. {IEEE} International Symposium on Biomedical Imaging},
+	shortjournal = {Proc {IEEE} Int Symp Biomed Imaging},
+	author = {Nakarmi, Ukash and Zhou, Yihang and Lyu, Jingyuan and Slavakis, Konstantinos and Ying, Leslie},
+	urldate = {2020-05-25},
+	date = {2016-04},
+	pmid = {31709030},
+	pmcid = {PMC6839784}
+}
+
+@article{tremoulheac_dynamic_2014,
+	title = {Dynamic {MR} Image Reconstruction–Separation From Undersampled (\${\textbackslash}bf k,t\$)-Space via Low-Rank Plus Sparse Prior},
+	volume = {33},
+	issn = {1558-254X},
+	doi = {10.1109/TMI.2014.2321190},
+	abstract = {Dynamic magnetic resonance imaging ({MRI}) is used in multiple clinical applications, but can still benefit from higher spatial or temporal resolution. A dynamic {MR} image reconstruction method from partial ( k, t)-space measurements is introduced that recovers and inherently separates the information in the dynamic scene. The reconstruction model is based on a low-rank plus sparse decomposition prior, which is related to robust principal component analysis. An algorithm is proposed to solve the convex optimization problem based on an alternating direction method of multipliers. The method is validated with numerical phantom simulations and cardiac {MRI} data against state of the art dynamic {MRI} reconstruction methods. Results suggest that using the proposed approach as a means of regularizing the inverse problem remains competitive with state of the art reconstruction techniques. Additionally, the decomposition induced by the reconstruction is shown to help in the context of motion estimation in dynamic contrast enhanced {MRI}.},
+	pages = {1689--1701},
+	number = {8},
+	journaltitle = {{IEEE} Transactions on Medical Imaging},
+	author = {Trémoulhéac, Benjamin and Dikaios, Nikolaos and Atkinson, David and Arridge, Simon R.},
+	date = {2014-08},
+	note = {Conference Name: {IEEE} Transactions on Medical Imaging},
+	keywords = {Algorithms, Compressive sensing ({CS}), Heart, Humans, Image Processing, Computer-Assisted, Image reconstruction, Licenses, Magnetic Resonance Imaging, Magnetic resonance imaging, Matrix decomposition, Phantoms, Imaging, Principal Component Analysis, Robustness, Sparse matrices, alternating direction method, biomedical {MRI}, cardiac {MRI} data, cardiology, convex optimization problem, dynamic {MR} image reconstruction method, dynamic magnetic resonance ({MR}) imaging, dynamic magnetic resonance imaging, high spatial resolution, high temporal resolution, image reconstruction, inverse problem, inverse transforms, low-rank, medical image processing, motion estimation, numerical analysis, numerical phantom simulation, optimisation, partial (k,t )-space measurements, phantoms, principal component analysis, robust principal component analysis, sparse decomposition prior, sparsity, state of the art reconstruction techniques, undersampled (K,t )-space measurement}
+}
+
+@article{otazo_lowrank_2015,
+	title = {Low—rank plus sparse matrix decomposition for accelerated dynamic {MRI} with separation of background and dynamic components},
+	volume = {73},
+	rights = {© 2014 Wiley Periodicals, Inc.},
+	issn = {1522-2594},
+	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.25240},
+	doi = {10.1002/mrm.25240},
+	abstract = {Purpose To apply the low-rank plus sparse (L+S) matrix decomposition model to reconstruct undersampled dynamic {MRI} as a superposition of background and dynamic components in various problems of clinical interest. Theory and Methods The L+S model is natural to represent dynamic {MRI} data. Incoherence between k-t space (acquisition) and the singular vectors of L and the sparse domain of S is required to reconstruct undersampled data. Incoherence between L and S is required for robust separation of background and dynamic components. Multicoil L+S reconstruction is formulated using a convex optimization approach, where the nuclear norm is used to enforce low rank in L and the l1 norm is used to enforce sparsity in S. Feasibility of the L+S reconstruction was tested in several dynamic {MRI} experiments with true acceleration, including cardiac perfusion, cardiac cine, time-resolved angiography, and abdominal and breast perfusion using Cartesian and radial sampling. Results The L+S model increased compressibility of dynamic {MRI} data and thus enabled high-acceleration factors. The inherent background separation improved background suppression performance compared to conventional data subtraction, which is sensitive to motion. Conclusion The high acceleration and background separation enabled by L+S promises to enhance spatial and temporal resolution and to enable background suppression without the need of subtraction or modeling. Magn Reson Med 73:1125–1136, 2015. © 2014 Wiley Periodicals, Inc.},
+	pages = {1125--1136},
+	number = {3},
+	journaltitle = {Magnetic Resonance in Medicine},
+	author = {Otazo, Ricardo and Candès, Emmanuel and Sodickson, Daniel K.},
+	urldate = {2020-05-24},
+	date = {2015},
+	langid = {english},
+	note = {\_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1002/mrm.25240},
+	keywords = {compressed sensing, dynamic {MRI}, for-reference, low-rank matrix completion, sparsity, to-read}
+}
+
+@article{cai_singular_2008,
+	title = {A Singular Value Thresholding Algorithm for Matrix Completion},
+	url = {http://arxiv.org/abs/0810.3286},
+	abstract = {This paper introduces a novel algorithm to approximate the matrix with minimum nuclear norm among all matrices obeying a set of convex constraints. This problem may be understood as the convex relaxation of a rank minimization problem, and arises in many important applications as in the task of recovering a large matrix from a small subset of its entries (the famous Netflix problem). Off-the-shelf algorithms such as interior point methods are not directly amenable to large problems of this kind with over a million unknown entries. This paper develops a simple first-order and easy-to-implement algorithm that is extremely efficient at addressing problems in which the optimal solution has low rank. The algorithm is iterative and produces a sequence of matrices (X{\textasciicircum}k, Y{\textasciicircum}k) and at each step, mainly performs a soft-thresholding operation on the singular values of the matrix Y{\textasciicircum}k. There are two remarkable features making this attractive for low-rank matrix completion problems. The first is that the soft-thresholding operation is applied to a sparse matrix; the second is that the rank of the iterates X{\textasciicircum}k is empirically nondecreasing. Both these facts allow the algorithm to make use of very minimal storage space and keep the computational cost of each iteration low. We provide numerical examples in which 1,000 by 1,000 matrices are recovered in less than a minute on a modest desktop computer. We also demonstrate that our approach is amenable to very large scale problems by recovering matrices of rank about 10 with nearly a billion unknowns from just about 0.4\% of their sampled entries. Our methods are connected with linearized Bregman iterations for l1 minimization, and we develop a framework in which one can understand these algorithms in terms of well-known Lagrange multiplier algorithms.},
+	journaltitle = {{arXiv}:0810.3286 [math]},
+	author = {Cai, Jian-Feng and Candes, Emmanuel J. and Shen, Zuowei},
+	urldate = {2020-05-24},
+	date = {2008-10-17},
+	eprinttype = {arxiv},
+	eprint = {0810.3286},
+	keywords = {Mathematics - Optimization and Control}
+}
+
+@article{roohi_multidimensional_2017,
+	title = {Multi—dimensional low rank plus sparse decomposition for reconstruction of under-sampled dynamic {MRI}},
+	volume = {63},
+	issn = {0031-3203},
+	url = {http://www.sciencedirect.com/science/article/pii/S0031320316302965},
+	doi = {10.1016/j.patcog.2016.09.040},
+	abstract = {In this paper, we introduce a multi-dimensional approach to the problem of reconstruction of {MR} image sequences that are highly undersampled in k-space. By formulating the reconstruction as a high-order low rank tensor plus sparse tensor decomposition problem, we propose an efficient numerical algorithm based on the alternating direction method of multipliers ({ADMM}) to solve the optimization. Using Tucker representation, the sparse component is learnt efficiently with different sparsifying matrices along the modes of dynamic {MR} data. To estimate the low rank tensor, a convex cost function is defined to be the weighted sum of nuclear norms of its 3 unfolding matrices. Through extensive experimental results we show that our proposed method achieves superior reconstruction quality, compared to the state-of-the-art reconstruction methods.},
+	pages = {667--679},
+	journaltitle = {Pattern Recognition},
+	shortjournal = {Pattern Recognition},
+	author = {Roohi, Shahrooz F. and Zonoobi, Dornoosh and Kassim, Ashraf A. and Jaremko, Jacob L.},
+	urldate = {2020-05-24},
+	date = {2017-03-01},
+	langid = {english},
+	keywords = {Compressive sensing, Dynamic 3D {MRI}, Image reconstruction, Low-rank and sparse tensor decomposition}
+}
+
+@inproceedings{fazel_logdet_2003,
+	title = {Log—det heuristic for matrix rank minimization with applications to Hankel and Euclidean distance matrices},
+	volume = {3},
+	doi = {10.1109/ACC.2003.1243393},
+	abstract = {We present a heuristic for minimizing the rank of a positive semidefinite matrix over a convex set. We use the logarithm of the determinant as a smooth approximation for rank, and locally minimize this function to obtain a sequence of trace minimization problems. We then present a lemma that relates the rank of any general matrix to that of a corresponding positive semidefinite one. Using this, we readily extend the proposed heuristic to handle general matrices. We examine the vector case as a special case, where the heuristic reduces to an iterative l/sub 1/-norm minimization technique. As practical applications of the rank minimization problem and our heuristic, we consider two examples: minimum-order system realization with time-domain constraints, and finding lowest-dimension embedding of points in a Euclidean space from noisy distance data.},
+	eventtitle = {Proceedings of the 2003 American Control Conference, 2003.},
+	pages = {2156--2162 vol.3},
+	booktitle = {Proceedings of the 2003 American Control Conference, 2003.},
+	author = {Fazel, M. and Hindi, H. and Boyd, S.P.},
+	date = {2003-06},
+	note = {{ISSN}: 0743-1619},
+	keywords = {Computational geometry, Constraint optimization, Control systems, Electronic mail, Euclidean distance, Euclidean distance matrices, Euclidean space, Hankel distance matrices, Hankel matrices, Signal processing, Statistics, System identification, Time domain analysis, Yttrium, convex programming, convex set, determinants, general matrix, iterative methods, iterative minimization technique, lemma, local minimization, log det heuristics, lowest dimension embedding points, matrix rank minimization, minimisation, minimum-order system realization, noisy distance data, positive semidefinite matrix, smooth rank approximation, time domain constraints, time-domain analysis, trace minimization problems, vector case}
+}
+
+@article{lingala_accelerated_2011,
+	title = {Accelerated Dynamic {MRI} Exploiting Sparsity and Low-Rank Structure: k-t {SLR}},
+	volume = {30},
+	issn = {1558-254X},
+	doi = {10.1109/TMI.2010.2100850},
+	shorttitle = {Accelerated Dynamic {MRI} Exploiting Sparsity and Low-Rank Structure},
+	abstract = {We introduce a novel algorithm to reconstruct dynamic magnetic resonance imaging ({MRI}) data from under-sampled k-t space data. In contrast to classical model based cine {MRI} schemes that rely on the sparsity or banded structure in Fourier space, we use the compact representation of the data in the Karhunen Louve transform ({KLT}) domain to exploit the correlations in the dataset. The use of the data-dependent {KL} transform makes our approach ideally suited to a range of dynamic imaging problems, even when the motion is not periodic. In comparison to current {KLT}-based methods that rely on a two-step approach to first estimate the basis functions and then use it for reconstruction, we pose the problem as a spectrally regularized matrix recovery problem. By simultaneously determining the temporal basis functions and its spatial weights from the entire measured data, the proposed scheme is capable of providing high quality reconstructions at a range of accelerations. In addition to using the compact representation in the {KLT} domain, we also exploit the sparsity of the data to further improve the recovery rate. Validations using numerical phantoms and in vivo cardiac perfusion {MRI} data demonstrate the significant improvement in performance offered by the proposed scheme over existing methods.},
+	pages = {1042--1054},
+	number = {5},
+	journaltitle = {{IEEE} Transactions on Medical Imaging},
+	author = {Lingala, Sajan Goud and Hu, Yue and {DiBella}, Edward and Jacob, Mathews},
+	date = {2011-05},
+	note = {Conference Name: {IEEE} Transactions on Medical Imaging},
+	keywords = {Algorithms, Computer Simulation, Data driven transforms, Fourier space, Heart, Heuristic algorithms, Humans, Image Processing, Computer-Assisted, Image reconstruction, Karhunen Louve transform domain, Karhunen-Loeve transforms, Magnetic Resonance Imaging, Cine, Magnetic resonance imaging, Minimization, Models, Cardiovascular, Optimization, Phantoms, Imaging, Reproducibility of Results, Respiratory Mechanics, Signal Processing, Computer-Assisted, Transforms, accelerated dynamic {MRI} exploiting sparsity, biomedical {MRI}, cardiology, classical model, dynamic magnetic resonance imaging ({MRI}), image reconstruction, in vivo cardiac perfusion {MRI} data, k-t {SLR}, low rank and sparse matrix recovery, low-rank structure, medical image processing, numerical analysis, numerical phantoms, phantoms, spectrally regularized matrix recovery problem, undersampled k-t space data}
+}
+
 @article{gabay_dual_1976,
 	title = {A dual algorithm for the solution of nonlinear variational problems via finite element approximation},
 	volume = {2},
@@ -425,21 +536,6 @@ Volume: 2014}
 	langid = {english},
 	keywords = {Mathematics / Applied, Mathematics / Differential Equations / General, Mathematics / General, Mathematics / Numerical Analysis}
 }
-
-@inproceedings{fazel_log-det_2003,
-	title = {Log-det heuristic for matrix rank minimization with applications to Hankel and Euclidean distance matrices},
-	volume = {3},
-	doi = {10.1109/ACC.2003.1243393},
-	abstract = {We present a heuristic for minimizing the rank of a positive semidefinite matrix over a convex set. We use the logarithm of the determinant as a smooth approximation for rank, and locally minimize this function to obtain a sequence of trace minimization problems. We then present a lemma that relates the rank of any general matrix to that of a corresponding positive semidefinite one. Using this, we readily extend the proposed heuristic to handle general matrices. We examine the vector case as a special case, where the heuristic reduces to an iterative l/sub 1/-norm minimization technique. As practical applications of the rank minimization problem and our heuristic, we consider two examples: minimum-order system realization with time-domain constraints, and finding lowest-dimension embedding of points in a Euclidean space from noisy distance data.},
-	eventtitle = {Proceedings of the 2003 American Control Conference, 2003.},
-	pages = {2156--2162 vol.3},
-	booktitle = {Proceedings of the 2003 American Control Conference, 2003.},
-	author = {Fazel, M. and Hindi, H. and Boyd, S.P.},
-	date = {2003-06},
-	note = {{ISSN}: 0743-1619},
-	keywords = {Computational geometry, Constraint optimization, Control systems, Electronic mail, Euclidean distance, Euclidean distance matrices, Euclidean space, Hankel distance matrices, Hankel matrices, Signal processing, Statistics, System identification, Time domain analysis, Yttrium, convex programming, convex set, determinants, general matrix, iterative methods, iterative minimization technique, lemma, local minimization, log det heuristics, lowest dimension embedding points, matrix rank minimization, minimisation, minimum-order system realization, noisy distance data, positive semidefinite matrix, smooth rank approximation, time domain constraints, time-domain analysis, trace minimization problems, vector case}
-}
-
 @article{cohen_compressed_2009,
 	title = {Compressed sensing and best k-term approximation},
 	volume = {22},
@@ -511,6 +607,7 @@ Volume: 2014}
 	author = {Donoho, David L.},
 	date = {2006-04}
 }
+
 @article{candes_robust_2006,
 	title = {Robust uncertainty principles: exact signal reconstruction from highly incomplete frequency information},
 	volume = {52},
@@ -780,24 +877,6 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	langid = {american}
 }
 
-@article{otazo_low-rank_2015,
-	title = {Low-rank plus sparse matrix decomposition for accelerated dynamic {MRI} with separation of background and dynamic components},
-	volume = {73},
-	rights = {© 2014 Wiley Periodicals, Inc.},
-	issn = {1522-2594},
-	url = {https://onlinelibrary.wiley.com/doi/abs/10.1002/mrm.25240},
-	doi = {10.1002/mrm.25240},
-	abstract = {Purpose To apply the low-rank plus sparse (L+S) matrix decomposition model to reconstruct undersampled dynamic {MRI} as a superposition of background and dynamic components in various problems of clinical interest. Theory and Methods The L+S model is natural to represent dynamic {MRI} data. Incoherence between k-t space (acquisition) and the singular vectors of L and the sparse domain of S is required to reconstruct undersampled data. Incoherence between L and S is required for robust separation of background and dynamic components. Multicoil L+S reconstruction is formulated using a convex optimization approach, where the nuclear norm is used to enforce low rank in L and the l1 norm is used to enforce sparsity in S. Feasibility of the L+S reconstruction was tested in several dynamic {MRI} experiments with true acceleration, including cardiac perfusion, cardiac cine, time-resolved angiography, and abdominal and breast perfusion using Cartesian and radial sampling. Results The L+S model increased compressibility of dynamic {MRI} data and thus enabled high-acceleration factors. The inherent background separation improved background suppression performance compared to conventional data subtraction, which is sensitive to motion. Conclusion The high acceleration and background separation enabled by L+S promises to enhance spatial and temporal resolution and to enable background suppression without the need of subtraction or modeling. Magn Reson Med 73:1125–1136, 2015. © 2014 Wiley Periodicals, Inc.},
-	pages = {1125--1136},
-	number = {3},
-	journaltitle = {Magnetic Resonance in Medicine},
-	author = {Otazo, Ricardo and Candès, Emmanuel and Sodickson, Daniel K.},
-	urldate = {2020-02-28},
-	date = {2015},
-	langid = {english},
-	keywords = {compressed sensing, dynamic {MRI}, for-reference, low-rank matrix completion, sparsity, to-read}
-}
-
 @book{nishimura_principles_1996,
 	title = {Principles of magnetic resonance imaging},
 	pagetotal = {232},
@@ -937,7 +1016,6 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	urldate = {2020-05-10},
 	date = {1990-08-01}
 }
-
 @article{bammer_basic_2003,
 	title = {Basic principles of diffusion-weighted imaging},
 	volume = {45},
@@ -1066,6 +1144,7 @@ However, in the {EM} algorithm conditional expectations are usually involved, wh
 	date = {2020-04-06},
 	langid = {british}
 }
+
 @article{ladd_pros_2018,
 	title = {Pros and cons of ultra-high-field {MRI}/{MRS} for human application},
 	volume = {109},
@@ -1579,7 +1658,6 @@ clustered point distributions are desired.},
 	eprint = {2002.02041},
 	keywords = {{IRLS}, Mathematics - Numerical Analysis, to-read}
 }
-
 @article{levine_3d_2017,
 	title = {3D Cartesian {MRI} with compressed sensing and variable view sharing using complementary poisson-disc sampling: 3D Cartesian {MRI} with Compressed Sensing and Variable View Sharing},
 	volume = {77},
@@ -1626,6 +1704,7 @@ clustered point distributions are desired.},
 	url = {http://www.vision.ee.ethz.ch/~organmot/chapter_download.shtml},
 	urldate = {2020-01-31}
 }
+
 @article{lemarechal_cauchy_2012,
 	title = {Cauchy and the Gradient Method},
 	pages = {4},

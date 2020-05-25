@@ -8,57 +8,6 @@ Although the reader might be to be familiar with the most of these definitions, 
 
 \begin{tight_equations}
 
-\begin{definition}[norm]
-A non-negative function $\norm{\cdot}: X \rightarrow [0, \infty)$ is called a norm, if 
-\begin{enumerate}[label=\alph*)]
-    \item $\norm{\mathbf{x}} = 0$ if and only if $\mathbf{x} = \mathbf{0}$,
-    \item $\norm{\lambda \mathbf{x}} = \Vert \lambda \Vert \norm{\mathbf{x}}$ for all scalars $\lambda$ and all vectors $\mathbf{x} \in X$, and
-    \item $\norm{\mathbf{x} + \mathbf{y}} \le \norm{\mathbf{x}} + \norm{\mathbf{y}}$ for all vectors $\mathbf{x, y} \in X$.
-\end{enumerate}
-\end{definition}
-
-\begin{remark}
-$X$ denotes a vector space on which the norm is defined. In MRI setting, however, $\mathbb{C}^N$ is the default vector space for computations, and therefore, we also define the following constructs in this space.
-\end{remark}
-
-\begin{definition}[$\ell_p$-norms for vectors]
-The $\ell_p$-norm on $\mathbb{C}^N$ is defined for $1 \le p < \infty$ as
-\begin{equation}\label{eq:p-norm}
-\norm{\mathbf{x}}_p = \left(\sum_{j=1}^n |x_j|^p\right)^{\frac{1}{p}},
-\end{equation}
-and for $p = \infty$ as
-\[\norm{\mathbf{x}}_\infty = \max_{j \in [n]} | x_j |.\]
-For $0 < p < 1$, (\ref{eq:p-norm}) defines a quasinorm, which means that from the definition of the norm a) and b) holds, but c) is replaced by the weaker quasitriangle inequality
-\[\norm{\mathbf{x} + \mathbf{y}}_p \le C\left(\norm{\mathbf{x}}_p + \norm{\mathbf{y}}_p\right)\]
-with $C = 2^{\frac{1}{2}-1}$.
-\end{definition}
-
-\begin{remark}
-Figure~\ref{fig:balls} is showing 2-dimensional balls defined by $\ell_p$-norm with various $p$ values.
-\end{remark}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{images/balls.pdf}
-    \caption{\textbf{$\ell_p$ balls in 2D.}}
-    \label{fig:balls}
-\end{figure}
-
-\begin{notation}
-$[n]$ denotes the set of integers form $0$ to $n-1$.
-\end{notation}
-
-\begin{remark}
-Using the schema above, it is impossible to have a proper norm for $p = 0$; nonetheless, is very common to define $\ell_0$-norm as the number of non-zero coordinates:
-\[\norm{\mathbf{x}}_0 = \left| \left\{x_i \ne 0 : i \in [n]\right\}\right| \text{ where } \mathbf{x} \in \mathbb{C}^N.\]
-Following this convention, $\norm{\cdot}_0$ always refers to that formulation in this work.
-\end{remark}
-
-\begin{definition}
-The Frobenius norm on $\mathbb{C}^{m \times n}$ is defined as
-\[\norm{\mathbf{A}}_F = \left(\sum_{i=1}^m\sum{j=1}{n}|a_{ij}|^2\right)^\frac{1}{2}.\]
-\end{definition}
-
 \begin{definition}[sparsity]
 We call a vector $s$-sparse, if at most $s$ of its entries are non-zero; i.e. $\norm{\mathbf{x}}_0 \le s$.
 \end{definition}
@@ -88,10 +37,6 @@ holds. Similarly, a function $f:\mathbb{C}^n  \rightarrow \mathbb{R}$ is called 
 \[f(t\mathbf{x} + (1-t)\mathbf{y}) < t f(\mathbf{x}) + (1-t) f(\mathbf{y})\]
 holds.
 \end{definition}
-
-\begin{remark}
-For $1 \le p < \infty$, the $\ell_p$-norms are strictly convex, and $\ell_p$-quasinorms for $0 < p < 1$ are always non-convex (see fig.~\ref{fig:balls}).
-\end{remark}
 
 \begin{remark}
 A useful property of convex function is that all local minimizers are also global minimizers. Moreover, the minimizer of a \textit{strictly} convex function is unique, as well.
@@ -147,12 +92,60 @@ for some $C \in \mathbb{R}$.
 Note that using this notation, $\mathcal{O}(\epsilon^{-p})$ corresponds to $\mathcal{O}(k^{-\frac{1}{p}})$ (where $p$ has the same meaning as in the definition above), and that $\mathcal{O}(\epsilon^\alpha)$ means faster convergence than $\mathcal{O}(\epsilon^\beta)$, if $\alpha < \beta$.
 \end{remark}
 
-\begin{definition}[discrete Fourier transform (DFT)]
-The discrete Fourier transform $\mathbf{\hat{x}} \in \mathbb{C}^m$ of a vector $\mathbf{x} \in \mathbb{C}^m$ is given by
-\[\hat{x}_k = \sum_{l = 0}^{m-1} x_l \cdot e^{-\frac{2\pi i}{m}kl} : 0 \le k \le m-1,\]
-or in matrix notation
-\[\mathbf{\hat{x}} = \mathbf{Fx} \text{ with } F_{k,l} = e^{-\frac{2\pi i}{m}kl}.\]
+\begin{definition}[norm]
+A non-negative function $\norm{\cdot}: X \rightarrow [0, \infty)$ is called a norm, if 
+\begin{enumerate}[label=\alph*)]
+    \item $\norm{\mathbf{x}} = 0$ if and only if $\mathbf{x} = \mathbf{0}$,
+    \item $\norm{\lambda \mathbf{x}} = \Vert \lambda \Vert \norm{\mathbf{x}}$ for all scalars $\lambda$ and all vectors $\mathbf{x} \in X$, and
+    \item $\norm{\mathbf{x} + \mathbf{y}} \le \norm{\mathbf{x}} + \norm{\mathbf{y}}$ for all vectors $\mathbf{x, y} \in X$.
+\end{enumerate}
 \end{definition}
+
+\begin{remark}
+$X$ denotes a vector space on which the norm is defined. In MRI setting, however, $\mathbb{C}^N$ is the default vector space for computations, and therefore, we also define the following constructs in this space.
+\end{remark}
+
+\begin{definition}[$\ell_p$-norms for vectors]
+The $\ell_p$-norm on $\mathbb{C}^N$ is defined for $1 \le p < \infty$ as
+\begin{equation}\label{eq:p-norm}
+\norm{\mathbf{x}}_p = \left(\sum_{j=1}^n |x_j|^p\right)^{\frac{1}{p}},
+\end{equation}
+and for $p = \infty$ as
+\[\norm{\mathbf{x}}_\infty = \max_{j \in [n]} | x_j |.\]
+For $0 < p < 1$, (\ref{eq:p-norm}) defines a quasinorm, which means that from the definition of the norm a) and b) holds, but c) is replaced by the weaker quasitriangle inequality
+\[\norm{\mathbf{x} + \mathbf{y}}_p \le C\left(\norm{\mathbf{x}}_p + \norm{\mathbf{y}}_p\right)\]
+with $C = 2^{\frac{1}{2}-1}$.
+\end{definition}
+
+\begin{remark}
+Figure~\ref{fig:balls} is showing 2-dimensional balls defined by $\ell_p$-norm with various $p$ values.
+\end{remark}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/balls.pdf}
+    \caption{\textbf{$\ell_p$ balls in 2D.}}
+    \label{fig:balls}
+\end{figure}
+
+\begin{notation}
+$[n]$ denotes the set of integers form $0$ to $n-1$.
+\end{notation}
+
+\begin{remark}
+For $1 \le p < \infty$, the $\ell_p$-norms are strictly convex, and $\ell_p$-quasinorms for $0 < p < 1$ are always non-convex (see fig.~\ref{fig:balls}).
+\end{remark}
+
+\begin{remark}
+Using the schema above, it is impossible to have a proper norm for $p = 0$; nonetheless, is very common to define $\ell_0$-norm as the number of non-zero coordinates:
+\[\norm{\mathbf{x}}_0 = \left| \left\{x_i \ne 0 : i \in [n]\right\}\right| \text{ where } \mathbf{x} \in \mathbb{C}^N.\]
+Following this convention, $\norm{\cdot}_0$ always refers to that formulation in this work.
+\end{remark}
+
+%\begin{definition}
+%The Frobenius norm on $\mathbb{C}^{m \times n}$ is defined as
+%\[\norm{\mathbf{A}}_F = \left(\sum_{i=1}^m\sum{j=1}{n}|a_{ij}|^2\right)^\frac{1}{2}.\]
+%\end{definition}
 
 \begin{definition}[matrix rank]
 The column rank of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as the maximal number of independent columns of $A$. Similarly, the row rank of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is the maximal number of independent rows. As the column rank and the row rank are always equal, this number is simply called the rank of $A$.
@@ -167,6 +160,23 @@ The process of obtaining these matrices is called Singular Value Decomposition (
 \begin{remark}
 SVD is a particularly useful in analysis of matrix rank as the rank of a matrix always coincides with the number of its non-zero sigular values.
 \end{remark}
+
+\begin{definition}(Schatten-p norm)
+The Schatter-p norm of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as the $\ell_p$-norm applied to its singular values; that is,
+\[\norm{\mathbf{A}}_p = \left(\sum_{i=1}^{\min\{m,N\}}\sigma_i^p(\mathbf{A})\right)^\frac{1}{p}.\]
+Three important special cases are $p = 1, 2, \infty$, also called nuclear norm, Frobenius norm and spectral norm, respectively. The nuclear norm also has a distinct notation $\norm{\cdot}_*$, and the Frobenius norm is usually denoted by $\norm{\cdot}_F$.
+\end{definition}
+
+\begin{remark}
+Similarly to $\ell_p$-norms for $p \in (0,1)$, the Schatten-p norms with $0 < p < 1$ are only quasinorms and are always non-convex. Schatter-0 norm are, however, not defined as Schatten-p norms for $p \rightarrow 0$ converge to an already defined quantifier, the rank (of which, of course, one can think as the $\ell_0$-"norm" of singular values).
+\end{remark}
+
+\begin{definition}[discrete Fourier transform (DFT)]
+The discrete Fourier transform $\mathbf{\hat{x}} \in \mathbb{C}^m$ of a vector $\mathbf{x} \in \mathbb{C}^m$ is given by
+\[\hat{x}_k = \sum_{l = 0}^{m-1} x_l \cdot e^{-\frac{2\pi i}{m}kl} : 0 \le k \le m-1,\]
+or in matrix notation
+\[\mathbf{\hat{x}} = \mathbf{Fx} \text{ with } F_{k,l} = e^{-\frac{2\pi i}{m}kl}.\]
+\end{definition}
 
 \end{tight_equations}
 
@@ -184,20 +194,20 @@ And that is the point when compressed sensing comes into play claiming that give
     \tag{P\textsubscript{0}}\label{eq:P_0}
     \min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_0 \text{ subject to } \mathbf{Az} = \mathbf{y} = \mathbf{Ax}
 \end{equation}
-have a unique $s$-sparse solution with $s \ll N$. This optimization problem is often referred to as (\ref{eq:P_0}). The number of necessary measurement, however, still a difficult question. There are theoretical results stating that $m = 2s$ is the lower bound for a perfect recovery~\citationneeded and that a stable recovery (later explained) occurs with high probability with $m \ge C s log(N / m)$ for random measurement matrices~\citationneeded, but in practice, reconstruction algorithms struggle to reach these theoretical limits (albeit, the achieved $m$ is still drastically improved compared to the Nyquist sampled case).
+have a unique $s$-sparse solution with $s \ll N$. This optimization problem is often referred to as (\ref{eq:P_0}). The number of necessary measurement, however, still a difficult question. There are theoretical results stating that $m = 2s$ is the lower bound for a perfect recovery \cite{damelin_miller} and that a stable recovery (later explained) occurs with high probability with $m \ge C s log(N / m)$ for random measurement matrices \cite{foucart_mathematical_2013}, but in practice, reconstruction algorithms struggle to reach these theoretical limits (albeit, the achieved $m$ is still drastically improved compared to the Nyquist sampled case).
 
-The main reason why the optimal bounds are usually not reached is that the measurement matrices of real life systems have often have less favorable properties as random matrices and, more importantly, (\ref{eq:P_0}) is a NP-hard problem~\citationneeded; thus, only relaxations can be solved. The most commonly used relaxations are the so called $\ell_1$ minimization or Basis Pursuit (BP)~\citationneeded defined as
+The main reason why the optimal bounds are usually not reached is that the measurement matrices of real life systems have often have less favorable properties as random matrices and, more importantly, (\ref{eq:P_0}) is a NP-hard problem  \cite{natarajan}; thus, only relaxations can be solved. The most commonly used relaxations are the so called $\ell_1$ minimization or Basis Pursuit (BP) \cite{chen} defined as
 \begin{equation}
     \tag{P\textsubscript{1}}\label{eq:P_1}
     \min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_1 \text{ subject to } \mathbf{Az} = \mathbf{y},
 \end{equation}
-the Basis Pursuit DeNoising (BPDN)~\citationneeded formulated as
+the Basis Pursuit DeNoising (BPDN) \cite{chen_donoho_saunders} formulated as
 
 \begin{equation}
     \tag{P\textsubscript{1}, \texteta}\label{eq:P_1_noisy}
     \min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{z}}_1 \text{ subject to } \norm{\mathbf{Az} - \mathbf{y}}_2 \le \eta,
 \end{equation}
-and the LASSO (Least Absolute Shrinkage and Selection Operator)~\citationneeded problem expressed by
+and the LASSO (Least Absolute Shrinkage and Selection Operator) \cite{tibshirani} problem expressed by
 \[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{Az} - \mathbf{y}}_2 \text{ subject to } \norm{\mathbf{z}}_1 \le s.\]
 By the aid of a Lagrangian multiplier $\lambda$, the latter two can be transformed to the same unconstrained minimization problem
 \[\min_{\mathbf{z} \in \mathbb{C}^N} \norm{\mathbf{Az} - \mathbf{y}}_2 + \lambda \norm{\mathbf{z}}_1.\]
@@ -316,14 +326,14 @@ If a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ has restricted isometry con
 \subsection{The Connection Between CS and MRI}
 Although it is not always trivial to apply the compressed sensing scheme to different measurement methods, MR imaging is in a lucky position with the Fourier transform in the core of its image acquisition process as random partial discrete Fourier transform (i.e., selecting $m$ rows randomly with uniform distribution from the $N$ rows, or in other words, observing only $m$ entries of the Fourier transform) is proved to satisfy the RIP~\cite{fornasier_theoretical_2010}. That discovery has enormous significance as is offers a way to speed up the inherently slow MRI measurements by measuring only a few randomly selected points from the k-space, and then solve the $\ell_1$-minimization problem via an arbitrarily selected optimization algorithm.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.9\linewidth]{images/random_sampling.png}
-    \caption{\textbf{A heuristic reconstructing signal from random undersampling.} In the left block, the result of Fourier analysis is shown for both equidistant and random sampling, demonstrating the underdetermined nature of equidistant undersampling (bottom) and the noise-like effect of random sampling (top). In the right block, a simple method is applied that selects the peaks above a certain threshold as candidates, calculates the inference of these peaks, and substracts the calculated inference from the spectrum allowing detection of further peaks after lowering the threshold. Source: Adapted from~\cite{lustig_compressed_2008}.}
+    \caption{\textbf{A heuristic process for reconstruction signal from randomly undersampled data.} In the left block, the result of Fourier analysis is shown for both equidistant and random sampling, demonstrating the underdetermined nature of equidistant undersampling (bottom) and the noise-like effect of random sampling (top). In the right block, a simple method is applied that selects the peaks above a certain threshold as candidates, calculates the inference of these peaks, and substracts the calculated inference from the spectrum allowing detection of further peaks after lowering the threshold. Source: Adapted from~\cite{lustig_compressed_2008}.}
     \label{fig:random_sampling_1D}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.8\linewidth]{images/random_sampling2.png}
     \caption{\textbf{Connection between the sampling pattern and the introduced inference.} Using inverse DFT replacing the missing values with zeros leads to different type of undersampling artifacts. Sampling only the center reduces the resolution, undersampled equispaced scheme adds shifted copies of the signal to the recovered image, and random sampling spreads the inference uniformly. Source: Adapted from~\cite{lustig_compressed_2008}.}
@@ -332,7 +342,7 @@ Although it is not always trivial to apply the compressed sensing scheme to diff
 
 One can think of this recovery scheme as a denoising or inference cancelling process where the noise/inference to be removed is the sum of undersampling artifacts predicted by Nyquist-Shannon theorem. If we use an equispaced sampling pattern, then the resulted noise is basically shifted copies of the signal and hence recovery of the original signal is impossible as each replica is an equally likely candidate. Figure~\ref{fig:random_sampling_1D} illustrates this problem and demonstrates the advantage of random sampling. In contrast, random sampling "spreads" the noise uniformly over the image, so the inference acts mostly like white noise (see fig.~\ref{fig:random_sampling_images}). This approach is particularly appealing as countless denoising algorithms exists, and as many of them are based on minimization of the $\ell_1$-norm of the transform of signal, these methods provide a convenient way to solve (\ref{eq:P_1}) problem. The transform used is always depends on the type of image in interest: MR angiograms (imaging technique visualizing blood vessels) are sparse even in the image domain, but edge detection algorithms like finite differences transform (that corresponds to the well-known total variation (TV) penalty) can further enhance sparsity (fig.~\ref{fig:MRA}); brain images have a sparse representation in various wavelet transformations~\ref{fig:brain_wavelet}, and dynamic MR images tend to be sparse after temporal Fourier transform is applied.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
     \centering
     \begin{minipage}[t]{0.65\linewidth}
         \centering
@@ -417,7 +427,7 @@ That way we can calculate all $\alpha_i$ coefficients,:
 and using these coefficients $\mathbf{x_*}$ can be calculated directly by equation \ref{eq:direct_method}.
 
 \subsubsection{As an iterative method} One weakness of direct method that for high dimensional vectors, we have to calculate high number of coefficients. On the other hand, it is not necessary to calculate all of them as a good approximation of $\mathbf{x_* }$ can be obtained using only a few well chosen $\mathbf{p_i}$ vectors. To achieve that we need to define a cost function:
-$$f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \mathbf{Ax} - \mathbf{x}^T \mathbf{b}.$$
+\[f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \mathbf{Ax} - \mathbf{x}^T \mathbf{b}.\]
 The existence of a unique minimizer is evident as its second derivative is given by a symmetric positive-definite matrix:
 \[\nabla^2 f(\mathbf{x}) = \mathbf{A}.\]
 Also, we can calculate the first derivative easily:
@@ -430,7 +440,7 @@ Following this direction, the next optimal location is given by
 \[\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k,\]
 where $\alpha_k$ can be derived by substituting the previous formula for $\mathbf{x}_{k+1}$ to the the cost function and minimizing it with respect to $\alpha_k$ :
 \[\nabla f(\mathbf{x}_{k+1}) = \nabla f(\mathbf{x}_k + \alpha_k \mathbf{p}_k)  \overset{!}{=} 0 \Rightarrow ... \Rightarrow \alpha_k = \frac{\mathbf{p}_k^T \mathbf{r}_k}{\langle \mathbf{p}_k, \mathbf{p}_k \rangle_\mathbf{A}}\]
-An example that gives an intuition why CG needs less steps than GD is shown by fig.~\ref{fig:grad_desc_problem} where the inappropriate step size and a "curved valley" produce zigzagging motion, and slow convergence as a result, which is slowed even further when the flat area in the bottom of that valley is reached. In contrast, CG avoids zigzagging because of the constraint of conjugate directions as it is depicted on fig.~\ref{fig:CG_vs_GD}.
+An example that gives an intuition why CG needs less steps than GD is shown by fig.~\ref{fig:grad_desc_problem} where the inappropriate step size and a "curved valley" produce zigzagging motion, and slow convergence as a result, which is slowed even further when the flat area in the bottom of that valley is reached. In contrast, CG avoids zigzagging because of the constraint of conjugate directions as it is depicted on fig.~\ref{fig:CG_vs_GD}. The basic, but still the most popular, form of the algorithm is summarized in algorithm~\ref{alg:cg}.
 
 \begin{figure}
     \centering
@@ -456,9 +466,8 @@ An example that gives an intuition why CG needs less steps than GD is shown by f
     \end{minipage}
 \end{figure}
 
-The basic algorithm, but still the most popular version, can be simply summarized as follows:
 
-\begin{algorithm}[H]
+\begin{algorithm}
     \SetKwInOut{Inputs}{input}
     \SetKwInOut{Output}{output}
     \Inputs{vector $\mathbf{b}$ ,\\ symmetric, positive-definite matrix $\mathbf{A}$, \\ $\epsilon \in \mathbb{R}_+$ error tolerance parameter, and \\ approximate initial solution $\mathbf{x}_0$ (optional, set to $\mathbf{0}$ by default)}
@@ -475,6 +484,7 @@ The basic algorithm, but still the most popular version, can be simply summarize
     }
     \Return $\mathbf{x}_k$
     \caption{Conjugate Gradient (CG) method}
+    \label{alg:cg}
 \end{algorithm}
 
 It worth noting that while it is hard to find a better method for simple problems than CG, in more complex cases preconditioning is necessary to ensure fast convergence. Furthermore, there exist multiple extensions of the base CG algorithm, like the biconjugate gradient (BiCG) method and its stabilized version (BiCGSTAB)~\cite{van_der_vorst_bicgstab_1992} that removes the constraint of self-adjointness, and the non-linear versions (just to name a few: \cite{fletcher_function_1964, polak_note_1969, dai_nonlinear_1999}) that pushes even further the boundary of set of problems solvable by CG.
@@ -483,9 +493,9 @@ It worth noting that while it is hard to find a better method for simple problem
 
 Even though the conjugate gradient methods provides an effective way to accelerate the convergence, the momentum-based methods that mostly outperform them in cases of complex, non-quadratic cost functions has also a long history. First, the so called heavy ball momentum was proposed by Polyak in 1967 to accelerate convergence~\cite{polyak_methods_1964}. The resulting heavy ball iteration takes the following form:
 \[\mathbf{x}_{k+1} = \mathbf{x}_k - \frac{\alpha}{L}\nabla f(\mathbf{x}_k) + \beta (\mathbf{x}_k - \mathbf{x}_{k-1})\]
-where $\alpha$ and $\beta$ are simple constants, and the term $\beta (\mathbf{x}_k - \mathbf{x}_{k-1})$ is referred to as the \textit{momentum}. The names \textit{heavy ball} and \textit{momentum} comes from the physical analogy; namely, the path defined by the minimizer sequence $\{\mathbf{x}_k\}$ resembles the route of a ball rolling down from a hill. The optimal choice of $\alpha$ and $\beta$ is unfortunately not trivial. In fact, universally optimal options not exists, but there are many variants of heavy ball method with different choice of $\alpha$ and $\beta$, being optimal always only in specific use cases. Following that, Nesterov published the algorithm in 1983 that later became known as fast gradient method (FGM)~\cite{nesterov_method_1983}. In contrast to the original gradient descent scheme, it maintains two converging sequences $\{\mathbf{x}_k\}$ and $\{\mathbf{z}_k\}$, of which $\{\mathbf{x}_k\}$ is the sequence that converges to the solution. The algorithm consists of three simple steps as shown below.
+where $\alpha$ and $\beta$ are simple constants, and the term $\beta (\mathbf{x}_k - \mathbf{x}_{k-1})$ is referred to as the \textit{momentum}. The names \textit{heavy ball} and \textit{momentum} comes from the physical analogy; namely, the path defined by the minimizer sequence $\{\mathbf{x}_k\}$ resembles the route of a ball rolling down from a hill. The optimal choice of $\alpha$ and $\beta$ is unfortunately not trivial. In fact, universally optimal options not exists, but there are many variants of heavy ball method with different choice of $\alpha$ and $\beta$, being optimal always only in specific use cases. Following that, Nesterov published the algorithm in 1983 that later became known as fast gradient method (FGM)~\cite{nesterov_method_1983}. In contrast to the original gradient descent scheme, it maintains two converging sequences $\{\mathbf{x}_k\}$ and $\{\mathbf{z}_k\}$, of which $\{\mathbf{x}_k\}$ is the sequence that converges to the solution. The algorithm consists of three simple steps as shown in algorithm~\ref{alg:fgm}.
 
-\begin{algorithm}[H]
+\begin{algorithm}
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
     \Input{convex and smooth function $f$, \\ $\epsilon \in \mathbb{R}_+$ error tolerance parameter, and approximate initial solution $\mathbf{x}_0$ (optional, set to $\mathbf{0}$ by default)}
@@ -500,22 +510,23 @@ where $\alpha$ and $\beta$ are simple constants, and the term $\beta (\mathbf{x}
     }
     \Return{$\mathbf{x}$}
     \caption{Fast Gradient Method (FGM)}
+    \label{alg:fgm}
 \end{algorithm}
 
 Despite the seemingly different formulations, both methods use some kind of momentum rule. The main difference is that heavy ball simply performs a weighted addition of the momentum from the previous iterations and the gradient of the current position, Nesterov's method combines these term in a couterintuitive, yet optimal manner as depicted on fig.~\ref{fig:momentum}. While FGM is preferred in convex optimization problems since it is slightly faster than heavy ball method, the latter is more commonly used in the machine learning community due to its robustness in non-convex settings.
 
-\begin{figure}[t]
+\begin{figure}
     \centering
-    \includegraphics[width=0.8\linewidth]{images/momentum.png}
+    \includegraphics[width=0.7\linewidth]{images/momentum.png}
     \caption{\textbf{Difference between heavy ball momentum and Nesterov's momentum:} While the heavy ball simply performs a weighted addition of the momentum from the previous iterations and the gradient of the current position, Nesterov's method combines these term in a couterintuitive, yet optimal manner. Source: Image is adapted from~\cite{chandradevan_evolution_2017} and the idea of intuitive description of Nesterov's momentum rule as "lookahead" gradient step originates from~\cite{sutskever_importance_2013}.}
     \label{fig:momentum}
 \end{figure}
 
 Up to recent time, FGM was considered to be the fastest possible first order method for convex optimization because of its quadratic convergence proved by Nesterov. He also proved that the \textit{order} of convergence (i.e., quadratic convergence) of his algorithm is optimal indeed for first order methods. Nevertheless, the \textit{rate} of convergence of FGM is slightly sub-optimal as it was suggested by the convergence analysis performed by Drori and Teboulle in 2014~\cite{drori_performance_2014}. In their research, they considered a "meta optimization" problem, notably the minimization of worst-case convergence rate over all first order methods and all possible cost functions. As this problem is too difficult to be solved, they relaxed the problem to get a similar "meta-minimization" which can be solved by a semi-definite program. They found numerically that the relaxed bound of worst-case convergence rate for FGM is slightly below
 \[\frac{2L\norm{\mathbf{x}_0 - \mathbf{x}_*}_2^2}{(N+1)^2},\]
-where $N$ is the number of steps performed. Instead, they proposed a sequence of fixed step sizes calculated numerically that has approx. two times lower worst-case upper bound on convergence. Their approach, however, has a few drawbacks, such as the number of steps must be chosen in advance to ensure the improved convergence bound, and the numerical method producing these optimal step sizes is expensive both computationally and memory-wise. The next step that made this algorithm applicable in practical problems was done by Kim and Fessler in 2016, when they presented the analytical solution for the optimized step size coefficients~\cite{kim_optimized_2016} in the following form:
+where $N$ is the number of steps performed. Instead, they proposed a sequence of fixed step sizes calculated numerically that has approx. two times lower worst-case upper bound on convergence. Their approach, however, has a few drawbacks, such as the number of steps must be chosen in advance to ensure the improved convergence bound, and the numerical method producing these optimal step sizes is expensive both computationally and memory-wise. The next step that made this algorithm applicable in practical problems was done by Kim and Fessler in 2016, when they presented the analytical solution for the optimized step size coefficients~\cite{kim_optimized_2016} in form described by algorithm~\ref{alg:ogm1}.
 
-\begin{algorithm}[H]
+\begin{algorithm}
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
     \Input{convex and smooth function $f$, \\ $\epsilon \in \mathbb{R}_+$ error tolerance parameter, and \\ approximate initial solution $\mathbf{x}_0$ (optional, set to $\mathbf{0}$ by default)}
@@ -533,11 +544,12 @@ where $N$ is the number of steps performed. Instead, they proposed a sequence of
     }
     \Return{$\mathbf{x}$}
     \caption{Optimized Gradient Method 1 (OGM1)}
+    \label{alg:ogm1}
 \end{algorithm}
 
-This form reflects the simple modification of the existing Nesterov method that leads to the improved speed, namely the introduction of a new momentum term. The only problem is that the step size sequence still depends on the number of steps performed. Therefore, the same authors published a refined version of the algorithm~\cite{kim_convergence_2017} a year later that removes this limitation and also simplifies the implementation:
+This form reflects the simple modification of the existing Nesterov method that leads to the improved speed, namely the introduction of a new momentum term. The only problem is that the step size sequence still depends on the number of steps performed. Therefore, the same authors published a refined version of the algorithm~\cite{kim_convergence_2017} a year later that removes this limitation and also simplifies the implementation, as one can see looking at algorithm~\ref{alg:ogm2}.
 
-\begin{algorithm}[H]
+\begin{algorithm}
     \SetKwInOut{Input}{input}
     \SetKwInOut{Output}{output}
     \Input{convex and smooth function $f$, \\ $\epsilon \in \mathbb{R}_+$ error tolerance parameter, and \\ approximate initial solution $\mathbf{x}_0$ (optional, set to $\mathbf{0}$ by default)}
@@ -552,6 +564,7 @@ This form reflects the simple modification of the existing Nesterov method that 
     }
     \Return{$\mathbf{x}$}
     \caption{Optimized Gradient Method 2 (OGM2)}
+    \label{alg:ogm2}
 \end{algorithm}
 
 Of course, this formulation also enjoys the twice better worst-case convergence rate meaning that the new convergence bound on the helper sequence $\{\mathbf{z}_k\}$ for every iteration is
@@ -565,7 +578,7 @@ Sometimes the size of the problem does not allow the exact computation of even t
 
 Nevertheless, the application of gradient methods to these problems are not hopeless, if the cost function can be decoupled into smaller functions. Fortunately it is very often possible. Returning to the previous examples: The cost function of the supervised learning problem is usually a sum of values of a simple function evaluated separately for each image; and the cost function of the MRI problem can often be approximated by a summation of cost values evaluated for each frame.
 
-One possible approach is calculating the gradient for each term of the summation (this need loading only a single image/frame into the memory), and then the previously prohibiting memory demand can be reduced to an accumulating summation that needs memory allocation only for the accumulator and the current image/frame. This approach is often referred to as batch gradient descent. Another approach, called stochastic gradient descent (SGD), is applying the position update step (i.e., the step that calculates the next element of the $\{\mathbf{x}_k\}$ sequence) after the evaluation of gradient for each frame. Even though this approach uses an a less accurate approximation of the true gradient as the batch method, it appears to be surprisingly robust in many practical applications frequently giving even a better result than batch processing in highly non-convex cases. The third possibility is a combination of the first two: the dataset is divided into small partitions, and the algorithm iterates over these partitions performing the update step only after the sum of gradients within the current batch is calculated. These partitions are usually called mini-batches, and thus the name of this method is mini-batch gradient descent.
+One possible approach is calculating the gradient for each term of the summation (this needs loading only a single image/frame into the memory), and then the previously prohibiting memory demand can be reduced to an accumulating summation that needs memory allocation only for the accumulator and the current image/frame. This approach is often referred to as batch gradient descent. Another approach, called stochastic gradient descent (SGD), is applying the position update step (i.e., the step that calculates the next element of the $\{\mathbf{x}_k\}$ sequence) after the evaluation of gradient for each frame. Even though this approach uses an a less accurate approximation of the true gradient as the batch method, it appears to be surprisingly robust in many practical applications frequently giving even a better result than batch processing in highly non-convex cases. The third possibility is a combination of the first two: the dataset is divided into small partitions, and the algorithm iterates over these partitions performing the update step only after the sum of gradients within the current batch is calculated. These partitions are usually called mini-batches, and thus the name of this method is mini-batch gradient descent.
 
 \subsection{Proximal Gradient Methods}
 
@@ -613,7 +626,7 @@ A simple and intuitive way to do this transformation is using penalty methods th
 \[\min f(\mathbf{x}) + \mu_k \sum_{i \in [N]} p(c_i(\mathbf{x})),\]
 where $p$ is called the penalty function and $\mu_k$ are the penalty coefficients, and we solve this problem by an arbitrary solver for different $\mu_k$ values always using the solution of previous iteration as the starting point for the next iteration. Initially $\mu_k$ is chosen to be a small number, and it is increased in each iteration until it reaches infinity (or rather a sufficiently large number in practice). The intuition behind the algorithm is that first the method finds a region where the value of $f$ is small, and as the value of $\mu_k$ increases it gradually converges to a solution that satisfies the constraints (therefore the penalty function needs to map values which satisfy the constrains to a small number and give large values that violates them; e.g. $g(x) = max(0, x)^2$ and $g(x) = e^x - 1$ are both feasible options).
 
-A similar group of methods is the class of augmented Lagrangian methods (AL) was introduced by Powell~\cite{powell_method_1969} and Hestenes in 1969 \cite{hestenes_multiplier_1969}. That class considers the problems with equality constraints specifically, that is, $\min f(\mathbf{x})$ subject to $c_i(\mathbf{x}) = 0 : \forall i \in [N]$. Compared to penalty methods, the transformed unconstrained problem contains an extra term designed to mimic a Lagrange multiplier:
+A similar group of methods is the class of augmented Lagrangian methods (AL) was introduced by Powell~\cite{powell_method_1969} and Hestenes~\cite{hestenes_multiplier_1969} in 1969. That class considers the problems with equality constraints specifically, that is, $\min f(\mathbf{x})$ subject to $c_i(\mathbf{x}) = 0 : \forall i \in [N]$. Compared to penalty methods, the transformed unconstrained problem contains an extra term designed to mimic a Lagrange multiplier:
 \[\min f(\mathbf{x}) + \frac{\mu_k}{2} \sum_{i \in [N]} c_i(\mathbf{x})^2 + \sum_{i \in [N]} \lambda_i c_i(\mathbf{x}).\]
 Similarly to penalty methods, $\mu$ coefficients are increased after each iteration, but in this case there is no need to increase them to infinity to reach the solution of the constrained problem because of the carefully weighted additional term. The "careful weighting" means that the $\lambda_i$ variables are adjusted after each iteration to give higher weight to constraints which are violated, using the update rule $\lambda_{i+1} = \lambda_i + \mu_i c_i(\mathbf{x}_i)$.
 
@@ -635,7 +648,7 @@ Finally, the ADMM steps are the following (using the previously defined soft-thr
 \begin{align*}
     & \mathbf{x}_{k+1} = (\mathbf{A}^T\mathbf{A} + \mu \mathbf{I})^{-1}(\mathbf{A}^T\mathbf{b} + \mu \mathbf{z}_k - \boldsymbol{\lambda}_k)\\
     & \mathbf{z}_{k+1} = \Lambda_{c/\mu}(\mathbf{x}_{k+1} + \boldsymbol{\lambda}_k / \mu)\\
-    & \boldsymbol{\lambda}_{k+1} = \boldsymbol{\lambda}_k + \mu(\mathbf{Bx}_{k+1} + \mathbf{Dz}_{k+1} - \mathbf{c})
+    & \boldsymbol{\lambda}_{k+1} = \boldsymbol{\lambda}_k + \mu(\mathbf{x}_{k+1} + \mathbf{z}_{k+1})
 \end{align*}.
 The advantage of this scheme is that it allows distributed and parallelized computing with slight modification on the core algorithm.
 
