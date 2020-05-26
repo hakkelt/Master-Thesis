@@ -14,11 +14,20 @@ Being driven by mostly scientists, the Julia community has already developed som
 
 As Julia is designed to be very extendable, it is always a feasible option to develop a new package that fits the specific problem. After reviewing the code of the mentioned packages, we came to the conclusion that the design choices of these packages doen't allow addition of features we desired, without breaking the already existing features, we decided to implement a package that fits better the image CS-MRI reconstruction framework. The developed package is named FunctionOperators.jl and it is already published to the central Julia package repository. Being just after the initial phase, the package supports only the most basic features, but the design of the interface and the efficient implementation lets the user build arbitrarily complex composite operators without having any computation penalty compared to the implementation with pure functions. As of today, the already implemented features if the package are the following:
 \begin{itemize}
-    \item Construction from a function with one argument that defines "forward" operation. When the constructed FunctionOperator is being multiplied with a vector/matrix of the \textit{proper} size, this function is called on the given vector/matrix. The size of the \textit{proper} input and expected output is a mandatory argument of the constructor of FunctionOperator, and any input with a mismatching size is rejected, and it after the multiplication the size of the output is also checked against the output size specified at construction. E.g. `Op = FunctionOperator(forw = x -> fft(x)); y = Op * x` calculates the FFT of x and stores in y.
-    \item Construction from two functions both accepting one argument. These functions define the "forward" and the "backward" operations. In contrast to the "forward" function, the "backward" function is called when adjoint of the FunctionOperator is requested. E.g. `Op = FunctionOperator(forw = x -> fft(x), backw = x -> ifft(x)); y = Op' * x` calculates the inverse FFT of x and stores in y.
-    \item These "forward" and "backward" functions also can accept two arguments. In that case, the second argument is the input of the operation, and the functions are expected to store the result of the operation in the first argument. This feature is advantageous if one wants to optimize the number of memory allocations. E.g. `Op = FunctionOperator(forw = (b,x) -> b .= x .* 2); mul!(y, Op, x)` multiplies x elementwise with two and stores the result in y without allocating an intermediate array.
-    \item Composition of FunctionOperators by multiplication (that means composition of the "forward" functions), addition and substraction (these adds/substracts the output of the operations). E.g. considering `Op1 = FunctionOperator(forw = x -> fft(x)); Op2 = FunctionOperator(forw = (b,x) -> b .= x .* 2);` the output of `Op1 * Op2 * x` is the same as fft(x .* 2)
-    \item Composition of FunctionOperators with UniformScaling object from LinearAlgebra standard library. This UniformScaling operator corresponds to the identity matrix. E.g. we can define the MR acquisition operator $\mathcal{A}$ as a FunctionOperator, and then we can define the CG operator in algorithm~\ref{alg:al-cg} as $\mathcal{A}' * \mathcal{A} + \delta_1 I$ (it is not the abstract mathematical notation, but a valid Julia expression!) and then we can pass it to a a solver (IterativeSolver.jl has, for example, CG solver that uses duck-typing, so it requires only that the multiplication must be implemented on the object passed as argument).
+    \item Construction from a function with one argument that defines "forward" operation. When the constructed FunctionOperator is being multiplied with a vector/matrix of the \textit{proper} size, this function is called on the given vector/matrix. The size of the \textit{proper} input and expected output is a mandatory argument of the constructor of FunctionOperator, and any input with a mismatching size is rejected, and it after the multiplication the size of the output is also checked against the output size specified at construction. E.g., the following code calculates the FFT of x and stores in y:\\
+    \lstinline{ Op = FunctionOperator(forw = x -> fft(x))}\\
+    \lstinline{ y = Op * x}
+    \item Construction from two functions both accepting one argument. These functions define the "forward" and the "backward" operations. In contrast to the "forward" function, the "backward" function is called when adjoint of the FunctionOperator is requested. E.g., the following calculates the inverse FFT of x and stores in y:\\
+    \lstinline{Op = FunctionOperator(forw = x -> fft(x), backw = x -> ifft(x))}\\
+    \lstinline{y = Op' * x}
+    \item These "forward" and "backward" functions also can accept two arguments. In that case, the second argument is the input of the operation, and the functions are expected to store the result of the operation in the first argument. This feature is advantageous if one wants to optimize the number of memory allocations. E.g., the following multiplies x elementwise with two and stores the result in y without allocating an intermediate array.\\
+    \lstinline{Op = FunctionOperator(forw = (b,x) -> b .= x .* 2)}||
+    \lstinline{mul!(y, Op, x)} 
+    \item Composition of FunctionOperators by multiplication (that means composition of the "forward" functions), addition and substraction (these adds/substracts the output of the operations). E.g. considering the following the last line evaluates to true:\\
+    \lstinline{Op1 = FunctionOperator(forw = x -> fft(x))}\\
+    \lstinline{Op2 = FunctionOperator(forw = (b,x) -> b .= x .* 2)}\\
+    \lstinline{Op1 * Op2 * x == fft(x .* 2)}
+    \item Composition of FunctionOperators with UniformScaling object from LinearAlgebra standard library. This UniformScaling operator corresponds to the identity matrix. E.g. we can define the MR acquisition operator $\mathcal{A}$ as a FunctionOperator, and then we can define the CG operator in algorithm~\ref{alg:al-cg} as $\mathcal{A}' * \mathcal{A} + \delta_1 I$ (it is not the abstract mathematical notation, but a valid Julia expression because Julia also accepts Unicode characters in the identifiers!) and then we can pass it to a a solver (IterativeSolver.jl has, for example, CG solver that uses duck-typing, so it requires only that the multiplication must be implemented on the object passed as argument).
     \item Adjoint of composit FunctionOperators: If the FunctionOperator is a composition of other FunctionOperators, then the adjoint is defined as the composition of adjoints of the member FunctionOperators, in the reverse order. E.g., let us recall the decomposition of the acquisition operator $\mathcal{A} = \Omega \mathcal{FC}$. Now look on it on the other way around: we have $\Omega, \mathcal{F}$ and $\mathcal{C}$ already created as FunctionOperators, and we create the acquisition operator as the composition of them: $\mathcal{A} = \Omega * \mathcal{F * C}$. Then $\mathbf{A}' * x$ would do the same as $\mathcal{C' * F'} * \Omega' * x$.
 \end{itemize}
 
@@ -35,9 +44,9 @@ After the careful examination of both the publication and the reference Matlab i
 The result of the benchmarking is available in table~\ref{tab:lin_fessler} and the Jupyter notebooks holding both the benchmarking code, the documentation, and the results are available at \url{https://github.com/hakkelt/reproduce-l-s-dynamic-mri-julia}
 In comparison to the Matlab implementation, the results are somewhat mixed since Julia outperformed Matlab in case of the improved AL scheme (the speedup here was ~2x) and in case of proximal methods for the non-Cartesian dataset (with 2-3.5x speedup). On the other hand, Matlab produced faster code for the other cases. This results underlines the fact that merely switching the language to Julia not necessarily results in increased speed automatically. A possible explanation is that we missed some hidden optimization tricks deeply buried in the Matlab code (which was well optimized indeed, and very hard to read---it required a fair amount of time from us to understand how is it connected to the theory described in the paper). Another possible factor is that Matlab uses some proprietary C and fortran libraries that have slightly better performance compared to the open source options bundled with Julia by default.
 
-Furthermore, the comparison of different Julia implementations revealed that the three package have very similar running time and they differ mostly in the memory allocated, LinearMaps.jl having the largest memory demand (as it was expected from the implementation that allocates and releases buffers in each iteration again and again in our case), and FunctionOperators being better by a small margin. We also tested the automatic optimization macro mentioned above, and the benchmarks showed that it reached almost optimal memory usage, reducing the size of net allocations by $~70\%$ on average, compared to the $~80\%$ reduction achieved by the tedious process of manual optimization.
+Furthermore, the comparison of different Julia implementations revealed that the three package have very similar running time (that matches our expectations as these packages are meant to be "invisible" in performance benchmarks being only wrappers around some functions), but they rahter differ in the memory allocated, LinearMaps.jl having the largest memory demand (as it was expected from the implementation that allocates and releases buffers in each iteration again and again in our case), and FunctionOperators being better than AbstractOperators by a small margin. We also tested the automatic optimization macro mentioned above, and the benchmarks showed that it reached almost optimal memory usage, reducing the size of net allocations by $~70\%$ on average, compared to the $~80\%$ reduction achieved by the tedious process of manual optimization.
 
-\begin{table}[]
+\begin{table}
 \footnotesize
 \begin{tabular}{|p{0.1\linewidth}|p{0.18\linewidth}p{0.18\linewidth}p{0.18\linewidth}p{0.18\linewidth}|}
 \hline
@@ -85,9 +94,14 @@ POGM & 6.4 s, 1.10 GiB & 16.5 s, 2.58 GiB & 6.9 s, 1.08 GiB & 74.5 s, 3.28 GiB \
 
 \section{Implementation of Multiscale Decomposition}
 
-\subsection{NUFFT}
+The implementation of multiscale low rank algorithm described in~\cite{ong_extreme_2020}, posed multiple challenges. First, the algorithm was written in a framework, also developed by the author, called SigPy~\cite{noauthor_sigpy_nodate}. Practically that meant that we needed to re-implement a fairly large part of that library in Julia. While it would have been possible to directly call the methods from this framework, these blocking would make the paralellization of the Julia code practically impossible. The other largest challenge was that the author used a special version of the non-uniform FFT (NFFT), also from his package, and therefore we also needed to re-implement this non-trivial method as well because it was not compatible with the Julia implementation of NFFT. However, this difficulty later turned out to be beneficial, as we realized a performance problem in the author's code, and correcting it in our implementation doubled its speed. But first let us discuss shortly the NFFT algorithm.
 
-\subsection{MSLR Algorithm}
+\subsection{NFFT}
+As the name suggests, non-uniform FFTs are the non-Cartesian variant of the FFT, and therefore they are very useful in MRI reconstruction with real-life data. Also, similarly to the FFT which is the fast version of DFT, non-uniform FFT is also derived from non-uniform DFT. There are many possibilities how to calculate them efficiently, but the most widely used variant is proposed by Fessler~\cite{fessler_nonuniform_2003}. This variant maps the off-grid coordinates determined by the non-Cartesion trajectory to the closest grid point and to its neighbor pixels, using a kernel (most commonly the Kaiser-Bessel function) to weight this projection. Then, it applies the ordinary FFT to the grid filled with values by the mapping. Finally, it utilizes some technique, known as apodization in the photography, that corrects the artifacts introduced by the undersampling and the mapping to the grid. The large popularity of this approach is that there are many highly optimized FFT solutions, and therefore the speed of NFFT only depend on the effective mapping (the time complexity of apodization is negligible compared to the mapping).
+
+In our implementation we used the FFTW library to compute the FFT, which is currently the fastest open source solution (and some even claim that it outperform the commercial ones). This library supports also multithreading that help us also speeding up the code. When we compared our implementation to the implementation in SigPy, we considered three multithreading settings: a fully singly threaded, a partially single threaded (the Julia code is single threaded, and the multithreading in FFTW is allowed), and a fully multithreaded. Concerning the size of the problem: We tested the implementation for three sizes, a small sized random image ($64\times64$) and relative few sampling points ($1024$), a "medium sized" where the image were relatively large with size of $128\times128\times128$, but the number of sampling point were still low compared to the size of the image ($16k$ sampling points), and the "large" problem where the image size is reduced to keep the problem feasible, but the number of sampling points were large. In case of the "medium" and "large" data, a batch dimension of size $12$ is also provided that means that no Fourier transformation is done along that direction, but the same operation takes place on each slice defined by this direction.
+
+The numerical results, then showed us that the best multithreading setting is depends on the problem, as we expected. Moreover, the multithreading in FFTW brings larger benefits when the size of input image is large (in these cases the FFT is the dominant step in the NFFT), while enabling the Julia multithreading (these threads then distributes the sampling between each other) has a large positive impact when the number of sampling points are sufficently large (let's say over $1M$ points). In the MRI cases, the latter is not an infrequent situation. For a better insights to the results, we refer the reader to fig.~\ref{fig:nfft_small}-\ref{fig:nfft_large}. In these figures we show two different versions of the Julia implementation: one contains the initialization steps, the other not. While the former is good enough when we want to evaluate the NFFT only once, the latter is good when we perform the same operation multiple times; e.g., in a loop. In these cases, one might want to avoid repeated allocations in the initialization part, and therefore our implementation makes it possible to create a \textit{plan} and then apply this plan to the data avoiding the repeated initialization.
 
 %\subsection{Optimization possibilities}
 %\begin{enumerate}
@@ -106,7 +120,7 @@ POGM & 6.4 s, 1.10 GiB & 16.5 s, 2.58 GiB & 6.9 s, 1.08 GiB & 74.5 s, 3.28 GiB \
 %\subsection{Parallelization Solution}
 %Details how I made the code run parallel
 
-\begin{figure}
+\begin{figure}[htbp]
     \centering
     \begin{minipage}{0.48\linewidth}
         \centering
@@ -118,60 +132,86 @@ POGM & 6.4 s, 1.10 GiB & 16.5 s, 2.58 GiB & 6.9 s, 1.08 GiB & 74.5 s, 3.28 GiB \
         \includegraphics[width=\linewidth]{images/nfft_small_backw.pdf}
         \label{fig:nfft_small_backw}
     \end{minipage}
-    \caption{\textbf{Comparison of running time} between the Python implementation in SigPy package (blue), and the Julia implementations (orange: initialization and computation, green: computation only) at different threading settings. (Note that the Python implementation does not implement multithreading, and hence the height of the three blue bar is the same.) \textbf{For small images, single threaded Julia version is the fastest.}}
+    \caption{\textbf{Comparison of running time} between the Python implementation in SigPy package (blue), and the Julia implementations (orange: initialization and computation), green: computation only) at different threading settings \textbf{in the case of a small problem} (small input image with relatively few sampling points). \textbf{For small images, single threaded Julia version is the fastest.} (Note that the Python implementation does not implement multithreading, and hence the height of the three blue bar is the same.)}
     \label{fig:nfft_small}
 \end{figure}
 
-
-\begin{figure}
+\begin{figure}[htbp]
     \centering
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/nfft_medium_forw.pdf}
-        \label{fig:nfft_medium_forw}
     \end{minipage}
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/nfft_medium_backw.pdf}
-        \label{fig:nfft_medium_backw}
     \end{minipage}
-    \caption{\textbf{Comparison of running time} between the Python implementation in SigPy package (blue), and the Julia implementations (orange: initialization and computation, green: computation only) at different threading settings. (Note that the Python implementation does not implement multithreading, and hence the height of the three blue bar is the same.) \textbf{For small images, single threaded Julia version is the fastest.}}
+    \caption{\textbf{Comparison of running time}  in the medium sized setting: Single threaded Julia + multithreaded FFTW yielded the best performance.}
     \label{fig:nfft_medium}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
     \centering
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/nfft_large_forw.pdf}
-        \label{fig:nfft_large_forw}
     \end{minipage}
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/nfft_large_backw.pdf}
-        \label{fig:nfft_large_backw}
     \end{minipage}
-    \caption{\textbf{Comparison of running time} between the Python implementation in SigPy package (blue), and the Julia implementations (orange: initialization and computation, green: computation only) at different threading settings. (Note that the Python implementation does not implement multithreading, and hence the height of the three blue bar is the same.) \textbf{For small images, single threaded Julia version is the fastest.}}
+    \caption{\textbf{Comparison of running time} in case of large number of sampling points: Multithreaded Julia code + multithreaded FFTW were the fastest.}
     \label{fig:nfft_large}
+\end{figure}
+
+\subsection{MSLR Algorithm}
+
+After finishing the re-implementation of the necessary parts of SigPy in Julia, our attention is turned towards the implementation of the algorithm itelf that was not a challenge any more as almost all important operators and functions are defined in SigPy. Being aware of the speedup in case of the re-implementation of the NFFT, we expected similar acceleration. Yet, the result were even better as we predicted. As we already mentioned, the Python implementation did not exploit the potentials in the batch processing in NFFT. Specifically, it is much faster to pass the image the NFFT specifying along which dimension we want to perform the NFFT, than iterating over th batch dimension (= the dimension along which we \textit{do not} want to perform the NFFT) and calling the NFFT on each slice. 
+
+Fig.~\ref{fig:gridding_recon_speed} demonstrates the effect: Here the measured algorithm technically consists only of a loop that iterates over the batch dimension corresponding to the coils sensitivities, and calls NFFT on each. On the other hand, the Julia version passes the entire arraw to NFFT. The result is drastic, $5.5\times$ speedup, even in the fully single threaded case. But when we anable the full multithreading, algorithm appeared to outperform even the Python's GPU version.
+
+Fig.~\ref{fig:MSLR_recon_speed} does not show so much improvement, but still many-fold speedup is experienced, with the fully multithreaded almost reaching the Pyhton's GPU version.
+
+These results suggest that re-implementing the Python'GPU code in Julia would enjoy, maybe not that much, but significant acceleration. For more information concerning the implementational details, we refer the reader to the GitHub repository of the project: \url{https://github.com/hakkelt/extreme_mri_julia}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/gridding_recon_speed.pdf}
+    \caption{Comparison of speed different implementations for the gridding reconstruction problem (i.e. a large scale adjoint NFFT with batch dimensions).}
+    \label{fig:gridding_recon_speed}
 \end{figure}
 
 \begin{figure}
     \centering
-    \begin{minipage}{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/gridding_recon_speed.pdf}
-        \label{fig:gridding_recon_speed}
-    \end{minipage}
-    \begin{minipage}{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/MSLR_recon_speed.pdf}
-        \label{fig:MSLR_recon_speed}
-    \end{minipage}
-    \caption{asdf}
-    \label{fig:3D_recon}
+    \includegraphics[width=\linewidth]{images/MSLR_recon_speed.pdf}
+    \caption{Comparison of speed for different implementation of the MSLR algorithm. Note that the heavily multithreaded Julia implementation was almost as fast as the Python GPU implementation. Also even the fully single threaded Julia implementation was more than three times faster than the Python CPU implementation.}
+    \label{fig:MSLR_recon_speed}
 \end{figure}
 
-\section{IRLS Implementation}
+%\begin{figure}
+ %   \centering
+%    \caption{asdf}
+ %   \label{fig:3D_recon}
+%\end{figure}
+
+\section{HM-IRLS Implementation}
+
+While the plan at the beginning of the project was to apply the new HM-IRLS method to the $L+S$ problem, the robust version of this algorithm is still not published at the time of the writing, unfortunately. Therefore we were limited make experiments with the low-rank-only variant of the algorithm. To make the comparison to the other method somewhat balanced, we used the simulated dataset from~\cite{wissmann_mrxcat_2014}, and we modified it to produce multiple slightly different datasets, and made experiments on how the parameters of these dataset-variant effects the recovery process. That way we could look at the effect of noise, undersampling ratio, and sparseness. By undersampling, of course, we mean here the undersampling \textit{of the Fourier domain}.
+
+The modification process consisted of a singular value hard thresholding that selected the $r$ largest singular values, and discarded all other. As a result, the thresholding produced an image with the desired rank $r$. Next, we subtracted this low-rank approximation from the original image, and we added back the residual after hard thresholding to the low-rank image. The resulted image served then as "ground truth" image, which we undersampled, and added some noise to the undersampled data. The process in a more exact form:
+\[\mathbf{L} = SVHT_r(\mathbf{X})\]
+and
+\[\mathbf{X}_{gt} = \mathbf{L} + HT_s(\mathbf{X} - \mathbf{L}),\]
+where $SVHT_r$ is the singular value hard thresholding,
+and $HT_s$ is the hard thresholding that discard all, but the $s$ largest values in a matrix. The last step of the construction of the modified setting was the undersampling where we were in full control of the number of sampled point from the Fourier domain.
+
+In the testing stage, we examined how much can the different algorithms reconstruct the "ground truth" from the undersampled, noisy measurement. Our experiments showed that the HM-IRLS algorithm performed extremely well in the noiseless case and when $s = 0$, that is, the ground truth image was only the low rank component. The results also confirms the claims that POGM converges the fast, FISTA and the improved AL being the second fastest, but finally all of the algorithms designed to minimize the $L+S$ cost converged to the same minimizer after a long time. The MSLR algorithm, however, reached a much worse local minimizer than the other algorithms. Even though it might be surprising at first, the difference in the reach optimizer is fairly reasonable as HM-IRLS solved the low-rank minimization directly, the ones with the $L+S$ cost solved a relaxed problem that minimized nuclear norm instead of the rank, and, finally, the MSLR even relaxed the the nuclear norm even further by the Burer-Monteiro factorization to reduce the memory requirement of the algorithm (therefore it is slightly unfair comparison to others which care less about memory consumption). Moreover, we checked the behavior of the rank during the iterations, and we noted that the while the HM-IRLS algorithm decreased the rank gradually, the soft-thresholding-based algorithms reached the target rank very soon, but the overall cost function stopped also at a ligher level. The AL method with CG steps were the only expection, most probably because of the alternating steps working "against" each other. Fig.~\ref{fig:ideal} shows a setting plot were all algorithms successfully converged.
+
+Unfortunately, even relatively low level of noise or small amount of sparsity can make the HM-IRLS fail to converge. Fig.~\ref{fig:orig} displays such a case, that actually corresponds the setting used in the $L+S$ paper we discussed deeper. In that setting, not only HM-IRLS, but also the MSLR algorithm diverges at all $\alpha$ step sizes. This can certainly avoided by adjusting the parameters of the algorithm. After running many measurements we concluded that SNR under approximately 100 dB makes the HM-IRLS fail to converge for most settings (see fig.~\ref{fig:noise_tolerance}. On the other hand, the reconstruction power of HM-IRLS appeared to be much stronger than the others minimizing the nuclear-norm, as it is depicted on fig.~\ref{fig:reconstruction_power}.
+
+It important to note that the results here are promising, but definitely not decisive, as using HM-IRLS in this form in $L+S$ setting is technically modelling error, and also as we tested only on one dataset. One could rather see the efforts presented here as a proof-of-concept that motivates further investigation.
+
+For more information on the implementation details, see \url{https://github.com/hakkelt/IRLS-for-CS-MRI}.
 
 %\subsection{Description of Algorithm}
 %\subsection{Implementation Details}
@@ -181,65 +221,46 @@ POGM & 6.4 s, 1.10 GiB & 16.5 s, 2.58 GiB & 6.9 s, 1.08 GiB & 74.5 s, 3.28 GiB \
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/ideal_MSE.pdf}
-        \label{fig:ideal_MSE}
     \end{minipage}
     \begin{minipage}{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/ideal_rank.pdf}
-        \label{fig:ideal_rank}
     \end{minipage}
-    \caption{asdf}
-    \label{fig:ideal_recon}
+    \caption{\textbf{Ideal case: low-rank only and noiseless} All algorithms converges and HM-IRLS gives the best, almost perfect result. Even tough HM-IRLS seems to be the slowest, in the mathematical sense, it is the fastest. Here on the image the red line shows the result of 30 iterations, while the others perform multiple thousands of iterations. On the right image, showing the rank over the iterations, one can not that HM-IRLS is more careful with decreasing the rank thank other methods, and the decrease is also more smott.}
+    \label{fig:ideal}
 \end{figure}
 
 \begin{figure}
     \centering
-    \begin{minipage}{0.48\linewidth}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/orig_MSE.pdf}
+    \end{minipage}
+    \begin{minipage}[t]{0.48\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/orig_rank.pdf}
+    \end{minipage}
+    \caption{{Setting that mimics the real-life settings.} HM-IRLS diverges as MSLR also do.}
+    \label{fig:orig}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/reconstruction_power.pdf}
+        \caption{\textbf{Reconstruction power.} The number of measurements (number of "spokes" in the radian sampling trajectory) is increasing resulting more measurement data.HM-IRLS have much better reconstruction in all cases. ZF refers to the naive \textit{zero-filling} method, where the missing values are substituted with zeros.}
         \label{fig:reconstruction_power}
     \end{minipage}
-    \begin{minipage}{0.48\linewidth}
+    \begin{minipage}[t]{0.48\linewidth}
         \centering
         \includegraphics[width=\linewidth]{images/noise_tolerance.pdf}
+        \caption{\textbf{Noise tolerance of algorithms.} When the noies is very low, the HM-IRLS gives almost perfect result, but higher noise level quickly degrades the performance. ZF refers to the naive \textit{zero-filling} method when missing values are substituted with ones.}
         \label{fig:noise_tolerance}
     \end{minipage}
-    \caption{asdf}
-    \label{fig:IRLS_analysis}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \begin{minipage}{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/orig_MSE.pdf}
-        \label{fig:orig_MSE}
-    \end{minipage}
-    \begin{minipage}{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/orig_rank.pdf}
-        \label{fig:orig_rank}
-    \end{minipage}
-    \caption{asdf}
-    \label{fig:orig}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \begin{minipage}{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/orig_MSE.pdf}
-        \label{fig:orig_MSE}
-    \end{minipage}
-    \begin{minipage}{0.48\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{images/orig_rank.pdf}
-        \label{fig:orig_rank}
-    \end{minipage}
-    \caption{asdf}
-    \label{fig:orig}
-\end{figure}
-
+\iffalse
 \begin{figure}
     \centering
     \includegraphics[width=0.46\linewidth]{images/PINCAT_all.pdf}
@@ -281,5 +302,6 @@ POGM & 6.4 s, 1.10 GiB & 16.5 s, 2.58 GiB & 6.9 s, 1.08 GiB & 74.5 s, 3.28 GiB \
     \caption{Caption}
     \label{fig:PINCAT_POGM_recon}
 \end{figure}
+\fi
 
 \clearpage % You need \clearpage at the end of every chapter to force images included in this chapter to be rendered in somewhere else

@@ -307,8 +307,70 @@ A good intuition of this process is imagining a complicated cost function, which
     \label{fig:mm-intuition}
 \end{figure}
 
-C. Kümmerle and C. M. Verdun, “Denoising and Completion of Structured Low-Rank Matrices via Iteratively Reweighted Least Squares,” arXiv:1811.07472 [cs, math], Nov. 2018.
+This framework is a powerful tool to solve many complicated problems, and it serves as a proxy to a very wide range of functions. In~\cite{kummerle_denoising_2018, kummerle_understanding_nodate} the authors considered a particularly difficult problem: the rank minimizaton. And in constrast to the nuclear-norm minimization scheme we seen earlier, they have chosen the log-det function as a surrogate to minimize over. It is easy to see how much more powerful this approach is since contrary to nuclear norm, which is only an approximation of the rank, the log-det is equal to the rank. To illustrate that, let us recall that
+\[log(x) = \lim_{p \rightarrow 0} \frac{x^p - 1}{p}.\]
+Than take $x = \sigma_i(\mathbf{A})$ for some $\mathbf{A}$, and accordingly
+\[log(\sigma_i(\mathbf{A})) = \lim_{p \rightarrow 0} \frac{\sigma_i(\mathbf{A})^p - 1}{p}.\]
+Next, we make some simple steps
+\[\sum_{i=1}^R log(\sigma_i(\mathbf{A})) = \lim_{p \rightarrow 0} \sum_{i=1}^R \frac{\sigma_i(\mathbf{A})^p - 1}{p} =  \frac{\lim_{p \rightarrow 0} \sum_{i=1}^R \sigma_i(\mathbf{A})^p}{p} - \frac{R}{p},\]
+and we know that
+\[ \lim_{p \rightarrow 0} \sum_{i=1}^R \sigma_i(\mathbf{A})^p = rank(\mathbf{A}).\]
+Finally,
+\[\sum_{i=1}^R log(\sigma_i(\mathbf{A})^p) = log(\prod_{i=1}^R \sigma_i(\mathbf{A})^p) = log(det(\mathbf{A})),\]
+and
+\[\frac{\lim_{p \rightarrow 0} \sum_{i=1}^R \sigma_i(\mathbf{A})^p}{p} - \frac{R}{p} = \frac{\norm{\mathbf{A}}_p^p}{p} - \frac{R}{p},\]
+where $\norm{\mathbf{A}}_p^p$ is a Schatten-p norm.
 
-Henry Adams, Lara Kassab, and Deanna Needell "An Iterative Method for Structured Matrix Completion"
+Although a deeper discussion of this new algorithm, named Harmonic-Mean-IRLS or HM-IRLS, would be interesting, due to the limitation of this work we need to refer the reader to the doctoral thesis~\cite{kummerle_understanding_nodate} of Christian Kümmerle, or to the the our github repository holding a reference implementation:
+\url{https://github.com/hakkelt/IRLS-for-CS-MRI/blob/master/SimpleMatrixCompletion.ipynb}, as the discussion would require a much longer introduction to mathematical concepts. A important property, nevertheless, worth mentioning here: the authors constructed the HM-IRLS to use some second-order information, and as a result of this propoerty, it converges really fast, admitting superlinear convergence in general and even quadratic convergence locally. On the other hand, it also means more heavy computation as well.
+
+\iffalse
+\begin{algorithm}
+    \SetKwData{Input}{input}
+    \SetKwData{Output}{output}
+    \Input{
+        $y$: under-sampled data\\
+        $\Phi$: sampling operator\\
+        $\tilde{r}$: rank estimate of solution\\
+        $maxIter$: number of CG iteration steps\\
+        $N$: number of iterations
+        }
+    \BlankLine
+    initialize: $d_1, d_2$ = size of image, $ϵ^k = \infty, \mathbf{X}^k = \Phi^* \mathbf{y},
+    
+    \For{$k = 1 \ldots N$}
+        $U, \sigma, V = svd(X^k)$\\
+        $U^k, σ, V^k = U[:, 1:\tilde{r}], F.S, F.V[:, 1:\tilde{r}]$\\    
+        $ϵ^k = min(\epsilon^k, σ[\tilde{r}+1])$\\
+        
+        $H^k = [1 / (max(\sigma[i], \epsilon^k) * max(\sigma[j], \epsilon^k))  for i in 1:\tilde{r}, j in 1:\tilde{r}]$\\
+        $dH^k = [1 / (max(\sigma[\tilde{r}+1], \epsilon^k) * max(\sigma[j], \epsilon^k))  for j in 1:\tilde{r}]$\\
+        $P^k([\gamma_1, \gamm_2, \gamm_3]) = U^k * \gamma_1 * V^{k*} + U^k * \gamma_2^T * (I - V^k V^{k*}) + (I - U^k U^k') * \gamma_3^T * V^{k*}$\\
+        $^{k*} = [vec(U^{k*} \Phi^* y V^k), U^{k*} * Φᵃy * (I - Vᵏ*Vᵏ')$
+                    γ₁ = 
+                    γ₂ = 
+                    γ₃ = (I - Uᵏ*Uᵏ') * Φᵃy * Vᵏ
+                    vcat(, vec(γ₂), vec(γ₃))
+                end)
+        b = Pᵏ' * Φ' * y
+        ��⁻¹ = I / Diagonal(vcat(vec(Hᵏᵤᵥ), vec(kron(dHᵏ, ones(1, d₂))), vec(kron(dHᵏ, ones(1, d₁))')))
+        CG_op = FunctionOperator{dType}(name = "CG_op", inDims = (r̃*(r̃+d₁+d₂),), outDims = (r̃*(r̃+d₁+d₂),),
+            forw = γ ->  begin
+                    (ϵᵏ^2 * I / (��⁻¹ - ϵᵏ^2 * I)) * γ + Pᵏ' * Φ' * Φ * Pᵏ * γ
+                end)
+        γᵏ = cg(CG_op, b, maxiter = maxIter) # 2.167
+        rᵏ = y - Φ * Pᵏ * γᵏ
+        γᵏ_tilde = (��⁻¹ / (��⁻¹ - ϵᵏ^2 * I)) * γᵏ - Pᵏ' * Φ' * rᵏ
+        Xᵏ = Φ' * rᵏ + Pᵏ * γᵏ_tilde   # 2.168
+    end
+    
+    r, n, s, e = sum(svdvals(Xᵏ) .> 1e-3), opnorm(Xᴳᵀ - Xᵏ, 2), σ[1], ϵᵏ
+    n, s, e = @sprintf("%.3f", n), @sprintf("%.3f", s), @sprintf("%.3f", e)
+    verbose && println("k = $N,\trank(Xᵏ) = $r,\t‖Xᴳᵀ - Xᵏ‖₂ = $n, σ₁ = $s, ϵᵏ = $e")
+    
+    Xᵏ
+end
+\end{algorithm}
+\fi
 
 \clearpage % You need \clearpage at the end of every chapter to force images included in this chapter to be rendered in somewhere else

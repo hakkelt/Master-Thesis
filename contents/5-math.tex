@@ -162,13 +162,13 @@ SVD is a particularly useful in analysis of matrix rank as the rank of a matrix 
 \end{remark}
 
 \begin{definition}(Schatten-p norm)
-The Schatter-p norm of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as the $\ell_p$-norm applied to its singular values; that is,
+The Schatten-p norm of a matrix $\mathbf{A} \in \mathbb{C}^{m \times N}$ is defined as the $\ell_p$-norm applied to its singular values; that is,
 \[\norm{\mathbf{A}}_p = \left(\sum_{i=1}^{\min\{m,N\}}\sigma_i^p(\mathbf{A})\right)^\frac{1}{p}.\]
 Three important special cases are $p = 1, 2, \infty$, also called nuclear norm, Frobenius norm and spectral norm, respectively. The nuclear norm also has a distinct notation $\norm{\cdot}_*$, and the Frobenius norm is usually denoted by $\norm{\cdot}_F$.
 \end{definition}
 
 \begin{remark}
-Similarly to $\ell_p$-norms for $p \in (0,1)$, the Schatten-p norms with $0 < p < 1$ are only quasinorms and are always non-convex. Schatter-0 norm are, however, not defined as Schatten-p norms for $p \rightarrow 0$ converge to an already defined quantifier, the rank (of which, of course, one can think as the $\ell_0$-"norm" of singular values).
+Similarly to $\ell_p$-norms for $p \in (0,1)$, the Schatten-p norms with $0 < p < 1$ are only quasinorms and are always non-convex. Schatten-0 norm are, however, not defined as Schatten-p norms for $p \rightarrow 0$ converge to an already defined quantifier, the rank (of which, of course, one can think as the $\ell_0$-"norm" of singular values).
 \end{remark}
 
 \begin{definition}[discrete Fourier transform (DFT)]
@@ -516,7 +516,7 @@ where $\alpha$ and $\beta$ are simple constants, and the term $\beta (\mathbf{x}
 
 Despite the seemingly different formulations, both methods use some kind of momentum rule. The main difference is that heavy ball simply performs a weighted addition of the momentum from the previous iterations and the gradient of the current position, Nesterov's method combines these term in a couterintuitive, yet optimal manner as depicted on fig.~\ref{fig:momentum}. While FGM is preferred in convex optimization problems since it is slightly faster than heavy ball method, the latter is more commonly used in the machine learning community due to its robustness in non-convex settings.
 
-\begin{figure}
+\begin{figure}[bt]
     \centering
     \includegraphics[width=0.7\linewidth]{images/momentum.png}
     \caption{\textbf{Difference between heavy ball momentum and Nesterov's momentum:} While the heavy ball simply performs a weighted addition of the momentum from the previous iterations and the gradient of the current position, Nesterov's method combines these term in a couterintuitive, yet optimal manner. Source: Image is adapted from~\cite{chandradevan_evolution_2017} and the idea of intuitive description of Nesterov's momentum rule as "lookahead" gradient step originates from~\cite{sutskever_importance_2013}.}

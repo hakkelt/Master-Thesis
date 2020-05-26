@@ -134,6 +134,18 @@
 
 % Format references by IEEE guidlines
 \usepackage[style=ieee, backend=biber]{biblatex}
+\renewbibmacro*{doi+eprint+url}{%
+  \iftoggle{bbx:doi}
+    {\iffieldundef{url}{\printfield{doi}}{}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:eprint}
+    {\usebibmacro{eprint}}
+    {}%
+  \newunit\newblock
+  \iftoggle{bbx:url}
+    {\usebibmacro{url+urldate}}
+    {}}
 
 \DeclareBibliographyAlias{artwork}{misc}
 

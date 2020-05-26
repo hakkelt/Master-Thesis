@@ -8,4 +8,11 @@
 In this thesis work, we considered the classic results as well as the recent advances within of the compressed sensing framework and their application to real life MR imaging. In particular, we closely examined two recent publications presenting state-of-the-art solutions combining conventional techniques with novel ideas. Afterwards, we implemented these algorithms along with a recently invented algorithm from the family of iteratively least squares methods that previously have not been applied to MRI setting yet. Finally, we compared these algorithm with respect to reconstruction power from massively undersampled data and noise tolerance.
 
 \section{Achievements}
+
+Throughout the projects we presented here, we gained a deeper understanding of optimization methods, in particular to iterative gradient methods, and IRLS methods. We build up a confidence in programming in Julia, and we believe that the software we developed might server a good use for others, especially the FunctionOperators.jl package and the parallelized NFFT.
+
+We also proved that the new IRLS variant developed in~\cite{kummerle_denoising_2018, kummerle_understanding_nodate} is a feasible solution to compressed sensing MRI, and despite being unstable, it can vastly outperform other state-of-the-art algorithms when it converges.
+
 \section{Future Plans}
+
+We plan to continue developing the FunctionOperators package extending it with features and commonly used operators, and in the near future it also expected to became GPU compatible. The achievements in the parallelization of NFFT is planned to be used to contribute to the NFFT.jl package that is considered to be the best option for NFFT so far, yet it lacks the support for multithreading and GPU arrays. Finally, we would like to implement also extensions of the novel IRLS method as soon as the authors publish their ongoing research.
