@@ -88,7 +88,7 @@ ISTA & 6.3 s, 1.05 GiB & 16.4 s, 2.49 GiB & 6.9 s, 1.04 GiB & 73.5 s, 3.03 GiB \
 FISTA & 6.3 s, 1.05 GiB & 16.3 s, 2.49 GiB & 6.9 s, 1.04 GiB & 72.2 s, 3.03 GiB \\
 POGM & 6.4 s, 1.10 GiB & 16.5 s, 2.58 GiB & 6.9 s, 1.08 GiB & 74.5 s, 3.28 GiB \\ \hline
 \end{tabular}
-\caption{Benchmarking on different datasets performing reconstruction via proximity and augmented Lagrangian methods descirbed in~\cite{lin_efficient_2019}. "FunctionOperators naive" is an implementation with minimal manual optimizations, "FunctionOperators optimized" is a manually optimized version, and ""FunctionOperators pretty" is exactly same as the "naive" version except that our automatic automatic optimizer macro is called on the code.}
+\caption{Benchmarking on different datasets performing reconstruction via proximity and augmented Lagrangian methods descirbed in~\cite{lin_efficient_2019}. "FunctionOperators naive" is an implementation with minimal manual optimizations, "FunctionOperators optimized" is a manually optimized version, and ""FunctionOperators pretty" is exactly same as the "naive" version except that our automatic automatic optimizer macro is called on the code. Environment of tests: 48 Intel Xeon CPUs and 385 GiB memory, Julia 1.4.}
 \label{tab:lin_fessler}
 \end{table}
 
@@ -168,11 +168,9 @@ The numerical results, then showed us that the best multithreading setting is de
 
 After finishing the re-implementation of the necessary parts of SigPy in Julia, our attention is turned towards the implementation of the algorithm itelf that was not a challenge any more as almost all important operators and functions are defined in SigPy. Being aware of the speedup in case of the re-implementation of the NFFT, we expected similar acceleration. Yet, the result were even better as we predicted. As we already mentioned, the Python implementation did not exploit the potentials in the batch processing in NFFT. Specifically, it is much faster to pass the image the NFFT specifying along which dimension we want to perform the NFFT, than iterating over th batch dimension (= the dimension along which we \textit{do not} want to perform the NFFT) and calling the NFFT on each slice. 
 
-Fig.~\ref{fig:gridding_recon_speed} demonstrates the effect: Here the measured algorithm technically consists only of a loop that iterates over the batch dimension corresponding to the coils sensitivities, and calls NFFT on each. On the other hand, the Julia version passes the entire arraw to NFFT. The result is drastic, $5.5\times$ speedup, even in the fully single threaded case. But when we anable the full multithreading, algorithm appeared to outperform even the Python's GPU version.
+Fig.~\ref{fig:gridding_recon_speed} demonstrates the effect: Here the measured algorithm technically consists only of a loop that iterates over the batch dimension corresponding to the coils sensitivities, and calls NFFT on each. On the other hand, the Julia version passes the entire arraw to NFFT. The result is drastic, $5.5\times$ speedup, even in the fully single threaded case. But when we anable the full multithreading, algorithm appeared to outperform even the Python's GPU version. Fig.~\ref{fig:MSLR_recon_speed} does not show so much improvement, but still many-fold speedup is experienced, with the fully multithreaded almost reaching the Pyhton's GPU version.
 
-Fig.~\ref{fig:MSLR_recon_speed} does not show so much improvement, but still many-fold speedup is experienced, with the fully multithreaded almost reaching the Pyhton's GPU version.
-
-These results suggest that re-implementing the Python'GPU code in Julia would enjoy, maybe not that much, but significant acceleration. For more information concerning the implementational details, we refer the reader to the GitHub repository of the project: \url{https://github.com/hakkelt/extreme_mri_julia}
+These results suggest that re-implementing the Python'GPU code in Julia would enjoy, maybe not that much, but significant acceleration. For more information concerning the implementational details, we refer the reader to the GitHub repository of the project: \url{https://github.com/hakkelt/extreme_mri_julia} Environment of measurements: 56 Intel Xeon CPUs, 2 K80 GPU, and 385 GiB memory, Julia 1.4.
 
 \begin{figure}
     \centering
@@ -200,7 +198,6 @@ While the plan at the beginning of the project was to apply the new HM-IRLS meth
 
 The modification process consisted of a singular value hard thresholding that selected the $r$ largest singular values, and discarded all other. As a result, the thresholding produced an image with the desired rank $r$. Next, we subtracted this low-rank approximation from the original image, and we added back the residual after hard thresholding to the low-rank image. The resulted image served then as "ground truth" image, which we undersampled, and added some noise to the undersampled data. The process in a more exact form:
 \[\mathbf{L} = SVHT_r(\mathbf{X})\]
-and
 \[\mathbf{X}_{gt} = \mathbf{L} + HT_s(\mathbf{X} - \mathbf{L}),\]
 where $SVHT_r$ is the singular value hard thresholding,
 and $HT_s$ is the hard thresholding that discard all, but the $s$ largest values in a matrix. The last step of the construction of the modified setting was the undersampling where we were in full control of the number of sampled point from the Fourier domain.
@@ -208,15 +205,15 @@ and $HT_s$ is the hard thresholding that discard all, but the $s$ largest values
 In the testing stage, we examined how much can the different algorithms reconstruct the "ground truth" from the undersampled, noisy measurement. Our experiments showed that the HM-IRLS algorithm performed extremely well in the noiseless case and when $s = 0$, that is, the ground truth image was only the low rank component. The results also confirms the claims that POGM converges the fast, FISTA and the improved AL being the second fastest, but finally all of the algorithms designed to minimize the $L+S$ cost converged to the same minimizer after a long time. The MSLR algorithm, however, reached a much worse local minimizer than the other algorithms. Even though it might be surprising at first, the difference in the reach optimizer is fairly reasonable as HM-IRLS solved the low-rank minimization directly, the ones with the $L+S$ cost solved a relaxed problem that minimized nuclear norm instead of the rank, and, finally, the MSLR even relaxed the the nuclear norm even further by the Burer-Monteiro factorization to reduce the memory requirement of the algorithm (therefore it is slightly unfair comparison to others which care less about memory consumption). Moreover, we checked the behavior of the rank during the iterations, and we noted that the while the HM-IRLS algorithm decreased the rank gradually, the soft-thresholding-based algorithms reached the target rank very soon, but the overall cost function stopped also at a ligher level. The AL method with CG steps were the only expection, most probably because of the alternating steps working "against" each other. Fig.~\ref{fig:ideal} shows a setting plot were all algorithms successfully converged.
 
 Unfortunately, even relatively low level of noise or small amount of sparsity can make the HM-IRLS fail to converge. Fig.~\ref{fig:orig} displays such a case, that actually corresponds the setting used in the $L+S$ paper we discussed deeper. In that setting, not only HM-IRLS, but also the MSLR algorithm diverges at all $\alpha$ step sizes. This can certainly avoided by adjusting the parameters of the algorithm. After running many measurements we concluded that SNR under approximately 100 dB makes the HM-IRLS fail to converge for most settings (see fig.~\ref{fig:noise_tolerance}. On the other hand, the reconstruction power of HM-IRLS appeared to be much stronger than the others minimizing the nuclear-norm, as it is depicted on fig.~\ref{fig:reconstruction_power}.
+For more information on the implementation details, see \url{https://github.com/hakkelt/IRLS-for-CS-MRI}. Environment of measurements: 56 Intel Xeon CPUs, 2 K80 GPU, and 385 GiB memory, Julia 1.4.
 
 It important to note that the results here are promising, but definitely not decisive, as using HM-IRLS in this form in $L+S$ setting is technically modelling error, and also as we tested only on one dataset. One could rather see the efforts presented here as a proof-of-concept that motivates further investigation.
 
-For more information on the implementation details, see \url{https://github.com/hakkelt/IRLS-for-CS-MRI}.
 
 %\subsection{Description of Algorithm}
 %\subsection{Implementation Details}
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{minipage}{0.48\linewidth}
         \centering
@@ -230,7 +227,7 @@ For more information on the implementation details, see \url{https://github.com/
     \label{fig:ideal}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{minipage}[t]{0.48\linewidth}
         \centering
@@ -240,11 +237,11 @@ For more information on the implementation details, see \url{https://github.com/
         \centering
         \includegraphics[width=\linewidth]{images/orig_rank.pdf}
     \end{minipage}
-    \caption{{Setting that mimics the real-life settings.} HM-IRLS diverges as MSLR also do.}
+    \caption{{Setting that mimics the real-life settings.} HM-IRLS diverges as MSLR also does.}
     \label{fig:orig}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[p]
     \centering
     \begin{minipage}[t]{0.48\linewidth}
         \centering
